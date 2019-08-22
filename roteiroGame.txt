@@ -1,0 +1,22 @@
+Este documento tem por objetivo a reflexão a propósito da lógica do jogo, de forma a incitar a discussão a seu respeito.
+
+loop:
+	jsr readKeys
+	jsr drawShip
+	jsr drawLaser
+	jsr checkHit
+
+read keys:
+	lê as entradas
+	checa se o movimento será executado(se não será restringido pela parede)
+	Se possível, executa o movimento
+
+drawShip:
+	Após o input(ou não) do teclado, atualiza a imagem da nave
+
+drawlaser:
+	Atualiza a posição do laser
+
+checkHit:
+	checa se o laser acertou a nave
+	Em caso afirmativo, o jogo acaba 

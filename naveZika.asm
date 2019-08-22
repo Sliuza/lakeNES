@@ -55,4 +55,4 @@ sprites:
 
   .bank 2
   .org $0000
-  .incbin "graphics.chr"
+  .incbin "graphics/graphics.chr"
