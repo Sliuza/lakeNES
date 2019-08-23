@@ -51,19 +51,6 @@ clrmem:
   BNE clrmem
 
 LoadBackground:
-  LDA $2002
-  LDA #$20
-  STA $2006
-  LDA #$00
-  STA $2006
-
-  LDA #LOW(background)
-  STA pointerBackgroundLowByte
-  LDA #HIGH(background)
-  STA pointerBackgroundHighByte
-
-  LDX #$00
-  LDY #$00
 
 LoadPalettes:
   LDA $2002 ; read PPU status to reset the high/low latch
