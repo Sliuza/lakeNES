@@ -97,7 +97,7 @@ LoadSprites:
 ReadPlayerOneControls:
   LDA #$01          ; prepare the controller to be read.
   STA $4016
-  LDA#$00
+  LDA #$00
   STA $4016
 
 ; Each load of the $4016 memory address is reading a different button.
