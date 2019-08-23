@@ -30,27 +30,52 @@ shipTile6X = $0317
 
 ;initial state and graphics
 RESET:
-  JSR clrmem
   JSR LoadBackground
   JSR LoadPalettes
   JSR LoadAttributes
   JSR LoadSprites
 
-clrmem:
-  LDA #$00
-  STA $0000, x
-  STA $0100, x
-  STA $0300, x
-  STA $0400, x
-  STA $0500, x
-  STA $0600, x
-  STA $0700, x
-  LDA #$FE
-  STA $0200, x    ;move all sprites off screen
-  INX
-  BNE clrmem
+  LDA #%10000000   ; Enable NMI, sprites and background on table 0
+  STA $2000
+  LDA #%00011110   ; Enable sprites, enable backgrounds
+  STA $2001
+  LDA #$00         ; No background scrolling
+  STA $2006
+  STA $2006
+  STA $2005
+  STA $2005
+
+InfiniteLoop:
+  JMP InfiniteLoop
 
 LoadBackground:
+  LDA $2002
+  LDA #$20
+  STA $2006
+  LDA #$00
+  STA $2006
+
+  LDA #LOW(background)
+  STA pointerBackgroundLowByte
+  LDA #HIGH(background)
+  STA pointerBackgroundHighByte
+
+  LDX #$00
+  LDY #$00
+.Loop:
+  LDA [pointerBackgroundLowByte], y
+  STA $2007
+
+  INY
+  CPY #$00
+  BNE .Loop
+
+  INC pointerBackgroundHighByte
+  INX
+  CPX #$04
+  BNE .Loop
+  RTS
+
 
 LoadPalettes:
   LDA $2002 ; read PPU status to reset the high/low latch
@@ -165,14 +190,16 @@ ReadRight:
   STA shipTile6X
 EndReadRight:
 
+  RTS
+
 NMI:
   LDA #$00
-  STA $2003 ; set the low byte (00) of the RAM address
+  STA $2003                     ; set the low byte (00) of the RAM address
   LDA #$03
-  STA $4014 ; set the high byte (02) of the RAM address, start the transfer
-  RTI       ; return from interrupt
+  STA $4014                     ; set the high byte (02) of the RAM address, start the transfer
+  JSR ReadPlayerOneControls     ; read the input
+  RTI                           ; return from interrupt
 
-  JSR ReadPlayerOneControls
   
   .bank 1
   .org $E000
