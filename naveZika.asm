@@ -15,7 +15,7 @@ pointerBackgroundHighByte .rs 1
 
 ;initial state and graphics
 RESET:
-  clrmem
+  JSR clrmem
   JSR LoadBackground
   JSR LoadPalettes
   JSR LoadAttributes
