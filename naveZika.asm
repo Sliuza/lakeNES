@@ -10,8 +10,8 @@
 pointerBackgroundLowByte  .rs 1
 pointerBackgroundHighByte .rs 1
 
-; These variables represent the vertical and horizontal positions of our spaceship sprites; 
-shipTile1Y = $0300          
+; These variables represent the vertical and horizontal positions of our spaceship sprites;
+shipTile1Y = $0300
 shipTile2Y = $0304
 shipTile3Y = $0308
 shipTile4Y = $030C
@@ -30,6 +30,39 @@ shipTile6X = $0317
 
 ;initial state and graphics
 RESET:
+  SEI          ; disable IRQs
+  CLD          ; disable decimal mode
+  LDX #$40
+  STX $4017    ; disable APU frame IRQ
+  LDX #$FF
+  TXS          ; Set up stack
+  INX          ; now X = 0
+  STX $2000    ; disable NMI
+  STX $2001    ; disable rendering
+  STX $4010    ; disable DMC IRQs
+
+vblankwait1:       ; First wait for vblank to make sure PPU is ready
+  BIT $2002
+  BPL vblankwait1
+
+clrmem:        ; clear memory 
+  LDA #$00
+  STA $0000, x
+  STA $0100, x
+  STA $0300, x
+  STA $0400, x
+  STA $0500, x
+  STA $0600, x
+  STA $0700, x
+  LDA #$FE
+  STA $0200, x
+  INX
+  BNE clrmem
+
+vblankwait2:      ; Second wait for vblank, PPU is ready after this
+  BIT $2002
+  BPL vblankwait2
+
   JSR LoadBackground
   JSR LoadPalettes
   JSR LoadAttributes
@@ -84,7 +117,7 @@ LoadPalettes:
   LDA #$00
   STA $2006 ; write the low byte of $3F00 address
 
-  LDX #$00 
+  LDX #$00
 .Loop:
   LDA palettes, x   ;load palette byte
   STA $2007         ;write to PPU
@@ -138,7 +171,7 @@ EndReadA:
 
   LDA $4016         ; Player 1 - B
   LDA $4016         ; Player 1 - Select
-  LDA $4016         ; Player 1 - Start 
+  LDA $4016         ; Player 1 - Start
   LDA $4016         ; Player 1 - Up
   LDA $4016         ; Player 1 - Down
 
@@ -200,7 +233,7 @@ NMI:
   JSR ReadPlayerOneControls     ; read the input
   RTI                           ; return from interrupt
 
-  
+
   .bank 1
   .org $E000
 
