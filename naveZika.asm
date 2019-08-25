@@ -158,24 +158,87 @@ ReadPlayerOneControls:
   LDA #$00
   STA $4016
 
-; Each load of the $4016 memory address is reading a different button.
-; The buttons are read always in this sequence: (A, B, Select, Start, Up, Down, Left, Right)
+  ; Each load of the $4016 memory address is reading a different button.
+  ; The buttons are read always in this sequence: (A, B, Select, Start, Up, Down, Left, Right)
 
-  LDA $4016         ; Player 1 - A
-  AND #$00000001    ; If the A Button was pressed, the result of the AND operation will be 1
-  BEQ EndReadA      ; otherwise result will be 0.
+  ;LDA $4016         ; Player 1 - A
+  ;AND #$00000001    ; If the A Button was pressed, the result of the AND operation will be 1
+  ;BEQ EndReadA      ; otherwise result will be 0.
+  JSR ReadA       ; Player 1 - A
+  JSR ReadB       ; Player 1 - B
+  JSR ReadSelect
+  JSR ReadStart
+  JSR ReadUp
+  JSR ReadDown
+  JSR ReadLeft
+  JSR ReadRight
+  RTS
+
+
 
 ; TODO:   Implement the logic to be used when the 'A' button be pressed.
 ;         This button will be used to fire a bullet from the spaceship.
+ReadA:
+  LDA $4016       
+  BEQ EndReadA
 EndReadA:
+  RTS
+ReadB:
+  LDA $4016       
+  BEQ EndReadB
+EndReadB:
+  RTS
+ReadSelect:
+  LDA $4016       
+  BEQ EndReadSelect
+EndReadSelect:
+  RTS
+ReadStart:
+  LDA $4016       
+  BEQ EndReadStart
+EndReadStart:
+  RTS
+ReadUp:
+  LDA $4016       
+  AND #%00000001
+  BEQ EndReadUp
 
-  LDA $4016         ; Player 1 - B
-  LDA $4016         ; Player 1 - Select
-  LDA $4016         ; Player 1 - Start
-  LDA $4016         ; Player 1 - Up
-  LDA $4016         ; Player 1 - Down
+  LDA shipTile1Y
+  SEC
+  SBC #$01
+  STA shipTile1Y
+  STA shipTile2Y
+  STA shipTile3Y
 
- ReadLeft:
+  LDA shipTile4Y
+  SEC
+  SBC #$01
+  STA shipTile4Y
+  STA shipTile5Y
+  STA shipTile6Y
+EndReadUp:
+  RTS
+ReadDown:
+  LDA $4016       ; Player 1 - Down
+  AND #%00000001
+  BEQ EndReadDown
+
+  LDA shipTile1Y
+  CLC
+  ADC #$01
+  STA shipTile1Y
+  STA shipTile2Y
+  STA shipTile3Y
+
+  LDA shipTile4Y
+  CLC
+  ADC #$01
+  STA shipTile4Y
+  STA shipTile5Y
+  STA shipTile6Y
+EndReadDown:
+  RTS
+ReadLeft:
   LDA $4016         ; Player 1 - Left
   AND #$00000001    ; If the Left Button was pressed, the result of the AND operation will be 1
   BEQ EndReadLeft   ; otherwise result will be 0.
@@ -198,7 +261,7 @@ EndReadA:
   STA shipTile3X
   STA shipTile6X
 EndReadLeft:
-
+  RTS
 ReadRight:
   LDA $4016         ; Player 1 - Right
   AND #$00000001    ; If the Right Button was pressed, the result of the AND operation will be 1
@@ -222,7 +285,6 @@ ReadRight:
   STA shipTile3X
   STA shipTile6X
 EndReadRight:
-
   RTS
 
 NMI:
