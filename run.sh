@@ -1,1 +1,1 @@
-nesasm naveZika.asm && nestopia naveZika.nes
+rm -f naveZika.nes && nesasm naveZika.asm && nestopia naveZika.nes
