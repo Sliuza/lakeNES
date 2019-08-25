@@ -368,6 +368,25 @@ moveShotPlayer1:
   SBC shotspeed        ;shot position = shoty - shotspeedy
   STA rightShotPlayer1Y
 moveShotDone:
+
+  RTS
+
+checkShotCollision:
+  LDX leftShotPlayer1Y
+  CPX #$00    ;check if the shot has reached the upper wall
+  BEQ deleteShot
+  CPX #$01    ;check if the shot has reached the upper wall
+  BEQ deleteShot
+  CPX #$02    ;check if the shot has reached the upper wall
+  BEQ deleteShot
+  RTS
+deleteShot:
+  LDA #$00
+  STA shotPlayer1Exists  ;set flags
+  LDA #$FF               ;hide sprite
+  STA leftShotPlayer1Tile
+  LDA #$FF
+  STA rightShotPlayer1Tile
   RTS
 
 LoadShot:
@@ -476,6 +495,7 @@ NMI:
   STA $4014                     ; set the high byte (02) of the RAM address, start the transfer
   JSR ReadPlayerOneControls     ; read the input
   JSR moveShot
+  JSR checkShotCollision
   RTI                           ; return from interrupt
 
 
