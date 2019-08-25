@@ -227,6 +227,11 @@ ReadUp:
   BEQ EndReadUp
 
   LDA shipTile1Y
+  CMP #$80
+  BEQ EndReadYInputWithCollision
+  BEQ EndReadUp
+
+  LDA shipTile1Y
   SEC
   SBC #$01
   STA shipTile1Y
@@ -246,6 +251,11 @@ ReadDown:
   AND #%00000001
   BEQ EndReadDown
 
+  LDA shipTile4Y
+  CMP #$d8
+  BEQ EndReadYInputWithCollision
+  BEQ EndReadDown
+
   LDA shipTile1Y
   CLC
   ADC #$01
@@ -261,10 +271,23 @@ ReadDown:
   STA shipTile6Y
 EndReadDown:
   RTS
+
+
+EndReadYInputWithCollision:
+  JSR wallCollisionBeep
+  JSR disableBeep
+  RTS
+
 ReadLeft:
   LDA $4016         ; Player 1 - Left
   AND #$00000001    ; If the Left Button was pressed, the result of the AND operation will be 1
   BEQ EndReadLeft   ; otherwise result will be 0.
+
+  LDA shipTile6X
+  CMP #$19
+  BEQ EndReadXInputWithCollision
+  BEQ EndReadLeft
+
 
   LDA shipTile1X
   SEC
@@ -290,6 +313,12 @@ ReadRight:
   AND #$00000001    ; If the Right Button was pressed, the result of the AND operation will be 1
   BEQ EndReadRight  ; otherwise result will be 0.
 
+  LDA shipTile6X
+  CMP #$ee
+  BEQ EndReadXInputWithCollision
+  BEQ EndReadRight
+
+
   LDA shipTile1X
   CLC
   ADC #01
@@ -308,6 +337,11 @@ ReadRight:
   STA shipTile3X
   STA shipTile6X
 EndReadRight:
+  RTS
+
+EndReadXInputWithCollision:
+  JSR wallCollisionBeep
+  JSR disableBeep
   RTS
 
 ; ShootAnimation
