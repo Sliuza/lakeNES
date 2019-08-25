@@ -364,6 +364,8 @@ LoadShot:
   STA rightShotPlayer1X
   LDA #$01
   STA shotPlayer1Exists
+  JSR shotBeep
+  JSR disableBeep
   RTS
 
 shotBeep:
