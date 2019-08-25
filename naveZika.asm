@@ -9,12 +9,20 @@
  ; These two variable will be used to loop through all the data
 pointerBackgroundLowByte  .rs 1
 pointerBackgroundHighByte .rs 1
+shotPlayer1Exists .rs 1
+shotspeed .rs 1
 
-shotPlayer1Y = $0318
-shotPlayer2Y = $031C
 
-shotPlayer1X = $031B
-shotPlayer2X = $031F
+
+leftShotPlayer1Y       = $0330
+leftShotPlayer1Tile    = $0331
+leftShotPlayer1Color   = $0332
+leftShotPlayer1X       = $0333
+
+rightShotPlayer1Y      = $0334
+rightShotPlayer1Tile   = $0335
+rightShotPlayer1Color  = $0336
+rightShotPlayer1X      = $0337
 
 ; These variables represent the vertical and horizontal positions of our spaceship sprites;
 shipTile1Y = $0300
@@ -68,11 +76,12 @@ clrmem:        ; clear memory
 vblankwait2:      ; Second wait for vblank, PPU is ready after this
   BIT $2002
   BPL vblankwait2
-
   JSR LoadBackground
   JSR LoadPalettes
   JSR LoadAttributes
   JSR LoadSprites
+  JSR SetShotSpeed
+
 
   LDA #%10000000   ; Enable NMI, sprites and background on table 0
   STA $2000
@@ -154,8 +163,13 @@ LoadSprites:
   LDA spritePlayer1, x    ;load palette byte
   STA $0300, x      ;write to PPU
   INX               ;set index to next byte
-  CPX #$23
+  CPX #$32
   BNE .Loop         ;if x = $18, 24 in decimal, all done
+  RTS
+
+SetShotSpeed:
+  LDA #$03
+  STA shotspeed
   RTS
 
 ReadPlayerOneControls:
@@ -299,23 +313,57 @@ EndReadRight:
 ; ShootAnimation
 
 Player1Shoot:
-  LDA shipTile1X
-  STA shotPlayer1X
-  LDA shipTile3X
-  STA shotPlayer2X
-  LDA shipTile1Y
-  STA shotPlayer1Y
-  STA shotPlayer2Y
-  JSR moveShot
+  ; Shoot only if player shot does not exists
+  LDA shotPlayer1Exists
+  BEQ LoadShot
+  RTS
   
 moveShot:
-.Loop:
-  LDA shotPlayer1Y, x
-  STA shotPlayer1Y
-  STA shotPlayer2Y
-  INX
-  CPX $0
-  BNE .Loop
+  ; Move only if the shot exists
+  LDA shotPlayer1Exists
+  BNE moveShotPlayer1
+  RTS
+  
+moveShotPlayer1:
+  LDA leftShotPlayer1Y
+  SEC
+  SBC shotspeed        ;shot position = shoty - shotspeedy
+  STA leftShotPlayer1Y
+  LDA rightShotPlayer1Y
+  SEC
+  SBC shotspeed        ;shot position = shoty - shotspeedy
+  STA rightShotPlayer1Y
+moveShotDone:
+  RTS
+
+LoadShot:
+  ;Load first shot
+  LDA shipTile1Y  ;update left shot sprite info
+  STA leftShotPlayer1Y
+  
+  LDA #$18
+  STA leftShotPlayer1Tile
+  
+  LDA #$00
+  STA leftShotPlayer1Color
+  
+  LDA shipTile1X
+  STA leftShotPlayer1X
+
+  ;Load second shot
+  LDA shipTile3Y  ;update right shot sprite info
+  STA rightShotPlayer1Y
+  
+  LDA #$19
+  STA rightShotPlayer1Tile
+  
+  LDA #$00
+  STA rightShotPlayer1Color
+  
+  LDA shipTile3X
+  STA rightShotPlayer1X
+  LDA #$01
+  STA shotPlayer1Exists
   RTS
 
 NMI:
@@ -324,6 +372,7 @@ NMI:
   LDA #$03
   STA $4014                     ; set the high byte (02) of the RAM address, start the transfer
   JSR ReadPlayerOneControls     ; read the input
+  JSR moveShot
   RTI                           ; return from interrupt
 
 
