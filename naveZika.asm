@@ -10,6 +10,12 @@
 pointerBackgroundLowByte  .rs 1
 pointerBackgroundHighByte .rs 1
 
+shotPlayer1Y = $0318
+shotPlayer2Y = $031C
+
+shotPlayer1X = $031B
+shotPlayer2X = $031F
+
 ; These variables represent the vertical and horizontal positions of our spaceship sprites;
 shipTile1Y = $0300
 shipTile2Y = $0304
@@ -145,10 +151,10 @@ LoadAttributes:
 LoadSprites:
   LDX #$00
 .Loop:
-  LDA sprites, x    ;load palette byte
+  LDA spritePlayer1, x    ;load palette byte
   STA $0300, x      ;write to PPU
   INX               ;set index to next byte
-  CPX #$18
+  CPX #$23
   BNE .Loop         ;if x = $18, 24 in decimal, all done
   RTS
 
@@ -180,7 +186,10 @@ ReadPlayerOneControls:
 ;         This button will be used to fire a bullet from the spaceship.
 ReadA:
   LDA $4016       
+  AND #%00000001
   BEQ EndReadA
+  JSR Player1Shoot
+
 EndReadA:
   RTS
 ReadB:
@@ -285,6 +294,28 @@ ReadRight:
   STA shipTile3X
   STA shipTile6X
 EndReadRight:
+  RTS
+
+; ShootAnimation
+
+Player1Shoot:
+  LDA shipTile1X
+  STA shotPlayer1X
+  LDA shipTile3X
+  STA shotPlayer2X
+  LDA shipTile1Y
+  STA shotPlayer1Y
+  STA shotPlayer2Y
+  JSR moveShot
+  
+moveShot:
+.Loop:
+  LDA shotPlayer1Y, x
+  STA shotPlayer1Y
+  STA shotPlayer2Y
+  INX
+  CPX $0
+  BNE .Loop
   RTS
 
 NMI:
