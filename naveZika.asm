@@ -95,6 +95,7 @@ vblankwait2:      ; Second wait for vblank, PPU is ready after this
   JSR LoadSprites
   JSR SetShotSpeed
 
+  JSR SetLifeCounters
 
   LDA #%10000000   ; Enable NMI, sprites and background on table 0
   STA $2000
@@ -176,7 +177,7 @@ LoadSprites:
   LDA spritePlayer1, x    ;load palette byte
   STA $0300, x      ;write to PPU
   INX               ;set index to next byte
-  CPX #$50
+  CPX #$80
   BNE .Loop         ;if x = $40, 64 in decimal, all done
   RTS
 
