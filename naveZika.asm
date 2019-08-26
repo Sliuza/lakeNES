@@ -37,20 +37,20 @@ heart2ColorP2 = $033E
 heart3ColorP2 = $0342
 heart4ColorP2 = $0346
 
-; These variables represent the vertical and horizontal positions of our spaceship sprites;
-shipTile1Y = $0300
-shipTile2Y = $0304
-shipTile3Y = $0308
-shipTile4Y = $030C
-shipTile5Y = $0310
-shipTile6Y = $0314
+; These variables represent the vertical and horizontal positions of spaceship 1 sprites;
+ship1Tile1Y = $0300 
+ship1Tile2Y = $0304
+ship1Tile3Y = $0308
+ship1Tile4Y = $030C
+ship1Tile5Y = $0310
+ship1Tile6Y = $0314
 
-shipTile1X = $0303
-shipTile2X = $0307
-shipTile3X = $030B
-shipTile4X = $030F
-shipTile5X = $0313
-shipTile6X = $0317
+ship1Tile1X = $0303
+ship1Tile2X = $0307
+ship1Tile3X = $030B
+ship1Tile4X = $030F
+ship1Tile5X = $0313
+ship1Tile6X = $0317
 
   .bank 0 ; Defines bank of memory
   .org $C000 ; Defines where in the CPU’s address space it is located
@@ -246,24 +246,24 @@ ReadUp:
   AND #%00000001
   BEQ EndReadUp
 
-  LDA shipTile1Y
+  LDA ship1Tile1Y
   CMP #$80
   BEQ EndReadYInputWithCollision
   BEQ EndReadUp
 
-  LDA shipTile1Y
+  LDA ship1Tile1Y
   SEC
   SBC #$01
-  STA shipTile1Y
-  STA shipTile2Y
-  STA shipTile3Y
+  STA ship1Tile1Y
+  STA ship1Tile2Y
+  STA ship1Tile3Y
 
-  LDA shipTile4Y
+  LDA ship1Tile4Y
   SEC
   SBC #$01
-  STA shipTile4Y
-  STA shipTile5Y
-  STA shipTile6Y
+  STA ship1Tile4Y
+  STA ship1Tile5Y
+  STA ship1Tile6Y
 EndReadUp:
   RTS
 ReadDown:
@@ -271,24 +271,24 @@ ReadDown:
   AND #%00000001
   BEQ EndReadDown
 
-  LDA shipTile4Y
+  LDA ship1Tile4Y
   CMP #$d8
   BEQ EndReadYInputWithCollision
   BEQ EndReadDown
 
-  LDA shipTile1Y
+  LDA ship1Tile1Y
   CLC
   ADC #$01
-  STA shipTile1Y
-  STA shipTile2Y
-  STA shipTile3Y
+  STA ship1Tile1Y
+  STA ship1Tile2Y
+  STA ship1Tile3Y
 
-  LDA shipTile4Y
+  LDA ship1Tile4Y
   CLC
   ADC #$01
-  STA shipTile4Y
-  STA shipTile5Y
-  STA shipTile6Y
+  STA ship1Tile4Y
+  STA ship1Tile5Y
+  STA ship1Tile6Y
 EndReadDown:
   RTS
 
@@ -303,29 +303,29 @@ ReadLeft:
   AND #$00000001    ; If the Left Button was pressed, the result of the AND operation will be 1
   BEQ EndReadLeft   ; otherwise result will be 0.
 
-  LDA shipTile6X
+  LDA ship1Tile6X
   CMP #$19
   BEQ EndReadXInputWithCollision
   BEQ EndReadLeft
 
 
-  LDA shipTile1X
+  LDA ship1Tile1X
   SEC
   SBC #01
-  STA shipTile1X
-  STA shipTile4X
+  STA ship1Tile1X
+  STA ship1Tile4X
 
-  LDA shipTile2X
+  LDA ship1Tile2X
   SEC
   SBC #01
-  STA shipTile2X
-  STA shipTile5X
+  STA ship1Tile2X
+  STA ship1Tile5X
 
-  LDA shipTile3X
+  LDA ship1Tile3X
   SEC
   SBC #01
-  STA shipTile3X
-  STA shipTile6X
+  STA ship1Tile3X
+  STA ship1Tile6X
 EndReadLeft:
   RTS
 ReadRight:
@@ -333,29 +333,29 @@ ReadRight:
   AND #$00000001    ; If the Right Button was pressed, the result of the AND operation will be 1
   BEQ EndReadRight  ; otherwise result will be 0.
 
-  LDA shipTile6X
+  LDA ship1Tile6X
   CMP #$ee
   BEQ EndReadXInputWithCollision
   BEQ EndReadRight
 
 
-  LDA shipTile1X
+  LDA ship1Tile1X
   CLC
   ADC #01
-  STA shipTile1X
-  STA shipTile4X
+  STA ship1Tile1X
+  STA ship1Tile4X
 
-  LDA shipTile2X
+  LDA ship1Tile2X
   CLC
   ADC #01
-  STA shipTile2X
-  STA shipTile5X
+  STA ship1Tile2X
+  STA ship1Tile5X
 
-  LDA shipTile3X
+  LDA ship1Tile3X
   CLC
   ADC #01
-  STA shipTile3X
-  STA shipTile6X
+  STA ship1Tile3X
+  STA ship1Tile6X
 EndReadRight:
   RTS
 
@@ -411,7 +411,7 @@ deleteShot:
 
 LoadShot:
   ;Load first shot
-  LDA shipTile1Y  ;update left shot sprite info
+  LDA ship1Tile1Y  ;update left shot sprite info
   STA leftShotPlayer1Y
 
   LDA #$18
@@ -420,11 +420,11 @@ LoadShot:
   LDA #$00
   STA leftShotPlayer1Color
 
-  LDA shipTile1X
+  LDA ship1Tile1X
   STA leftShotPlayer1X
 
   ;Load second shot
-  LDA shipTile3Y  ;update right shot sprite info
+  LDA ship1Tile3Y  ;update right shot sprite info
   STA rightShotPlayer1Y
 
   LDA #$19
@@ -433,7 +433,7 @@ LoadShot:
   LDA #$00
   STA rightShotPlayer1Color
 
-  LDA shipTile3X
+  LDA ship1Tile3X
   STA rightShotPlayer1X
   LDA #$01
   STA shotPlayer1Exists
