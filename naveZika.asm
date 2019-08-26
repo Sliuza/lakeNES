@@ -181,17 +181,14 @@ ReadPlayerOneControls:
   ; Each load of the $4016 memory address is reading a different button.
   ; The buttons are read always in this sequence: (A, B, Select, Start, Up, Down, Left, Right)
 
-  ;LDA $4016         ; Player 1 - A
-  ;AND #$00000001    ; If the A Button was pressed, the result of the AND operation will be 1
-  ;BEQ EndReadA      ; otherwise result will be 0.
-  JSR ReadA       ; Player 1 - A
-  JSR ReadB       ; Player 1 - B
-  JSR ReadSelect
-  JSR ReadStart
-  JSR ReadUp
-  JSR ReadDown
-  JSR ReadLeft
-  JSR ReadRight
+  JSR ReadA         ; Player 1 - A
+  JSR ReadB         ; Player 1 - B
+  JSR ReadSelect    ; Player 1 - Select
+  JSR ReadStart     ; Player 1 - Start
+  JSR ReadUp        ; Player 1 - Up
+  JSR ReadDown      ; Player 1 - Down
+  JSR ReadLeft      ; Player 1 - Left
+  JSR ReadRight     ; Player 1 - Right
   RTS
 
 
