@@ -11,18 +11,31 @@ pointerBackgroundLowByte  .rs 1
 pointerBackgroundHighByte .rs 1
 shotPlayer1Exists .rs 1
 shotspeed .rs 1
+lifeCounterP1 .rs 3
+lifeCounterP2 .rs 3
 
 
+leftShotPlayer1Y       = $0318
+leftShotPlayer1Tile    = $0319
+leftShotPlayer1Color   = $031A
+leftShotPlayer1X       = $031B
 
-leftShotPlayer1Y       = $0330
-leftShotPlayer1Tile    = $0331
-leftShotPlayer1Color   = $0332
-leftShotPlayer1X       = $0333
+rightShotPlayer1Y      = $031C
+rightShotPlayer1Tile   = $031D
+rightShotPlayer1Color  = $031E
+rightShotPlayer1X      = $031F
 
-rightShotPlayer1Y      = $0334
-rightShotPlayer1Tile   = $0335
-rightShotPlayer1Color  = $0336
-rightShotPlayer1X      = $0337
+heart0ColorP1 = $0322
+heart1ColorP1 = $0326
+heart2ColorP1 = $032A
+heart3ColorP1 = $032E
+heart4ColorP1 = $0332
+
+heart0ColorP2 = $0336
+heart1ColorP2 = $033A
+heart2ColorP2 = $033E
+heart3ColorP2 = $0342
+heart4ColorP2 = $0346
 
 ; These variables represent the vertical and horizontal positions of our spaceship sprites;
 shipTile1Y = $0300
@@ -163,13 +176,19 @@ LoadSprites:
   LDA spritePlayer1, x    ;load palette byte
   STA $0300, x      ;write to PPU
   INX               ;set index to next byte
-  CPX #$32
-  BNE .Loop         ;if x = $18, 24 in decimal, all done
+  CPX #$50
+  BNE .Loop         ;if x = $40, 64 in decimal, all done
   RTS
 
 SetShotSpeed:
   LDA #$03
   STA shotspeed
+  RTS
+
+SetLifeCounters:
+  LDA #$05
+  STA lifeCounterP1
+  STA lifeCounterP2
   RTS
 
 ReadPlayerOneControls:
@@ -393,32 +412,34 @@ LoadShot:
   ;Load first shot
   LDA shipTile1Y  ;update left shot sprite info
   STA leftShotPlayer1Y
-  
+
   LDA #$18
   STA leftShotPlayer1Tile
-  
+
   LDA #$00
   STA leftShotPlayer1Color
-  
+
   LDA shipTile1X
   STA leftShotPlayer1X
 
   ;Load second shot
   LDA shipTile3Y  ;update right shot sprite info
   STA rightShotPlayer1Y
-  
+
   LDA #$19
   STA rightShotPlayer1Tile
-  
+
   LDA #$00
   STA rightShotPlayer1Color
-  
+
   LDA shipTile3X
   STA rightShotPlayer1X
   LDA #$01
   STA shotPlayer1Exists
   JSR shotBeep
   JSR disableBeep
+  JSR decreaseLifeP1   ; TODO tirar e por em putro lugar hehehe
+  JSR decreaseLifeP2
   RTS
 
 shotBeep:
@@ -502,6 +523,7 @@ NMI:
   .bank 1
   .org $E000
 
+  .include "decreaseLife.asm"
 background:
   .include "graphics/background.asm"
 

@@ -9,3 +9,17 @@ spritePlayer1:
 spriteShot:
   .db $00, $18, $00, $78
   .db $00, $19, $00, $88
+
+spriteHeartsP1:
+  .db $D8, $1A, $01, $D1
+  .db $D8, $1A, $01, $D9
+  .db $D8, $1A, $01, $E1
+  .db $D8, $1A, $01, $E9
+  .db $D8, $1A, $01, $F1
+
+spriteHeartsP2:
+  .db $10, $1A, $01, $D1
+  .db $10, $1A, $01, $D9
+  .db $10, $1A, $01, $E1
+  .db $10, $1A, $01, $E9
+  .db $10, $1A, $01, $F1
