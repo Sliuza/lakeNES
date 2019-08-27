@@ -1,7 +1,8 @@
 decreaseLifeP1:
   LDX lifeCounterP1   ; when player gets hit, decrease life
   DEX
-  BVS gameOver        ; in case of overflow, there is no more lifes left. GAME OVER.
+  CPX #$00
+  BEQ gameOver        ; in case of overflow, there is no more lifes left. GAME OVER.
   STX lifeCounterP1   ; update counter
 
   LDY #$02            ; choose palette 02
@@ -41,7 +42,8 @@ gameOver:
 decreaseLifeP2:
   LDX lifeCounterP2   ; when player gets hit, decrease life
   DEX
-  BVS gameOver2        ; in case of overflow, there is no more lifes left. GAME OVER.
+  CPX #$00
+  BEQ gameOver2        ; in case of overflow, there is no more lifes left. GAME OVER.
   STX lifeCounterP2   ; update counter
 
   LDY #$02            ; choose palette 02

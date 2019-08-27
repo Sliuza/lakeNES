@@ -13,7 +13,8 @@ shotPlayer1Exists .rs 1
 shotspeed .rs 1
 lifeCounterP1 .rs 3
 lifeCounterP2 .rs 3
-
+leftShotHitP1  .rs 1
+rightShotHitP1 .rs 1
 
 leftShotPlayer1Y       = $0318
 leftShotPlayer1Tile    = $0319
@@ -38,7 +39,7 @@ heart3ColorP2 = $0342
 heart4ColorP2 = $0346
 
 ; These variables represent the vertical and horizontal positions of spaceship 1 sprites;
-ship1Tile1Y = $0300 
+ship1Tile1Y = $0300
 ship1Tile2Y = $0304
 ship1Tile3Y = $0308
 ship1Tile4Y = $030C
@@ -52,8 +53,7 @@ ship1Tile4X = $030F
 ship1Tile5X = $0313
 ship1Tile6X = $0317
 
-; These variables represent the vertical and horizontal positions of spaceship 1 sprites;
-ship2Tile1Y = $0348 
+ship2Tile1Y = $0348
 ship2Tile2Y = $034C
 ship2Tile3Y = $0350
 ship2Tile4Y = $0354
@@ -87,7 +87,7 @@ vblankwait1:       ; First wait for vblank to make sure PPU is ready
   BIT $2002
   BPL vblankwait1
 
-clrmem:        ; clear memory 
+clrmem:        ; clear memory
   LDA #$00
   STA $0000, x
   STA $0100, x
@@ -109,8 +109,8 @@ vblankwait2:      ; Second wait for vblank, PPU is ready after this
   JSR LoadAttributes
   JSR LoadSprites
   JSR SetShotSpeed
-
   JSR SetLifeCounters
+  JSR SetShotsHit
 
   LDA #%10000000   ; Enable NMI, sprites and background on table 0
   STA $2000
@@ -207,67 +207,70 @@ SetLifeCounters:
   STA lifeCounterP2
   RTS
 
+SetShotsHit:
+  LDA #$00
+  STA leftShotHitP1
+  STA rightShotHitP1
+  RTS
 
-; --------------------------------------------------------------------------
-; In the section below you'll find the handlers for the Player 1 movements;
-; --------------------------------------------------------------------------
 ReadPlayerOneControls:
   LDA #$01          ; prepare the controller to be read.
   STA $4016
   LDA #$00
   STA $4016
 
-  ; Each load of the $4016 memory address is reading a different button of the player 1 controller.
+  ; Each load of the $4016 memory address is reading a different button.
   ; The buttons are read always in this sequence: (A, B, Select, Start, Up, Down, Left, Right)
 
-  JSR Read1A
-  JSR Read1B
-  JSR Read1Select
-  JSR Read1Start
-  JSR Read1Up
-  JSR Read1Down
-  JSR Read1Left
-  JSR Read1Right
+  ;LDA $4016         ; Player 1 - A
+  ;AND #$00000001    ; If the A Button was pressed, the result of the AND operation will be 1
+  ;BEQ EndReadA      ; otherwise result will be 0.
+  JSR ReadA       ; Player 1 - A
+  JSR ReadB       ; Player 1 - B
+  JSR ReadSelect
+  JSR ReadStart
+  JSR ReadUp
+  JSR ReadDown
+  JSR ReadLeft
+  JSR ReadRight
   RTS
+
+
 
 ; TODO:   Implement the logic to be used when the 'A' button be pressed.
 ;         This button will be used to fire a bullet from the spaceship.
-Read1A:
-  LDA $4016       
+ReadA:
+  LDA $4016
   AND #%00000001
-  BEQ EndRead1A
+  BEQ EndReadA
   JSR Player1Shoot
 
-EndRead1A:
+EndReadA:
   RTS
-
-Read1B:
-  LDA $4016       
-  BEQ EndRead1B
-EndRead1B:
+ReadB:
+  LDA $4016
+  BEQ EndReadB
+EndReadB:
   RTS
-
-Read1Select:
-  LDA $4016       
-  BEQ EndRead1Select
-EndRead1Select:
+ReadSelect:
+  LDA $4016
+  BEQ EndReadSelect
+EndReadSelect:
   RTS
-
-Read1Start:
-  LDA $4016       
-  BEQ EndRead1Start
-EndRead1Start:
+ReadStart:
+  LDA $4016
+  BEQ EndReadStart
+EndReadStart:
   RTS
-
-Read1Up:
-  LDA $4016       
+ReadUp:
+  LDA $4016
   AND #%00000001
-  BEQ EndRead1Up
+  BEQ EndReadUp
 
   LDA ship1Tile1Y
-  CMP #$7D
-  BEQ EndReadYInput1WithCollision
-  BEQ EndRead1Up
+  CMP #$80
+  BEQ EndReadYInputWithCollision
+  BEQ EndReadUp
 
   LDA ship1Tile1Y
   SEC
@@ -282,18 +285,17 @@ Read1Up:
   STA ship1Tile4Y
   STA ship1Tile5Y
   STA ship1Tile6Y
-EndRead1Up:
+EndReadUp:
   RTS
-
-Read1Down:
-  LDA $4016
+ReadDown:
+  LDA $4016       ; Player 1 - Down
   AND #%00000001
-  BEQ EndRead1Down
+  BEQ EndReadDown
 
   LDA ship1Tile4Y
   CMP #$d8
-  BEQ EndReadYInput1WithCollision
-  BEQ EndRead1Down
+  BEQ EndReadYInputWithCollision
+  BEQ EndReadDown
 
   LDA ship1Tile1Y
   CLC
@@ -308,23 +310,24 @@ Read1Down:
   STA ship1Tile4Y
   STA ship1Tile5Y
   STA ship1Tile6Y
-EndRead1Down:
+EndReadDown:
   RTS
 
-EndReadYInput1WithCollision:
+
+EndReadYInputWithCollision:
   JSR wallCollisionBeep
   JSR disableBeep
   RTS
 
-Read1Left:
-  LDA $4016
-  AND #$00000001      ; If the Left Button was pressed, the result of the AND operation will be 1
-  BEQ EndRead1Left    ; otherwise result will be 0.
+ReadLeft:
+  LDA $4016         ; Player 1 - Left
+  AND #$00000001    ; If the Left Button was pressed, the result of the AND operation will be 1
+  BEQ EndReadLeft   ; otherwise result will be 0.
 
   LDA ship1Tile6X
-  CMP #$18
-  BEQ EndReadXInput1WithCollision
-  BEQ EndRead1Left
+  CMP #$19
+  BEQ EndReadXInputWithCollision
+  BEQ EndReadLeft
 
 
   LDA ship1Tile1X
@@ -344,18 +347,17 @@ Read1Left:
   SBC #01
   STA ship1Tile3X
   STA ship1Tile6X
-EndRead1Left:
+EndReadLeft:
   RTS
-
-Read1Right:
-  LDA $4016
+ReadRight:
+  LDA $4016         ; Player 1 - Right
   AND #$00000001    ; If the Right Button was pressed, the result of the AND operation will be 1
-  BEQ EndRead1Right  ; otherwise result will be 0.
+  BEQ EndReadRight  ; otherwise result will be 0.
 
   LDA ship1Tile6X
-  CMP #$F0
-  BEQ EndReadXInput1WithCollision
-  BEQ EndRead1Right
+  CMP #$ee
+  BEQ EndReadXInputWithCollision
+  BEQ EndReadRight
 
 
   LDA ship1Tile1X
@@ -375,198 +377,13 @@ Read1Right:
   ADC #01
   STA ship1Tile3X
   STA ship1Tile6X
-EndRead1Right:
+EndReadRight:
   RTS
 
-EndReadXInput1WithCollision:
+EndReadXInputWithCollision:
   JSR wallCollisionBeep
   JSR disableBeep
   RTS
-
-; --------------------------------------------------------------------------
-;                   End of the Player 1 movements handlers
-; --------------------------------------------------------------------------
-
-
-; --------------------------------------------------------------------------
-; In the section below you'll find the handlers for the Player 2 movements;
-; --------------------------------------------------------------------------
-
-ReadPlayerTwoControls:
-  LDA #$01          ; prepare the controller to be read.
-  STA $4017
-  LDA #$00
-  STA $4017
-
-  ; Each load of the $4017 memory address is reading a different button of the player 2 controller.
-  ; The buttons are read always in this sequence: (A, B, Select, Start, Up, Down, Left, Right)
-
-  JSR Read2A
-  JSR Read2B
-  JSR Read2Select
-  JSR Read2Start
-  JSR Read2Up
-  JSR Read2Down
-  JSR Read2Left
-  JSR Read2Right
-  RTS
-
-; TODO:   Implement the logic to be used when the 'A' button be pressed.
-;         This button will be used to fire a bullet from the spaceship.
-Read2A:
-  LDA $4017       
-  AND #%00000001
-  BEQ EndRead2A
-  ; JSR Player1Shoot TODO: Implement player 2 shot
-
-EndRead2A:
-  RTS
-
-Read2B:
-  LDA $4017       
-  BEQ EndRead2B
-EndRead2B:
-  RTS
-
-Read2Select:
-  LDA $4017       
-  BEQ EndRead2Select
-EndRead2Select:
-  RTS
-
-Read2Start:
-  LDA $4017       
-  BEQ EndRead2Start
-EndRead2Start:
-  RTS
-
-Read2Up:
-  LDA $4017       
-  AND #%00000001
-  BEQ EndRead2Up
-
-  LDA ship2Tile1Y
-  CMP #$17
-  BEQ EndReadYInput2WithCollision
-  BEQ EndRead2Up
-
-  LDA ship2Tile1Y
-  SEC
-  SBC #$01
-  STA ship2Tile1Y
-  STA ship2Tile2Y
-  STA ship2Tile3Y
-
-  LDA ship2Tile4Y
-  SEC
-  SBC #$01
-  STA ship2Tile4Y
-  STA ship2Tile5Y
-  STA ship2Tile6Y
-EndRead2Up:
-  RTS
-
-Read2Down:
-  LDA $4017
-  AND #%00000001
-  BEQ EndRead2Down
-
-  LDA ship2Tile4Y
-  CMP #$60
-  BEQ EndReadYInput2WithCollision
-  BEQ EndRead2Down
-
-  LDA ship2Tile1Y
-  CLC
-  ADC #$01
-  STA ship2Tile1Y
-  STA ship2Tile2Y
-  STA ship2Tile3Y
-
-  LDA ship2Tile4Y
-  CLC
-  ADC #$01
-  STA ship2Tile4Y
-  STA ship2Tile5Y
-  STA ship2Tile6Y
-EndRead2Down:
-  RTS
-
-EndReadYInput2WithCollision:
-  JSR wallCollisionBeep
-  JSR disableBeep
-  RTS
-
-Read2Left:
-  LDA $4017
-  AND #$00000001      ; If the Left Button was pressed, the result of the AND operation will be 1
-  BEQ EndRead2Left    ; otherwise result will be 0.
-
-  LDA ship2Tile6X
-  CMP #$18
-  BEQ EndReadXInput2WithCollision
-  BEQ EndRead2Left
-
-
-  LDA ship2Tile1X
-  SEC
-  SBC #01
-  STA ship2Tile1X
-  STA ship2Tile4X
-
-  LDA ship2Tile2X
-  SEC
-  SBC #01
-  STA ship2Tile2X
-  STA ship2Tile5X
-
-  LDA ship2Tile3X
-  SEC
-  SBC #01
-  STA ship2Tile3X
-  STA ship2Tile6X
-EndRead2Left:
-  RTS
-
-Read2Right:
-  LDA $4017
-  AND #$00000001    ; If the Right Button was pressed, the result of the AND operation will be 1
-  BEQ EndRead2Right  ; otherwise result will be 0.
-
-  LDA ship2Tile6X
-  CMP #$F0
-  BEQ EndReadXInput2WithCollision
-  BEQ EndRead2Right
-
-
-  LDA ship2Tile1X
-  CLC
-  ADC #01
-  STA ship2Tile1X
-  STA ship2Tile4X
-
-  LDA ship2Tile2X
-  CLC
-  ADC #01
-  STA ship2Tile2X
-  STA ship2Tile5X
-
-  LDA ship2Tile3X
-  CLC
-  ADC #01
-  STA ship2Tile3X
-  STA ship2Tile6X
-EndRead2Right:
-  RTS
-
-EndReadXInput2WithCollision:
-  JSR wallCollisionBeep
-  JSR disableBeep
-  RTS
-
-; --------------------------------------------------------------------------
-;                   End of the Player 2 movements handlers
-; --------------------------------------------------------------------------
 
 ; ShootAnimation
 
@@ -575,13 +392,13 @@ Player1Shoot:
   LDA shotPlayer1Exists
   BEQ LoadShot
   RTS
-  
+
 moveShot:
   ; Move only if the shot exists
   LDA shotPlayer1Exists
   BNE moveShotPlayer1
   RTS
-  
+
 moveShotPlayer1:
   LDA leftShotPlayer1Y
   SEC
@@ -595,25 +412,11 @@ moveShotDone:
 
   RTS
 
-checkShotCollision:
-  LDX leftShotPlayer1Y
-  CPX #$00    ;check if the shot has reached the upper wall
-  BEQ deleteShot
-  CPX #$01    ;check if the shot has reached the upper wall
-  BEQ deleteShot
-  CPX #$02    ;check if the shot has reached the upper wall
-  BEQ deleteShot
-  RTS
-deleteShot:
-  LDA #$00
-  STA shotPlayer1Exists  ;set flags
-  LDA #$FF               ;hide sprite
-  STA leftShotPlayer1Tile
-  LDA #$FF
-  STA rightShotPlayer1Tile
-  RTS
-
 LoadShot:
+  ;Update Hit Flags
+  LDA #$00
+  STA leftShotHitP1
+  STA rightShotHitP1
   ;Load first shot
   LDA ship1Tile1Y  ;update left shot sprite info
   STA leftShotPlayer1Y
@@ -644,7 +447,6 @@ LoadShot:
   JSR shotBeep
   JSR disableBeep
   JSR decreaseLifeP1   ; TODO tirar e por em putro lugar hehehe
-  JSR decreaseLifeP2
   RTS
 
 shotBeep:
@@ -667,7 +469,7 @@ shotBeep:
 wallCollisionBeep:
   LDA #%00000001
   STA $4015
- 
+
   LDA #%10111111
   STA $4000
 
@@ -684,10 +486,10 @@ wallCollisionBeep:
 shotCollisionBeep:
   LDA #%00000001
   STA $4015
- 
+
   LDA #%10111111
   STA $4000
- 
+
   ;LDA #%
   ;STA $4001
 
@@ -714,13 +516,94 @@ disableBeep:
 
    RTS
 
+
+checkShotCollision:
+  LDX leftShotPlayer1Y
+  CPX #$00    ;check if the shot has reached the upper wall
+  BEQ deleteShot
+  CPX #$01    ;check if the shot has reached the upper wall
+  BEQ deleteShot
+  CPX #$02    ;check if the shot has reached the upper wall
+  BEQ deleteShot
+
+  LDX leftShotHitP1                  ; check if left shot already hit the ship2
+  CPX #$00
+  BEQ checkLeftCollisionWithShip2    ;check collision for left shot
+nextColCheck:
+  LDX rightShotHitP1                  ; check if right shot already hit the ship2
+  CPX #$00
+  BEQ checkRightCollisionWithShip2   ;check collision for right shot
+doneChecking:
+  RTS
+
+
+checkLeftCollisionWithShip2:    ; check if left shot has reached ship2, tile per tile
+  LDY #$00                      ; initialize counter
+loopLeftYCollision:             ; check if Y-coordinate of sprite and shot matches
+  LDA ship2Tile1Y, Y            ; carrega os 6 tiles
+  INY
+  INY
+  INY
+  CMP leftShotPlayer1Y
+  BEQ checkLeftXCollision
+  INY
+  CPY #$18
+  BNE loopLeftYCollision
+  JMP nextColCheck
+checkLeftXCollision:            ;check if x-coordinate of sprite and shot matches
+  LDA ship2Tile1Y, Y
+  CMP leftShotPlayer1X
+  BEQ weGottaHitS2byleft              ;BATEU A NAVE rsrsrs
+  INY
+  JMP loopLeftYCollision
+weGottaHitS2byleft:                   ; Some com o tiro, reduz vida do P2
+  LDA #$01
+  STA leftShotHitP1                   ; set left hit flag
+  JSR deleteShot
+  JSR decreaseLifeP2
+  JMP doneChecking
+
+checkRightCollisionWithShip2:    ; check if right shot has reached ship2, tile per tile
+  LDY #$00                       ; initialize counter
+loopRightYCollision:             ; check if Y-coordinate of sprite and shot matches
+  LDA ship2Tile1Y, Y
+  INY
+  INY
+  INY
+  CMP rightShotPlayer1Y
+  BEQ checkRightXCollision
+  INY
+  CPY #$18
+  BNE loopRightYCollision
+  RTS
+checkRightXCollision:            ;check if x-coordinate of sprite and shot matches
+  LDA ship2Tile1Y, Y
+  CMP rightShotPlayer1X
+  BEQ weGottaHitS2byright              ;BATEU A NAVE rsrsrs
+  INY
+  JMP loopRightYCollision
+weGottaHitS2byright:                   ; Some com o tiro, reduz vida do P2
+  LDA #$01
+  STA rightShotHitP1                   ; set right hit flag
+  JSR deleteShot
+  JSR decreaseLifeP2
+  JMP doneChecking
+
+deleteShot:
+  LDA #$00
+  STA shotPlayer1Exists     ;set flags
+  LDA #$FF                  ;hide sprite
+  STA leftShotPlayer1Tile
+  LDA #$FF
+  STA rightShotPlayer1Tile
+  RTS
+
 NMI:
   LDA #$00
   STA $2003                     ; set the low byte (00) of the RAM address
   LDA #$03
   STA $4014                     ; set the high byte (02) of the RAM address, start the transfer
-  JSR ReadPlayerOneControls     ; read the input of the player 1.
-  JSR ReadPlayerTwoControls     ; read the input of the player 2.
+  JSR ReadPlayerOneControls     ; read the input
   JSR moveShot
   JSR checkShotCollision
   RTI                           ; return from interrupt
@@ -749,4 +632,4 @@ sprites:
 
   .bank 2
   .org $0000
-  .incbin "graphics/graphics.chr"	
+  .incbin "graphics/graphics.chr"
