@@ -213,178 +213,6 @@ SetShotsHit:
   STA rightShotHitP1
   RTS
 
-ReadPlayerOneControls:
-  LDA #$01          ; prepare the controller to be read.
-  STA $4016
-  LDA #$00
-  STA $4016
-
-  ; Each load of the $4016 memory address is reading a different button.
-  ; The buttons are read always in this sequence: (A, B, Select, Start, Up, Down, Left, Right)
-
-  ;LDA $4016         ; Player 1 - A
-  ;AND #$00000001    ; If the A Button was pressed, the result of the AND operation will be 1
-  ;BEQ EndReadA      ; otherwise result will be 0.
-  JSR ReadA       ; Player 1 - A
-  JSR ReadB       ; Player 1 - B
-  JSR ReadSelect
-  JSR ReadStart
-  JSR ReadUp
-  JSR ReadDown
-  JSR ReadLeft
-  JSR ReadRight
-  RTS
-
-
-
-; TODO:   Implement the logic to be used when the 'A' button be pressed.
-;         This button will be used to fire a bullet from the spaceship.
-ReadA:
-  LDA $4016
-  AND #%00000001
-  BEQ EndReadA
-  JSR Player1Shoot
-
-EndReadA:
-  RTS
-ReadB:
-  LDA $4016
-  BEQ EndReadB
-EndReadB:
-  RTS
-ReadSelect:
-  LDA $4016
-  BEQ EndReadSelect
-EndReadSelect:
-  RTS
-ReadStart:
-  LDA $4016
-  BEQ EndReadStart
-EndReadStart:
-  RTS
-ReadUp:
-  LDA $4016
-  AND #%00000001
-  BEQ EndReadUp
-
-  LDA ship1Tile1Y
-  CMP #$80
-  BEQ EndReadYInputWithCollision
-  BEQ EndReadUp
-
-  LDA ship1Tile1Y
-  SEC
-  SBC #$01
-  STA ship1Tile1Y
-  STA ship1Tile2Y
-  STA ship1Tile3Y
-
-  LDA ship1Tile4Y
-  SEC
-  SBC #$01
-  STA ship1Tile4Y
-  STA ship1Tile5Y
-  STA ship1Tile6Y
-EndReadUp:
-  RTS
-ReadDown:
-  LDA $4016       ; Player 1 - Down
-  AND #%00000001
-  BEQ EndReadDown
-
-  LDA ship1Tile4Y
-  CMP #$d8
-  BEQ EndReadYInputWithCollision
-  BEQ EndReadDown
-
-  LDA ship1Tile1Y
-  CLC
-  ADC #$01
-  STA ship1Tile1Y
-  STA ship1Tile2Y
-  STA ship1Tile3Y
-
-  LDA ship1Tile4Y
-  CLC
-  ADC #$01
-  STA ship1Tile4Y
-  STA ship1Tile5Y
-  STA ship1Tile6Y
-EndReadDown:
-  RTS
-
-
-EndReadYInputWithCollision:
-  JSR wallCollisionBeep
-  JSR disableBeep
-  RTS
-
-ReadLeft:
-  LDA $4016         ; Player 1 - Left
-  AND #$00000001    ; If the Left Button was pressed, the result of the AND operation will be 1
-  BEQ EndReadLeft   ; otherwise result will be 0.
-
-  LDA ship1Tile6X
-  CMP #$19
-  BEQ EndReadXInputWithCollision
-  BEQ EndReadLeft
-
-
-  LDA ship1Tile1X
-  SEC
-  SBC #01
-  STA ship1Tile1X
-  STA ship1Tile4X
-
-  LDA ship1Tile2X
-  SEC
-  SBC #01
-  STA ship1Tile2X
-  STA ship1Tile5X
-
-  LDA ship1Tile3X
-  SEC
-  SBC #01
-  STA ship1Tile3X
-  STA ship1Tile6X
-EndReadLeft:
-  RTS
-ReadRight:
-  LDA $4016         ; Player 1 - Right
-  AND #$00000001    ; If the Right Button was pressed, the result of the AND operation will be 1
-  BEQ EndReadRight  ; otherwise result will be 0.
-
-  LDA ship1Tile6X
-  CMP #$ee
-  BEQ EndReadXInputWithCollision
-  BEQ EndReadRight
-
-
-  LDA ship1Tile1X
-  CLC
-  ADC #01
-  STA ship1Tile1X
-  STA ship1Tile4X
-
-  LDA ship1Tile2X
-  CLC
-  ADC #01
-  STA ship1Tile2X
-  STA ship1Tile5X
-
-  LDA ship1Tile3X
-  CLC
-  ADC #01
-  STA ship1Tile3X
-  STA ship1Tile6X
-EndReadRight:
-  RTS
-
-EndReadXInputWithCollision:
-  JSR wallCollisionBeep
-  JSR disableBeep
-  RTS
-
 ; ShootAnimation
 
 Player1Shoot:
@@ -516,7 +344,6 @@ disableBeep:
 
    RTS
 
-
 checkShotCollision:
   LDX leftShotPlayer1Y
   CPX #$00    ;check if the shot has reached the upper wall
@@ -603,7 +430,8 @@ NMI:
   STA $2003                     ; set the low byte (00) of the RAM address
   LDA #$03
   STA $4014                     ; set the high byte (02) of the RAM address, start the transfer
-  JSR ReadPlayerOneControls     ; read the input
+  JSR ReadPlayerOneControls     ; read the player 1 input
+  JSR ReadPlayerTwoControls     ; read the player 2 input
   JSR moveShot
   JSR checkShotCollision
   RTI                           ; return from interrupt
@@ -613,6 +441,8 @@ NMI:
   .org $E000
 
   .include "decreaseLife.asm"
+  .include "movements/player1Movements.asm"
+  .include "movements/player2Movements.asm"
 background:
   .include "graphics/background.asm"
 
