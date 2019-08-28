@@ -197,7 +197,7 @@ LoadSprites:
   RTS
 
 SetShotSpeed:
-  LDA #$02
+  LDA #$05
   STA shotspeed
   RTS
 
@@ -295,59 +295,6 @@ nextColCheck:
 doneChecking:
   RTS
 
-
-checkLeftCollisionWithShip2:    ; check if left shot has reached ship2, tile per tile
-  LDY #$00                      ; initialize counter
-loopLeftYCollision:             ; check if Y-coordinate of sprite and shot matches
-  LDA ship2Tile1Y, Y            ; carrega os 6 tiles
-  INY
-  INY
-  INY
-  CMP leftShotPlayer1Y
-  BEQ checkLeftXCollision
-  INY
-  CPY #$18
-  BNE loopLeftYCollision
-  JMP nextColCheck
-checkLeftXCollision:            ;check if x-coordinate of sprite and shot matches
-  LDA ship2Tile1Y, Y
-  CMP leftShotPlayer1X
-  BEQ weGottaHitS2byleft              ;BATEU A NAVE rsrsrs
-  INY
-  JMP loopLeftYCollision
-weGottaHitS2byleft:                   ; Some com o tiro, reduz vida do P2
-  LDA #$01
-  STA leftShotHitP1                   ; set left hit flag
-  JSR deleteShot
-  JSR decreaseLifeP2
-  JMP doneChecking
-
-checkRightCollisionWithShip2:    ; check if right shot has reached ship2, tile per tile
-  LDY #$00                       ; initialize counter
-loopRightYCollision:             ; check if Y-coordinate of sprite and shot matches
-  LDA ship2Tile1Y, Y
-  INY
-  INY
-  INY
-  CMP rightShotPlayer1Y
-  BEQ checkRightXCollision
-  INY
-  CPY #$18
-  BNE loopRightYCollision
-  RTS
-checkRightXCollision:            ;check if x-coordinate of sprite and shot matches
-  LDA ship2Tile1Y, Y
-  CMP rightShotPlayer1X
-  BEQ weGottaHitS2byright              ;BATEU A NAVE rsrsrs
-  INY
-  JMP loopRightYCollision
-weGottaHitS2byright:                   ; Some com o tiro, reduz vida do P2
-  LDA #$01
-  STA rightShotHitP1                   ; set right hit flag
-  JSR deleteShot
-  JSR decreaseLifeP2
-  JMP doneChecking
-
 deleteShot:
   LDA #$00
   STA shotPlayer1Exists     ;set flags
@@ -356,6 +303,84 @@ deleteShot:
   LDA #$FF
   STA rightShotPlayer1Tile
   RTS
+
+checkLeftCollisionWithShip2:    ; check if left shot has reached ship2, tile per tile
+  LDY #$03                      ; initialize counter
+loopLeftXCollision:             ; check if Y-coordinate of sprite and shot matches
+  LDA ship2Tile1Y, Y            ; carrega os 6 tiles
+  CMP leftShotPlayer1X
+  BEQ checkLeftYCollision
+didntHitLeft:                   ; return of checkLeftYCollision
+  INY
+  INY
+  INY
+  INY
+  CPY #$1B
+  BNE loopLeftXCollision
+  JMP nextColCheck
+checkLeftYCollision:            ;check if x-coordinate of sprite and shot matches
+  DEY
+  DEY
+  DEY
+  LDA ship2Tile1Y, Y                  ; Checa se atingiu o Y da nave, com uma margem de erro pela vel. do tiro.
+  CMP leftShotPlayer1Y
+  BEQ weGottaHitS2byleft              ;BATEU A NAVE rsrsrs
+  SBC #$01
+  CMP leftShotPlayer1Y
+  BEQ weGottaHitS2byleft              ;BATEU A NAVE rsrsrs
+  SBC #$01
+  CMP leftShotPlayer1Y
+  BEQ weGottaHitS2byleft              ;BATEU A NAVE rsrsrs
+  INY
+  INY
+  INY
+  JMP didntHitLeft
+weGottaHitS2byleft:                   ; Some com o tiro, reduz vida do P2
+  LDA #$01
+  STA leftShotHitP1                   ; set left hit flag
+  LDA #$FF                  ;hide sprite
+  STA leftShotPlayer1Tile
+  JSR decreaseLifeP2
+  JMP nextColCheck
+
+checkRightCollisionWithShip2:    ; check if right shot has reached ship2, tile per tile
+  LDY #$03                       ; initialize counter
+loopRightXCollision:             ; check if Y-coordinate of sprite and shot matches
+  LDA ship2Tile1Y, Y
+  CMP rightShotPlayer1X
+  BEQ checkRightYCollision
+didntHitRight:                   ; return of checkRightYCollision
+  INY
+  INY
+  INY
+  INY
+  CPY #$1B
+  BNE loopRightXCollision
+  RTS
+checkRightYCollision:            ;check if x-coordinate of sprite and shot matches
+  DEY
+  DEY
+  DEY
+  LDA ship2Tile1Y, Y
+  CMP rightShotPlayer1Y
+  BEQ weGottaHitS2byright              ;BATEU A NAVE rsrsrs
+  SBC #$01
+  CMP rightShotPlayer1Y
+  BEQ weGottaHitS2byright              ;BATEU A NAVE rsrsrs
+  SBC #$01
+  CMP rightShotPlayer1Y
+  BEQ weGottaHitS2byright              ;BATEU A NAVE rsrsrs
+  INY
+  INY
+  INY
+  JMP didntHitRight
+weGottaHitS2byright:                   ; Some com o tiro, reduz vida do P2
+  LDA #$01
+  STA rightShotHitP1                   ; set right hit flag
+  LDA #$FF                             ;hide sprite
+  STA rightShotPlayer1Tile
+  JSR decreaseLifeP2
+  JMP doneChecking
 
 NMI:
   LDA #$00
