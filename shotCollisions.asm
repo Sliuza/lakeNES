@@ -180,10 +180,10 @@ checkRightYCollisionP2:            ;check if x-coordinate of sprite and shot mat
   CMP #$00
   BEQ weGottaHitS1byright
   JMP didntHitRightP2
-weGottaHitS1byright:                   ; Some com o tiro, reduz vida do P2
+weGottaHitS1byright:                   ; Some com o tiro, reduz vida do P1
   LDA #$01
   STA rightShotHitP2                   ; set right hit flag
   LDA #$FF                             ;hide sprite
   STA rightShotPlayer2Tile
-  JSR decreaseLifeP2
+  JSR decreaseLifeP1
   JMP doneCheckingP2
