@@ -197,7 +197,7 @@ LoadSprites:
   RTS
 
 SetShotSpeed:
-  LDA #$03
+  LDA #$02
   STA shotspeed
   RTS
 
@@ -273,76 +273,8 @@ LoadShot:
   LDA #$01
   STA shotPlayer1Exists
   JSR shotBeep
-  JSR disableBeep
-  JSR decreaseLifeP1   ; TODO tirar e por em putro lugar hehehe
+  ;JSR decreaseLifeP1   ; TODO tirar e por em putro lugar hehehe
   RTS
-
-shotBeep:
-  LDA #%00000001
-  STA $4015
-
-  LDA #%10111111
-  STA $4000
-
-  ;LDA #%
-  ;STA $4001
-
-  LDA #$C9
-  STA $4002
-  LDA #$00
-  STA $4003
-
-  RTS
-
-wallCollisionBeep:
-  LDA #%00000001
-  STA $4015
-
-  LDA #%10111111
-  STA $4000
-
-  ;LDA #%
-  ;STA $4001
-
-  LDA #$C9
-  STA $4002
-  LDA #$00
-  STA $4003
-
-  RTS
-
-shotCollisionBeep:
-  LDA #%00000001
-  STA $4015
-
-  LDA #%10111111
-  STA $4000
-
-  ;LDA #%
-  ;STA $4001
-
-  LDA #$C9
-  STA $4002
-  LDA #$00
-  STA $4003
-
-  RTS
-
-disableBeep:
-  LDY #100
-  soundMainLoop:
-  LDX #100
-  soundSecondaryLoop:
-    DEX
-    CPX #0
-    BNE soundSecondaryLoop
-   DEY
-   CPY #0
-   BNE soundMainLoop
-   LDA #%00000000
-   STA $4015
-
-   RTS
 
 checkShotCollision:
   LDX leftShotPlayer1Y
@@ -443,6 +375,8 @@ NMI:
   .include "decreaseLife.asm"
   .include "movements/player1Movements.asm"
   .include "movements/player2Movements.asm"
+  .include "sound/beep.asm"
+
 background:
   .include "graphics/background.asm"
 

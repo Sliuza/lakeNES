@@ -53,7 +53,7 @@ Read1Up:
 
   LDA ship1Tile1Y
   CMP #$7D
-  BEQ EndReadYInput1WithCollision
+  BEQ wallCollisionBeep1
   BEQ EndRead1Up
 
   LDA ship1Tile1Y
@@ -79,7 +79,7 @@ Read1Down:
 
   LDA ship1Tile4Y
   CMP #$d8
-  BEQ EndReadYInput1WithCollision
+  BEQ wallCollisionBeep1
   BEQ EndRead1Down
 
   LDA ship1Tile1Y
@@ -98,10 +98,18 @@ Read1Down:
 EndRead1Down:
   RTS
 
-EndReadYInput1WithCollision:
-  JSR wallCollisionBeep
-  JSR disableBeep
-  RTS
+   wallCollisionBeep1:
+      LDA #%00000001
+      STA $4015
+
+      LDA #%10111111
+      STA $4000
+      LDA #$A0
+      STA $4002
+      LDA #$00
+      STA $4003
+      JSR disableBeep
+      RTS
 
 Read1Left:
   LDA $4016
@@ -110,7 +118,7 @@ Read1Left:
 
   LDA ship1Tile6X
   CMP #$18
-  BEQ EndReadXInput1WithCollision
+  BEQ wallCollisionBeep1
   BEQ EndRead1Left
 
 
@@ -141,7 +149,7 @@ Read1Right:
 
   LDA ship1Tile6X
   CMP #$F0
-  BEQ EndReadXInput1WithCollision
+  BEQ wallCollisionBeep1
   BEQ EndRead1Right
 
 
@@ -163,9 +171,4 @@ Read1Right:
   STA ship1Tile3X
   STA ship1Tile6X
 EndRead1Right:
-  RTS
-
-EndReadXInput1WithCollision:
-  JSR wallCollisionBeep
-  JSR disableBeep
   RTS

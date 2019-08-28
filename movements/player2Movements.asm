@@ -53,7 +53,7 @@ Read2Up:
 
   LDA ship2Tile1Y
   CMP #$17
-  BEQ EndReadYInput2WithCollision
+  BEQ wallCollisionBeep2
   BEQ EndRead2Up
 
   LDA ship2Tile1Y
@@ -79,7 +79,7 @@ Read2Down:
 
   LDA ship2Tile4Y
   CMP #$60
-  BEQ EndReadYInput2WithCollision
+  BEQ wallCollisionBeep2
   BEQ EndRead2Down
 
   LDA ship2Tile1Y
@@ -98,10 +98,18 @@ Read2Down:
 EndRead2Down:
   RTS
 
-EndReadYInput2WithCollision:
-  JSR wallCollisionBeep
-  JSR disableBeep
-  RTS
+wallCollisionBeep2:
+      LDA #%00000001
+      STA $4015
+
+      LDA #%10111111
+      STA $4000
+          LDA #$C9
+      STA $4002
+      LDA #$00
+      STA $4003
+      JSR disableBeep
+      RTS
 
 Read2Left:
   LDA $4017
@@ -110,7 +118,7 @@ Read2Left:
 
   LDA ship2Tile6X
   CMP #$18
-  BEQ EndReadXInput2WithCollision
+  BEQ wallCollisionBeep2
   BEQ EndRead2Left
 
 
@@ -141,7 +149,7 @@ Read2Right:
 
   LDA ship2Tile6X
   CMP #$F0
-  BEQ EndReadXInput2WithCollision
+  BEQ wallCollisionBeep2
   BEQ EndRead2Right
 
 
@@ -165,8 +173,4 @@ Read2Right:
 EndRead2Right:
   RTS
 
-EndReadXInput2WithCollision:
-  JSR wallCollisionBeep
-  JSR disableBeep
-  RTS
 
