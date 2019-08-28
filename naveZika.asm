@@ -198,7 +198,7 @@ LoadSprites:
   RTS
 
 SetShotSpeed:
-  LDA #$02
+  LDA #$04
   STA shotspeed
   RTS
 
@@ -285,6 +285,12 @@ checkShotCollision:
   BEQ deleteShot
   CPX #$02    ;check if the shot has reached the upper wall
   BEQ deleteShot
+  CPX #$03    ;check if the shot has reached the upper wall
+  BEQ deleteShot
+  CPX #$04    ;check if the shot has reached the upper wall
+  BEQ deleteShot
+
+
 
   LDX leftShotHitP1                  ; check if left shot already hit the ship2
   CPX #$00
@@ -306,35 +312,26 @@ deleteShot:
   RTS
 
 checkLeftCollisionWithShip2:    ; check if left shot has reached ship2, tile per tile
-  LDY #$03                      ; initialize counter
 loopLeftXCollision:             ; check if Y-coordinate of sprite and shot matches
-  LDA ship2Tile1Y, Y            ; carrega os 6 tiles
-  CMP leftShotPlayer1X
+  LDA leftShotPlayer1X            ; carrega os 6 tiles
+  SBC ship2Tile1X
+  AND #%11110000                  ; is it in interval 0-15?
+  CMP #$00
+  BEQ checkLeftYCollision
+  AND #%11101111                  ; is it 16?
+  CMP #$00
   BEQ checkLeftYCollision
 didntHitLeft:                   ; return of checkLeftYCollision
-  INY
-  INY
-  INY
-  INY
-  CPY #$1B
-  BNE loopLeftXCollision
   JMP nextColCheck
 checkLeftYCollision:            ;check if x-coordinate of sprite and shot matches
-  DEY
-  DEY
-  DEY
-  LDA ship2Tile1Y, Y                  ; Checa se atingiu o Y da nave, com uma margem de erro pela vel. do tiro.
-  CMP leftShotPlayer1Y
-  BEQ weGottaHitS2byleft              ;BATEU A NAVE rsrsrs
-  SBC #$01
-  CMP leftShotPlayer1Y
-  BEQ weGottaHitS2byleft              ;BATEU A NAVE rsrsrs
-  SBC #$01
-  CMP leftShotPlayer1Y
-  BEQ weGottaHitS2byleft              ;BATEU A NAVE rsrsrs
-  INY
-  INY
-  INY
+  LDA leftShotPlayer1Y                  ; Checa se atingiu o Y da nave, com uma margem de erro pela vel. do tiro.
+  SBC ship2Tile1Y
+  AND #%11111000                  ; is it in interval 0-7?
+  CMP #$00
+  BEQ weGottaHitS2byleft         ; BATEU A NAVE rsrsrs
+  AND #%11110111                  ; is it 8?
+  CMP #$00
+  BEQ weGottaHitS2byleft
   JMP didntHitLeft
 weGottaHitS2byleft:                   ; Some com o tiro, reduz vida do P2
   LDA #$01
@@ -345,35 +342,26 @@ weGottaHitS2byleft:                   ; Some com o tiro, reduz vida do P2
   JMP nextColCheck
 
 checkRightCollisionWithShip2:    ; check if right shot has reached ship2, tile per tile
-  LDY #$03                       ; initialize counter
 loopRightXCollision:             ; check if Y-coordinate of sprite and shot matches
-  LDA ship2Tile1Y, Y
-  CMP rightShotPlayer1X
+  LDA rightShotPlayer1X
+  SBC ship2Tile1X
+  AND #%11110000                  ; is it in interval 0-15?
+  CMP #$00
+  BEQ checkRightYCollision
+  AND #%11101111                  ; is it 16?
+  CMP #$00
   BEQ checkRightYCollision
 didntHitRight:                   ; return of checkRightYCollision
-  INY
-  INY
-  INY
-  INY
-  CPY #$1B
-  BNE loopRightXCollision
-  RTS
+  JMP doneChecking
 checkRightYCollision:            ;check if x-coordinate of sprite and shot matches
-  DEY
-  DEY
-  DEY
-  LDA ship2Tile1Y, Y
-  CMP rightShotPlayer1Y
-  BEQ weGottaHitS2byright              ;BATEU A NAVE rsrsrs
-  SBC #$01
-  CMP rightShotPlayer1Y
-  BEQ weGottaHitS2byright              ;BATEU A NAVE rsrsrs
-  SBC #$01
-  CMP rightShotPlayer1Y
-  BEQ weGottaHitS2byright              ;BATEU A NAVE rsrsrs
-  INY
-  INY
-  INY
+  LDA rightShotPlayer1Y
+  SBC ship2Tile1Y
+  AND #%11111000                  ; is it in interval 0-7?
+  CMP #$00
+  BEQ weGottaHitS2byright
+  AND #%11110111                  ; is it 8?
+  CMP #$00
+  BEQ weGottaHitS2byright
   JMP didntHitRight
 weGottaHitS2byright:                   ; Some com o tiro, reduz vida do P2
   LDA #$01
@@ -423,4 +411,3 @@ sprites:
   .bank 2
   .org $0000
   .incbin "graphics/graphics.chr"
-
