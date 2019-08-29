@@ -80,6 +80,23 @@ rightShotPlayer2Tile   = $0365
 rightShotPlayer2Color  = $0366
 rightShotPlayer2X      = $0367
 
+GspriteY = $0368
+GspriteColor = $036A
+AspriteY = $036C
+AspriteColor = $036E
+MspriteY = $0370
+MspriteColor = $0372
+EspriteY = $0374
+EspriteColor = $0376
+OspriteY = $0378
+OspriteColor = $037A
+VspriteY = $037C
+VspriteColor = $037E
+EEspriteY = $0380
+EEspriteColor = $0382
+RspriteY = $0384
+RspriteColor = $0386
+
   .bank 0 ; Defines bank of memory
   .org $C000 ; Defines where in the CPU’s address space it is located
 
@@ -125,6 +142,7 @@ vblankwait2:      ; Second wait for vblank, PPU is ready after this
   JSR SetShotSpeed
   JSR SetLifeCounters
   JSR SetShotsHit
+  JSR SetGameOverTiles
 
   LDA #%10000000   ; Enable NMI, sprites and background on table 0
   STA $2000
@@ -206,8 +224,8 @@ LoadSprites:
   LDA spritePlayer1, x    ;load palette byte
   STA $0300, x      ;write to PPU
   INX               ;set index to next byte
-  CPX #$80
-  BNE .Loop         ;if x = $40, 64 in decimal, all done
+  CPX #$A0
+  BNE .Loop         ;if x = $80, 128 in decimal, all done
   RTS
 
 SetShotSpeed:
@@ -229,6 +247,17 @@ SetShotsHit:
   STA rightShotHitP2
   RTS
 
+SetGameOverTiles:
+  LDA #$03
+  STA GspriteColor
+  STA AspriteColor
+  STA MspriteColor
+  STA EspriteColor
+  STA OspriteColor
+  STA VspriteColor
+  STA EEspriteColor
+  STA RspriteColor
+  RTS
 ; ShootAnimation
 
 Player1Shoot:
