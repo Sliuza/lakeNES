@@ -79,12 +79,6 @@ dec2Heart4:
 endDecreaseP2:
   RTS
 
-gameOver2:
-  JSR printGameOverColors
-  JSR gameOverBeep
-  JMP gameOver2
-
-
 printGameOverColors:
   LDA #$00
   STA GspriteColor
@@ -96,3 +90,7 @@ printGameOverColors:
   STA EEspriteColor
   STA RspriteColor
   RTS
+
+gameOver2:
+  JSR printGameOverColors
+  JSR gameOverBeep

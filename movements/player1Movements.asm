@@ -104,9 +104,9 @@ EndRead1Down:
       LDA #%00000001
       STA $4015
 
-      LDA #%10111111
+      LDA #%10111011
       STA $4000
-      LDA #$A0
+      LDA #$50
       STA $4002
       LDA #$00
       STA $4003

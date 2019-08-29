@@ -31,8 +31,6 @@
     STA $400A
     LDA #$00
     STA $400B
-    JSR disableBeep
-
     RTS
 
   disableBeep:
