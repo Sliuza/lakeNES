@@ -37,6 +37,7 @@ endDecreaseP1:
   RTS
 
 gameOver:
+   JSR printGameOverColors
    JSR gameOverBeep
    JMP RESET
 
@@ -79,6 +80,19 @@ endDecreaseP2:
   RTS
 
 gameOver2:
+  JSR printGameOverColors
   JSR gameOverBeep
   JMP gameOver2
 
+
+printGameOverColors:
+  LDA #$00
+  STA GspriteColor
+  STA AspriteColor
+  STA MspriteColor
+  STA EspriteColor
+  STA OspriteColor
+  STA VspriteColor
+  STA EEspriteColor
+  STA RspriteColor
+  RTS
