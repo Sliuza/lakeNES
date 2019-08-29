@@ -23,7 +23,7 @@ Read2A:
   LDA $4017       
   AND #%00000001
   BEQ EndRead2A
-  ; JSR Player1Shoot TODO: Implement player 2 shot
+  JSR Player1Shoot ;TODO: Implement player 2 shot
 
 EndRead2A:
   RTS
@@ -35,8 +35,12 @@ EndRead2B:
   RTS
 
 Read2Select:
-  LDA $4017       
+  LDA $4017
+  AND #%00000001
   BEQ EndRead2Select
+
+  JMP RESET
+
 EndRead2Select:
   RTS
 
@@ -172,5 +176,6 @@ Read2Right:
   STA ship2Tile6X
 EndRead2Right:
   RTS
+
 
 

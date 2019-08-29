@@ -82,6 +82,7 @@ RESET:
   STX $2000    ; disable NMI
   STX $2001    ; disable rendering
   STX $4010    ; disable DMC IRQs
+  JSR disableBeep
 
 vblankwait1:       ; First wait for vblank to make sure PPU is ready
   BIT $2002
@@ -197,7 +198,7 @@ LoadSprites:
   RTS
 
 SetShotSpeed:
-  LDA #$05
+  LDA #$02
   STA shotspeed
   RTS
 
@@ -422,3 +423,4 @@ sprites:
   .bank 2
   .org $0000
   .incbin "graphics/graphics.chr"
+

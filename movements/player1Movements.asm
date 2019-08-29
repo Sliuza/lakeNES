@@ -35,8 +35,10 @@ EndRead1B:
   RTS
 
 Read1Select:
-  LDA $4016       
+  LDA $4016
+  AND #%00000001
   BEQ EndRead1Select
+  JMP RESET
 EndRead1Select:
   RTS
 
@@ -172,3 +174,4 @@ Read1Right:
   STA ship1Tile6X
 EndRead1Right:
   RTS
+

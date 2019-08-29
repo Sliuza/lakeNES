@@ -19,25 +19,26 @@ decreaseLifeP1:
 
 decHeart0:             ; change sprite pallet color (fade)
   STY heart0ColorP1
-  JMP endDecrease
+  JMP endDecreaseP1
 decHeart1:
   STY heart1ColorP1
-  JMP endDecrease
+  JMP endDecreaseP1
 decHeart2:
   STY heart2ColorP1
-  JMP endDecrease
+  JMP endDecreaseP1
 decHeart3:
   STY heart3ColorP1
-  JMP endDecrease
+  JMP endDecreaseP1
 decHeart4:
   STY heart4ColorP1
-  JMP endDecrease
+  JMP endDecreaseP1
 
-endDecrease:
+endDecreaseP1:
   RTS
 
 gameOver:
-  RTS
+   JSR gameOverBeep
+   JMP RESET
 
 decreaseLifeP2:
   LDX lifeCounterP2   ; when player gets hit, decrease life
@@ -78,4 +79,6 @@ endDecreaseP2:
   RTS
 
 gameOver2:
-  RTS
+  JSR gameOverBeep
+  JMP gameOver2
+

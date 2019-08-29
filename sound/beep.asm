@@ -1,38 +1,37 @@
 
 
   shotBeep:
-    LDA #%00000001
+    LDA #%00000010
     STA $4015
 
     LDA #%10111111
-    STA $4000
+    STA $4004
 
     ;LDA #%
     ;STA $4001
 
-    LDA #$EF
-    STA $4002
+    LDA #$C9
+    STA $4006
     LDA #$00
-    STA $4003
+    STA $4007
     JSR disableBeep
     RTS
 
-
   gameOverBeep:
-    LDA #%00000001
+    LDA #%00000100
     STA $4015
 
     LDA #%10111111
-    STA $4000
+    STA $4008
 
     ;LDA #%
     ;STA $4001
 
     LDA #$EF
-    STA $4002
+    STA $400A
     LDA #$00
-    STA $4003
-    ;JSR disableBeep
+    STA $400B
+    JSR disableBeep
 
     RTS
 
@@ -51,3 +50,4 @@
      STA $4015
 
      RTS
+
