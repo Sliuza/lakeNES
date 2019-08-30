@@ -14,10 +14,10 @@
     RTS
 
   gameOverBeep:
-    LDA #%00000100 ;this byte sends the information for PPU reproduce a triangular wave
+    LDA #%01110100 ;this byte sends the information for PPU reproduce a triangular wave
     STA $4015
 
-    LDA #%10111111
+    LDA #%01111111
     STA $4008
 
     LDA #$EF
