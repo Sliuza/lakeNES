@@ -52,10 +52,11 @@ decreaseLifeP2:
   LDX lifeCounterP2   ; when player gets hit, decrease life
   DEX
   CPX #$00
-  BEQ gameOver        ; in case of overflow, there is no more lifes left. GAME OVER.
   STX lifeCounterP2   ; update counter
 
   LDY #$02            ; choose palette 02
+  CPX #$FF            ;checks wich heart to fade  
+  BEQ dec2Heart0
   CPX #$00            ;checks wich heart to fade  
   BEQ dec2Heart0
   CPX #$01
@@ -66,6 +67,7 @@ decreaseLifeP2:
   BEQ dec2Heart3
   CPX #$04
   BEQ dec2Heart4
+  BEQ gameOver        ; in case of overflow, there is no more lifes left. GAME OVER.
 
 dec2Heart0:             ; change sprite pallet color (fade)
   STY heart0ColorP2
