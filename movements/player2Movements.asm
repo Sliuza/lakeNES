@@ -23,7 +23,7 @@ Read2A:
   LDA $4017       
   AND #%00000001
   BEQ EndRead2A
-  JSR Player1Shoot ;TODO: Implement player 2 shot
+  JSR Player2Shoot
 
 EndRead2A:
   RTS

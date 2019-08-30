@@ -258,68 +258,6 @@ SetGameOverTiles:
   STA EEspriteColor
   STA RspriteColor
   RTS
-; ShootAnimation
-
-Player1Shoot:
-  ; Shoot only if player shot does not exists
-  LDA shotPlayer1Exists
-  BEQ LoadShot
-  RTS
-
-moveShot:
-  ; Move only if the shot exists
-  LDA shotPlayer1Exists
-  BNE moveShotPlayer1
-  RTS
-
-moveShotPlayer1:
-  LDA leftShotPlayer1Y
-  SEC
-  SBC shotspeed        ;shot position = shoty - shotspeedy
-  STA leftShotPlayer1Y
-  LDA rightShotPlayer1Y
-  SEC
-  SBC shotspeed        ;shot position = shoty - shotspeedy
-  STA rightShotPlayer1Y
-moveShotDone:
-
-  RTS
-
-LoadShot:
-  ;Update Hit Flags
-  LDA #$00
-  STA leftShotHitP1
-  STA rightShotHitP1
-  ;Load first shot
-  LDA ship1Tile1Y  ;update left shot sprite info
-  STA leftShotPlayer1Y
-
-  LDA #$18
-  STA leftShotPlayer1Tile
-
-  LDA #$00
-  STA leftShotPlayer1Color
-
-  LDA ship1Tile1X
-  STA leftShotPlayer1X
-
-  ;Load second shot
-  LDA ship1Tile3Y  ;update right shot sprite info
-  STA rightShotPlayer1Y
-
-  LDA #$19
-  STA rightShotPlayer1Tile
-
-  LDA #$00
-  STA rightShotPlayer1Color
-
-  LDA ship1Tile3X
-  STA rightShotPlayer1X
-  LDA #$01
-  STA shotPlayer1Exists
-  JSR shotBeep
-  ;JSR decreaseLifeP1   ; TODO tirar e por em putro lugar hehehe
-  RTS
 
 NMI:
   LDA #$00
@@ -328,7 +266,8 @@ NMI:
   STA $4014                     ; set the high byte (02) of the RAM address, start the transfer
   JSR ReadPlayerOneControls     ; read the player 1 input
   JSR ReadPlayerTwoControls     ; read the player 2 input
-  JSR moveShot
+  JSR movePlayer1ShotIfExistis
+  JSR movePlayer2ShotIfExistis
   JSR checkShotCollisionP1
   JSR checkShotCollisionP2
   RTI                           ; return from interrupt
@@ -340,6 +279,8 @@ NMI:
   .include "decreaseLife.asm"
   .include "movements/player1Movements.asm"
   .include "movements/player2Movements.asm"
+  .include "shots/player1Shot.asm"
+  .include "shots/player2Shot.asm"
   .include "sound/beep.asm"
   .include "shotCollisions.asm"
 
