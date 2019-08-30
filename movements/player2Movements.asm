@@ -10,6 +10,9 @@ ReadPlayerTwoControls:
   JSR Read2A
   JSR Read2B
   JSR Read2Select
+  LDA gameOverLock
+  CMP #$01
+  BEQ EndRead2A
   JSR Read2Start
   JSR Read2Up
   JSR Read2Down
@@ -17,7 +20,6 @@ ReadPlayerTwoControls:
   JSR Read2Right
   RTS
 
-; TODO:   Implement the logic to be used when the 'A' button be pressed.
 ;         This button will be used to fire a bullet from the spaceship.
 Read2A:
   LDA $4017       

@@ -1,4 +1,7 @@
 decreaseLifeP1:
+  LDA gameOverLock
+  CMP #$01
+  BEQ endDecreaseP1
   LDX lifeCounterP1   ; when player gets hit, decrease life
   DEX
   CPX #$00
@@ -39,8 +42,14 @@ endDecreaseP1:
 gameOver:
    JSR printGameOverColors
    JSR gameOverBeep
+   LDA #$01
+   STA gameOverLock
+   RTS
 
 decreaseLifeP2:
+  LDA gameOverLock
+  CMP #$01
+  BEQ endDecreaseP2
   LDX lifeCounterP2   ; when player gets hit, decrease life
   DEX
   CPX #$00
@@ -90,6 +99,8 @@ printGameOverColors:
   STA RspriteColor
   RTS
 
-;gameOver2:
- ; JSR printGameOverColors
-  ;JSR gameOverBeep
+gameOver2:
+  JSR printGameOverColors
+  JSR gameOverBeep
+  LDA #$01
+  STA gameOverLock

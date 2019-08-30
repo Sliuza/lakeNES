@@ -18,6 +18,7 @@ leftShotHitP1  .rs 1
 rightShotHitP1 .rs 1
 leftShotHitP2  .rs 1
 rightShotHitP2 .rs 1
+gameOverLock .rs 1
 
 leftShotPlayer1Y       = $0318
 leftShotPlayer1Tile    = $0319
@@ -237,6 +238,10 @@ SetLifeCounters:
   STA lifeCounterP1
   STA lifeCounterP2
   RTS
+
+SetGameOverLock:
+  LDA #$00
+  STA gameOverLock
 
 SetShotsHit:
   LDA #$00
