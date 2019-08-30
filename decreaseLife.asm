@@ -55,8 +55,6 @@ decreaseLifeP2:
   STX lifeCounterP2   ; update counter
 
   LDY #$02            ; choose palette 02
-  CPX #$FF            ;checks wich heart to fade  
-  BEQ dec2Heart0
   CPX #$00            ;checks wich heart to fade  
   BEQ dec2Heart0
   CPX #$01
