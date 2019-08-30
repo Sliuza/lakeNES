@@ -96,15 +96,15 @@ weGottaHitS2byright:                   ; Some com o tiro, reduz vida do P2
 
 checkShotCollisionP2:
   LDX leftShotPlayer2Y
-  CPX #$D8    ;check if the shot has reached the upper wall
+  CPX #$E8    ;check if the shot has reached the upper wall
   BEQ deleteShotP2
-  CPX #$D9    ;check if the shot has reached the upper wall
+  CPX #$E9    ;check if the shot has reached the upper wall
   BEQ deleteShotP2
-  CPX #$DA    ;check if the shot has reached the upper wall
+  CPX #$EA    ;check if the shot has reached the upper wall
   BEQ deleteShotP2
-  CPX #$DB    ;check if the shot has reached the upper wall
+  CPX #$EB    ;check if the shot has reached the upper wall
   BEQ deleteShotP2
-  CPX #$DC    ;check if the shot has reached the upper wall
+  CPX #$EC    ;check if the shot has reached the upper wall
   BEQ deleteShotP2
 
 
