@@ -5,7 +5,6 @@ decreaseLifeP1:
   LDX lifeCounterP1   ; when player gets hit, decrease life
   DEX
   CPX #$00
-  BEQ gameOver        ; in case of overflow, there is no more lifes left. GAME OVER.
   STX lifeCounterP1   ; update counter
 
   LDY #$02            ; choose palette 02
@@ -22,7 +21,7 @@ decreaseLifeP1:
 
 decHeart0:             ; change sprite pallet color (fade)
   STY heart0ColorP1
-  JMP endDecreaseP1
+  JMP gameOver
 decHeart1:
   STY heart1ColorP1
   JMP endDecreaseP1
@@ -70,7 +69,7 @@ decreaseLifeP2:
 
 dec2Heart0:             ; change sprite pallet color (fade)
   STY heart0ColorP2
-  JMP endDecreaseP2
+  JMP gameOver
 dec2Heart1:
   STY heart1ColorP2
   JMP endDecreaseP2
@@ -88,7 +87,7 @@ endDecreaseP2:
   RTS
 
 printGameOverColors:
-  LDA #$00
+  LDA #$0
   STA GspriteColor
   STA AspriteColor
   STA MspriteColor
@@ -98,9 +97,3 @@ printGameOverColors:
   STA EEspriteColor
   STA RspriteColor
   RTS
-
-gameOver2:
-  JSR printGameOverColors
-  JSR gameOverBeep
-  LDA #$01
-  STA gameOverLock
