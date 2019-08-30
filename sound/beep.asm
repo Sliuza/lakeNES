@@ -1,14 +1,11 @@
 
-
+; refers to the implementation of some of the beeps executed on the game
   shotBeep:
-    LDA #%00000010
+    LDA #%00000010 ;this byte sends the information for PPU reproduce a square wave
     STA $4015
 
     LDA #%10111111
     STA $4004
-
-    ;LDA #%
-    ;STA $4001
 
     LDA #$C9
     STA $4006
@@ -18,14 +15,11 @@
     RTS
 
   gameOverBeep:
-    LDA #%00000100
+    LDA #%00000100 ;this byte sends the information for PPU reproduce a triangular wave
     STA $4015
 
     LDA #%10111111
     STA $4008
-
-    ;LDA #%
-    ;STA $4001
 
     LDA #$EF
     STA $400A
@@ -33,7 +27,7 @@
     STA $400B
     RTS
 
-  disableBeep:
+  disableBeep: ;implements a silly loop for the beep execution and then disables it
     LDY #40
     soundMain1Loop:
     LDX #100

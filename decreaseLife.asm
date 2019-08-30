@@ -39,17 +39,16 @@ endDecreaseP1:
 gameOver:
    JSR printGameOverColors
    JSR gameOverBeep
-   JMP RESET
 
 decreaseLifeP2:
   LDX lifeCounterP2   ; when player gets hit, decrease life
   DEX
   CPX #$00
-  BEQ gameOver2        ; in case of overflow, there is no more lifes left. GAME OVER.
+  BEQ gameOver        ; in case of overflow, there is no more lifes left. GAME OVER.
   STX lifeCounterP2   ; update counter
 
   LDY #$02            ; choose palette 02
-  CPX #$00            ;checks wich heart to fade
+  CPX #$00            ;checks wich heart to fade  
   BEQ dec2Heart0
   CPX #$01
   BEQ dec2Heart1
@@ -91,6 +90,6 @@ printGameOverColors:
   STA RspriteColor
   RTS
 
-gameOver2:
-  JSR printGameOverColors
-  JSR gameOverBeep
+;gameOver2:
+ ; JSR printGameOverColors
+  ;JSR gameOverBeep

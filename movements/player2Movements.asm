@@ -82,9 +82,9 @@ Read2Down:
   BEQ EndRead2Down
 
   LDA ship2Tile4Y
-  CMP #$60
-  BEQ wallCollisionBeep2
-  BEQ EndRead2Down
+  CMP #$60          ; checks if the ship currently is on the bottom limit of the screen
+  BEQ wallCollisionBeep2 ;if positive the beep is enabled
+  BEQ EndRead2Down ;the down move is skipped 
 
   LDA ship2Tile1Y
   CLC
