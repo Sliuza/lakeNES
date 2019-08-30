@@ -37,9 +37,7 @@ loopLeftXCollision:             ; check if Y-coordinate of sprite and shot match
   AND #%11110000                  ; is it in interval 0-15?
   CMP #$00
   BEQ checkLeftYCollision
-  AND #%11101111                  ; is it 16?
-  CMP #$00
-  BEQ checkLeftYCollision
+
 didntHitLeft:                   ; return of checkLeftYCollision
   JMP nextColCheck
 checkLeftYCollision:            ;check if x-coordinate of sprite and shot matches
@@ -133,9 +131,6 @@ loopLeftXCollisionP2:             ; check if Y-coordinate of sprite and shot mat
   LDA leftShotPlayer2X            ; carrega os 6 tiles
   SBC ship1Tile1X
   AND #%11110000                  ; is it in interval 0-15?
-  CMP #$00
-  BEQ checkLeftYCollisionP2
-  AND #%11101111                  ; is it 16?
   CMP #$00
   BEQ checkLeftYCollisionP2
 didntHitLeftP2:                   ; return of checkLeftYCollision
