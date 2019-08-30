@@ -107,7 +107,6 @@ wallCollisionBeep2:
   STA $4015
 
   LDA #%10111111
-  STA $4000
   LDA #$50
   STA $4002
   LDA #$00

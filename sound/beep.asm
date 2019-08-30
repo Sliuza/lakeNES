@@ -4,7 +4,7 @@
     LDA #%00000010 ;this byte sends the information for PPU reproduce a square wave
     STA $4015
 
-    LDA #%10111111
+    LDA #%01011100
     STA $4004
 
     LDA #$C9
