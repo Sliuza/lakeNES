@@ -100,18 +100,17 @@ Read1Down:
 EndRead1Down:
   RTS
 
-   wallCollisionBeep1: ;this subroutine had to be put here for keeping an acceptable distance in memory relative to the routines invoking it
-      LDA #%00000001
-      STA $4015        ;stores the byte that will describe the wave causing the beep, in this case, a square wave 
+wallCollisionBeep1: ;this subroutine had to be put here for keeping an acceptable distance in memory relative to the routines invoking it
+  LDA #%00000001
+  STA $4015        ;stores the byte that will describe the wave causing the beep, in this case, a square wave 
 
-      LDA #%01011100   ;sets properties of the wave like volume, counter enabled/disabled or intensity
-      STA $4000
-      LDA #$50
-      STA $4002        ;low byte for beep note 
-      LDA #$00
-      STA $4003        ;high byte for beep note 
-      JSR disableBeep
-      RTS
+  LDA #%01011100   ;sets properties of the wave like volume, counter enabled/disabled or intensity
+  STA $4000
+  LDA #$50
+  STA $4002        ;low byte for beep note 
+  LDA #$00
+  STA $4003        ;high byte for beep note 
+  RTS
 
 Read1Left:
   LDA $4016

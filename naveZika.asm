@@ -112,7 +112,6 @@ RESET:
   STX $2000    ; disable NMI
   STX $2001    ; disable rendering
   STX $4010    ; disable DMC IRQs
-  JSR disableBeep
 
 vblankwait1:       ; First wait for vblank to make sure PPU is ready
   BIT $2002

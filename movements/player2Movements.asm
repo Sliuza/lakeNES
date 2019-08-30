@@ -103,17 +103,16 @@ EndRead2Down:
   RTS
 
 wallCollisionBeep2:
-      LDA #%00000001
-      STA $4015
+  LDA #%00000001
+  STA $4015
 
-      LDA #%10111111
-      STA $4000
-      LDA #$50
-      STA $4002
-      LDA #$00
-      STA $4003
-      JSR disableBeep
-      RTS
+  LDA #%10111111
+  STA $4000
+  LDA #$50
+  STA $4002
+  LDA #$00
+  STA $4003
+  RTS
 
 Read2Left:
   LDA $4017
