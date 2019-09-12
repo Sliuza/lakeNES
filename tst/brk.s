@@ -44,15 +44,33 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
    .base $10000-(PRG_COUNT*$4000)
 
 Reset:
-   nop ; Abort execution
+   nop 
+   nop
+   nop
+   nop 
+   nop
+   nop
+   nop 
+   nop
+   lda #$1
+   brk ; Abort execution
 
 NMI:
+   jsr loop
+   brk
 
    ;NOTE: NMI code goes here
+
+
 
 IRQ:
 
    ;NOTE: IRQ code goes here
+
+loop: 
+   nop
+   nop
+   rts
 
 ;----------------------------------------------------------------
 ; interrupt vectors
@@ -63,3 +81,4 @@ IRQ:
    .dw NMI
    .dw Reset
    .dw IRQ
+
