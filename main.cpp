@@ -36,47 +36,22 @@ int main(int argc, const char *argv[])
 {
 
 	std::ifstream input("bin/brk", std::ios::binary);
-
-	std::vector<char> bytes(
-		(std::istreambuf_iterator<char>(input)),
-		(std::istreambuf_iterator<char>()));
-
-	// std::cout << (char)bytes.at(0);
-	// std::cout << (char)bytes.at(1);
-	// std::cout << (char)bytes.at(2);
-	// std::cout << " ";
-	// std::cout << " ";
-	// std::cout << (unsigned)(uint8_t)bytes.at(3);
-	// std::cout << " ";
-	// std::cout << (unsigned)(uint8_t)bytes.at(4);
-	// std::cout << " ";
-
-	// std::cout << (unsigned)bytes.at(7);
-	// std::cout << " ";
-	// std::cout << (unsigned)bytes.at(8);
-	// std::cout << " ";
-	std::cout << std::hex << (unsigned)(uint8_t)bytes.at(16);
-	std::cout << " ";
-	// std::cout << (unsigned)bytes.at(8);
-
-
-	// std::cout << " ";
-	// std::cout << (unsigned)bytes.at(48);
-	// std::cout << " ";
-	// std::cout << (unsigned)(uint8_t)bytes.at(16396);
-	// std::cout << " ";
-	// unsigned int valueH = (unsigned)(uint8_t)bytes.at(0xFD);
-	unsigned int valueH = (unsigned)(uint8_t)bytes.at(16397);
-	std::cout << std::hex << valueH;
-	// std::cout << std::hex << valueH;
-	// std::cout << " ";
-	unsigned int valueL = (unsigned)(uint8_t)bytes.at(16398);
-	std::cout << std::hex << valueL;
-	// std::cout << std::hex << (unsigned)bytes.at(0xc002%bytes.size());
-
-
-	// std::cout << " ";
-	// std::cout << (unsigned)(uint8_t)bytes.at(16399); 
+	std::vector<char> bytes(65536);
+	char a;
+	int counter = 0;
+	int byteCounter = 0xc000;
+	while(!input.eof()){
+		input >> a;
+		if(counter>16){
+			bytes.insert(bytes.begin()+ byteCounter, char(a));
+			byteCounter += 1;
+		}
+		counter +=1;
+	}
+	for(int i= 0xc000; i<bytes.size();i++){
+		cout <<std::hex<< (unsigned)(uint8_t)bytes.at(i);
+	}
+	
 	input.close();
 
 	return 0;
