@@ -5,8 +5,7 @@
 #include <fstream>
 #include <iterator>
 #include <vector>
-#include "rom.hpp"
-#include "cpu.hpp"
+#include "nes.hpp"
 using namespace std;
 
 void print(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc, uint8_t p)
@@ -32,9 +31,6 @@ void printls(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc, uint8_t 
 		 << " | MEM[0x" << hex << setw(4) << addr
 		 << "] = 0x" << hex << setw(2) << (unsigned)data << " |" << endl;
 }
-void NES(){
-
-}
 
 int main(int argc, const char *argv[])
 {
@@ -50,11 +46,7 @@ int main(int argc, const char *argv[])
 		exit(1);
 	}
 	string pathToROM = argv[1];
-	CPU cpu;
-	cpu.loadROM(pathToROM);
-	cpu.printROM();
-	
-	
-
+	NES nes(pathToROM);
+	nes.load();
 	return 0;
 }
