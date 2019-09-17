@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iterator>
 #include <vector>
+#include <bitset>
 using namespace std;
 
 void print(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc, uint8_t p)
@@ -37,20 +38,45 @@ int main(int argc, const char *argv[])
 
 	std::ifstream input("bin/brk", std::ios::binary);
 	std::vector<char> bytes(65536);
-	char a;
+	char d;
+
 	int counter = 0;
 	int byteCounter = 0xc000;
 	while(!input.eof()){
-		input >> a;
-		if(counter>16){
-			bytes.insert(bytes.begin()+ byteCounter, char(a));
+		input >> d;
+		if(counter>=16){
+			bytes.insert(bytes.begin()+ byteCounter, char(d));
 			byteCounter += 1;
 		}
 		counter +=1;
 	}
-	for(int i= 0xc000; i<bytes.size();i++){
-		cout <<std::hex<< (unsigned)(uint8_t)bytes.at(i);
-	}
+	// reprodução do que foi lido como ROM
+	// for(int i= 0xc000; i<bytes.size();i++){
+	// 	cout <<std::hex<< (unsigned)(uint8_t)bytes.at(i);
+	// }
+
+	unsigned int pc = 0xc000;
+	unsigned int a = 0;
+	unsigned int x = 0;
+	unsigned int y = 0;
+	std::bitset<8> ps (0);
+	unsigned int instruction;
+
+	while((unsigned)(uint8_t)bytes.at(pc) != 0x00){
+		// cout << std::hex<< (unsigned)(uint8_t)bytes.at(pc);
+		instruction = (unsigned)(uint8_t)bytes.at(pc);
+		switch(instruction){
+			case 0xea:
+				cout << "NOP" << '\n';
+				break;
+			case 0xa9:
+				cout << "LDA" << '\n';
+				break;
+		}
+		pc++;
+	}	
+	cout << "BRK" << '\n';
+	cout << ps << '\n';
 	
 	input.close();
 
