@@ -1,5 +1,10 @@
+# *****************************************************
+# Parameters to control Makefile operation
+
 CC=g++
-CCFLAGS=-std=gnu++11 -O3
+# CCFLAGS=-std=gnu++11 -O3
+CFLAGS = -std=c++11
+# CCFLAGS = -std=c++11 -lncurses //TODO: Fix warnings when compiling with this option.
 
 TST=./tst
 RES=./res
@@ -10,6 +15,8 @@ NES=./bin/nesemu
 
 TESTS=$(addprefix ${BIN}/, $(notdir $(patsubst %.s,%,$(sort $(wildcard ${TST}/*.s)))))
 CROSS_AS=${EXT}/asm6/asm6
+
+# ****************************************************
 
 all: ${BIN} ${LOG} ${NES}
 
@@ -54,3 +61,35 @@ setup:
 
 clean:
 	rm -rf ${BIN}/* ${LOG}/*
+
+
+#g++ -c main.cpp -std=c++11
+#g++ -c Nes.cpp -std=c++11
+#g++ -c Cpu.cpp -std=c++11
+#g++ -c Rom.cpp -std=c++11
+#g++ -c Memory.cpp -std=c++11
+
+#g++ -o main main.o Nes.o Cpu.o Rom.o Memory.o -std=c++11
+
+build: main
+
+main: main.o Nes.o Cpu.o Rom.o Memory.o
+	$(CC) $(CFLAGS) -o main main.o Nes.o Cpu.o Rom.o Memory.o
+
+main.o: main.cpp
+	$(CC) $(CFLAGS) -c main.cpp
+
+Nes.o: Nes.cpp ../include/Nes.hpp
+	$(CC) $(CFLAGS) -c Nes.cpp
+
+Cpu.o: Cpu.cpp ../include/Cpu.hpp
+	$(CC) $(CFLAGS) -c Cpu.cpp
+
+Rom.o: Rom.cpp ../include/Rom.hpp
+	$(CC) $(CFLAGS) -c Rom.cpp
+
+Memory.o: Memory.cpp ../include/Memory.hpp
+	$(CC) $(CFLAGS) -c Memory.cpp
+	
+clear: 
+	$(RM) *.o *~
