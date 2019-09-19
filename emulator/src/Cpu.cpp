@@ -1,8 +1,9 @@
 #include "../include/Cpu.hpp"
+#include "../include/Instruction.hpp"
 
 Cpu::Cpu() {
   this->pc_reg = 0;
-  this->sp_reg = 0xFD;
+  this->sp_reg = 0xFF;
   this->x_reg = 0;
   this->y_reg = 0;
   this->a_reg = 0;
@@ -34,7 +35,19 @@ void Cpu::loadROM(string path) {
 void Cpu::printROM() {
   cout << "printROM\n";
   vector<uint8_t> r = this->rom.getRom();
+
+  Instruction *instruction;
+
+  // TODO : Create a Instruction Factory responsible for create the
+  // instance according to the instruction pointed by PC.
+  instruction = new ADCInstruction(1, 3);
+
+  instruction->execute(this, 0x123);
   // for (int i = 0xc000; i < r.size(); i++) {
   //   cout << std::hex << (unsigned)(uint8_t)r.at(i);
   // }
+
+  this->pc_reg += instruction->getInstructionSize();
+
+  cout << "[PC]: " << this->pc_reg << "\n";
 }

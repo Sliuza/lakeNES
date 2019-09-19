@@ -68,13 +68,14 @@ clean:
 #g++ -c Cpu.cpp -std=c++11
 #g++ -c Rom.cpp -std=c++11
 #g++ -c Memory.cpp -std=c++11
+#g++ -c Instruction.cpp -std=c++11
 
-#g++ -o main main.o Nes.o Cpu.o Rom.o Memory.o -std=c++11
+#g++ -o main main.o Nes.o Cpu.o Rom.o Memory.o Instruction.o -std=c++11
 
 build: main
 
-main: main.o Nes.o Cpu.o Rom.o Memory.o
-	$(CC) $(CFLAGS) -o main main.o Nes.o Cpu.o Rom.o Memory.o
+main: main.o Nes.o Cpu.o Rom.o Memory.o Instruction.o
+	$(CC) $(CFLAGS) -o main main.o Nes.o Cpu.o Rom.o Memory.o Instruction.o
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) -c main.cpp
@@ -90,6 +91,9 @@ Rom.o: Rom.cpp ../include/Rom.hpp
 
 Memory.o: Memory.cpp ../include/Memory.hpp
 	$(CC) $(CFLAGS) -c Memory.cpp
+
+Instruction.o: Instruction.cpp ../include/Instruction.hpp
+	$(CC) $(CFLAGS) -c Instruction.cpp
 	
 clear: 
 	$(RM) *.o *~
