@@ -40,7 +40,7 @@ void Cpu::printROM() {
 
   // TODO : Create a Instruction Factory responsible for create the
   // instance according to the instruction pointed by PC.
-  instruction = new ADCInstruction(1, 3);
+  instruction = new LDAInstruction(1, 3);
 
   instruction->execute(this, 0x123);
   // for (int i = 0xc000; i < r.size(); i++) {

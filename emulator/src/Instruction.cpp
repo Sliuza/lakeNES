@@ -1,17 +1,26 @@
 #include "../include/Instruction.hpp"
+#include "../include/Cpu.hpp"
 
-ADCInstruction::ADCInstruction(uint8_t addressingMode,
-                               uint8_t instructionSize) {
+BaseInstruction::BaseInstruction(uint8_t addressingMode,
+                                 uint8_t instructionSize) {
+  cout << "[BaseInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
   this->_addressingMode = addressingMode;
   this->_instructionSize = instructionSize;
-  cout << "\n\nADCInstruction Constructor...\n";
+}
+
+uint8_t BaseInstruction::getAddressingMode() { return this->_addressingMode; };
+
+uint8_t BaseInstruction::getInstructionSize() {
+  return this->_instructionSize;
 };
 
-void ADCInstruction::execute(Cpu *cpu, uint16_t address) {
-  cout << "Executing a ADC instruction...\n";
-  cout << "[Address]: " << address << "\n\n";
-};
+LDAInstruction::LDAInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[LDAInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
 
-uint8_t ADCInstruction::getInstructionSize() { return this->_instructionSize; }
-
-uint8_t ADCInstruction::getAddressingMode() { return this->_addressingMode; }
+void LDAInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[LDAInstruction] -  execute()\n";
+}
