@@ -95,7 +95,7 @@ Memory.o: Memory.cpp ../include/Memory.hpp
 Instruction.o: Instruction.cpp ../include/Instruction.hpp
 	$(CC) $(CFLAGS) -c Instruction.cpp
 
-Instruction.o: InstructionFactory.cpp ../include/InstructionFactory.hpp
+InstructionFactory.o: InstructionFactory.cpp ../include/InstructionFactory.hpp
 	$(CC) $(CFLAGS) -c InstructionFactory.cpp
 
 clear: 
