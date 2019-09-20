@@ -28,9 +28,9 @@ public:
   uint8_t getAddressingMode();
 };
 
-class LDAInstruction : public BaseInstruction {
+class ADCInstruction : public BaseInstruction {
 public:
-  LDAInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  ADCInstruction(uint8_t addressingMode, uint8_t instructionSize);
   void execute(Cpu *cpu, uint16_t address = 0);
 };
 

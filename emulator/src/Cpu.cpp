@@ -1,5 +1,6 @@
 #include "../include/Cpu.hpp"
 #include "../include/Instruction.hpp"
+#include "../include/InstructionFactory.hpp"
 
 Cpu::Cpu() {
   this->pc_reg = 0;
@@ -37,10 +38,11 @@ void Cpu::printROM() {
   vector<uint8_t> r = this->rom.getRom();
 
   Instruction *instruction;
+  InstructionFactory factory;
 
   // TODO : Create a Instruction Factory responsible for create the
   // instance according to the instruction pointed by PC.
-  instruction = new LDAInstruction(1, 3);
+  instruction = factory.createInstruction(0x69);
 
   instruction->execute(this, 0x123);
   // for (int i = 0xc000; i < r.size(); i++) {

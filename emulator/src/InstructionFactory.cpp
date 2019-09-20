@@ -29,6 +29,8 @@ InstructionFactory::InstructionFactory() {
   };
 };
 
+InstructionFactory::~InstructionFactory() {}
+
 operation_pair_t InstructionFactory::getOperationPair(uint8_t opCode) {
   return this->instructions.at(opCode);
 };
@@ -46,7 +48,7 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
 
   switch (instructionID) {
   case ADC: {
-    return new LDAInstruction(addressingMode, instructionSize);
+    return new ADCInstruction(addressingMode, instructionSize);
     break;
   }
   default: { break; }

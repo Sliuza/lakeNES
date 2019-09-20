@@ -15,12 +15,12 @@ uint8_t BaseInstruction::getInstructionSize() {
   return this->_instructionSize;
 };
 
-LDAInstruction::LDAInstruction(uint8_t addressingMode, uint8_t instructionSize)
+ADCInstruction::ADCInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[LDAInstruction] - constructor(" << unsigned(instructionSize)
+  cout << "[ADCInstruction] - constructor(" << unsigned(instructionSize)
        << ") \n";
 }
 
-void LDAInstruction::execute(Cpu *cpu, uint16_t address) {
-  cout << "[LDAInstruction] -  execute()\n";
+void ADCInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[ADCInstruction] -  execute()\n";
 }
