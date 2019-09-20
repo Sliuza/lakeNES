@@ -74,8 +74,8 @@ clean:
 
 build: main
 
-main: main.o Nes.o Cpu.o Rom.o Memory.o Instruction.o
-	$(CC) $(CFLAGS) -o main main.o Nes.o Cpu.o Rom.o Memory.o Instruction.o
+main: main.o Nes.o Cpu.o Rom.o Memory.o Instruction.o InstructionFactory.o
+	$(CC) $(CFLAGS) -o main main.o Nes.o Cpu.o Rom.o Memory.o Instruction.o InstructionFactory.o
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) -c main.cpp
@@ -94,6 +94,9 @@ Memory.o: Memory.cpp ../include/Memory.hpp
 
 Instruction.o: Instruction.cpp ../include/Instruction.hpp
 	$(CC) $(CFLAGS) -c Instruction.cpp
-	
+
+Instruction.o: InstructionFactory.cpp ../include/InstructionFactory.hpp
+	$(CC) $(CFLAGS) -c InstructionFactory.cpp
+
 clear: 
 	$(RM) *.o *~
