@@ -53,3 +53,41 @@ void Cpu::printROM() {
 
   cout << "[PC]: " << this->pc_reg << "\n";
 }
+
+//GETTERS
+uint16_t Cpu::getPc_reg(){
+  return this->pc_reg;
+}
+uint8_t Cpu::getSp_reg(){
+  return this->sp_reg;
+}
+uint8_t Cpu::getX_reg(){
+  return this->x_reg;
+}
+uint8_t Cpu::getY_reg(){
+  return this->y_reg;
+}
+Rom Cpu::getRom(){
+  return this->rom;
+}
+Memory Cpu::getRam(){
+  return this->ram;
+};
+
+//SETTERS
+void Cpu::setPc_reg(uint16_t _pc_reg){
+  this->pc_reg = _pc_reg;
+} 
+void Cpu::setSp_reg(uint8_t _sp_reg){
+  this->sp_reg = _sp_reg;
+}
+void Cpu::setX_reg(uint8_t _x_reg){
+  this->x_reg = _x_reg; 
+}
+void Cpu::setY_reg(uint8_t _y_reg){
+  this->y_reg = _y_reg; 
+}
+void Cpu::setA_reg(uint8_t _a_reg){
+  this->a_reg = _a_reg; 
+}
+  

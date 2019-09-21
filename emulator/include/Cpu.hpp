@@ -31,6 +31,21 @@ public:
   int getNumberOfPrgBlocks();
   void loadROM(string path);
   void printROM();
+
+  //GETTERS
+  uint16_t getPc_reg(); // program counter, 2 byte
+  uint8_t getSp_reg();  // stack pointer
+  uint8_t getX_reg(); // x register
+  uint8_t getY_reg(); // y register
+  Rom getRom();
+  Memory getRam();
+  
+  //SETTERS
+  void setPc_reg(uint16_t _pc_reg); // program counter, 2 byte
+  void setSp_reg(uint8_t _sp_reg);  // stack pointer
+  void setX_reg(uint8_t _x_reg); // x register
+  void setY_reg(uint8_t _y_reg); // y register
+  void setA_reg(uint8_t _a_reg);
 };
 
 #endif
