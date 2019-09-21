@@ -67,6 +67,9 @@ uint8_t Cpu::getX_reg(){
 uint8_t Cpu::getY_reg(){
   return this->y_reg;
 }
+uint8_t Cpu::getA_reg(){
+  return this->a_reg;
+}
 Rom Cpu::getRom(){
   return this->rom;
 }

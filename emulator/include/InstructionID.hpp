@@ -6,7 +6,10 @@
 enum InstructionID {
   ADC = 1,
   AND,
-  ASL
+  ASL,
+  LDA,
+  LDX,
+  LDY
   /*TODO: Fill it up with the others IDs.*/
 };
 

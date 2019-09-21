@@ -37,9 +37,10 @@ public:
   uint8_t getSp_reg();  // stack pointer
   uint8_t getX_reg(); // x register
   uint8_t getY_reg(); // y register
+  uint8_t getA_reg(); // a register
   Rom getRom();
   Memory getRam();
-  
+
   //SETTERS
   void setPc_reg(uint16_t _pc_reg); // program counter, 2 byte
   void setSp_reg(uint8_t _sp_reg);  // stack pointer
