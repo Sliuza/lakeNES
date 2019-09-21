@@ -15,6 +15,7 @@ private:
 
 public:
   Memory(uint size = 64 * 1024); /* 64KB*/
+  vector<uint8_t> getData();
 };
 
 #endif

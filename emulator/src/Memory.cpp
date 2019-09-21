@@ -11,3 +11,7 @@ Memory::Memory(uint size) {
   cout << "Alocating Memory\n"; // TODO: This Constructor is been called to many
                                 // times. Fix it!
 }
+
+vector<uint8_t> Memory::getData(){
+  return this->_data;
+}
