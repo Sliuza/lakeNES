@@ -26,6 +26,40 @@ InstructionFactory::InstructionFactory() {
       {0x71, make_pair(ADC, INDEXED_INDIRECT)},
 
       /* AND Instruction */
+      {0x29, make_pair(AND, IMMEDIATE)},
+      {0x25, make_pair(AND, ZERO_PAGE)},
+      {0x35, make_pair(AND, INDEXED_ZERO_PAGE_X)},
+      {0x2D, make_pair(AND, ABSOLUTE)},
+      {0x3D, make_pair(AND, INDEXED_ABSOLUTE_X)},
+      {0x39, make_pair(AND, INDEXED_ABSOLUTE_Y)},
+      {0x21, make_pair(AND, INDIRECT_INDEXED)},
+      {0x31, make_pair(AND, INDEXED_INDIRECT)},
+
+      /* LDA Instructions*/
+      {0xA9, make_pair(LDA, IMMEDIATE)},
+      {0xA5, make_pair(LDA, ZERO_PAGE)},
+      {0xB5, make_pair(LDA, INDEXED_ZERO_PAGE_X)},
+      {0xAD, make_pair(LDA, ABSOLUTE)},
+      {0xBD, make_pair(LDA, INDEXED_ABSOLUTE_X)},
+      {0xB9, make_pair(LDA, INDEXED_ABSOLUTE_Y)},
+      {0xA1, make_pair(LDA, INDIRECT_INDEXED)},
+      {0xB1, make_pair(LDA, INDEXED_INDIRECT)},
+
+      /* LDX Instructions*/
+      {0xA2, make_pair(LDX, IMMEDIATE)},
+      {0xA6, make_pair(LDX, ZERO_PAGE)},
+      {0xB6, make_pair(LDX, INDEXED_ZERO_PAGE_Y)},
+      {0xAE, make_pair(LDX, ABSOLUTE)},      
+      {0xBE, make_pair(LDX, INDEXED_ABSOLUTE_Y)},
+
+      /* LDY Instructions*/
+      {0xA0, make_pair(LDY, IMMEDIATE)},
+      {0xA4, make_pair(LDY, ZERO_PAGE)},
+      {0xB4, make_pair(LDY, INDEXED_ZERO_PAGE_X)},
+      {0xAC, make_pair(LDY, ABSOLUTE)},
+      {0xBC, make_pair(LDY, INDEXED_ABSOLUTE_X)},
+      
+
   };
 };
 
@@ -49,6 +83,22 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
   switch (instructionID) {
   case ADC: {
     return new ADCInstruction(addressingMode, instructionSize);
+    break;
+  }
+  case AND: {
+    return new ANDInstruction(addressingMode, instructionSize);
+    break;
+  }
+  case LDA: {
+    return new LDAInstruction(addressingMode, instructionSize);
+    break;
+  }
+  case LDX: {
+    return new LDXInstruction(addressingMode, instructionSize);
+    break;
+  }
+  case LDY: {
+    return new LDYInstruction(addressingMode, instructionSize);
     break;
   }
   default: { break; }
