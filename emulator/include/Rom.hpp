@@ -22,6 +22,7 @@ public:
   Rom();
   void load(string path);
   vector<uint8_t> getPgr();
+  uint8_t readPgr(uint16_t adress);
   vector<uint8_t> getChr();
 };
 
