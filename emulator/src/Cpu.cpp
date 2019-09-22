@@ -108,6 +108,24 @@ uint8_t Cpu::getY_reg(){
 uint8_t Cpu::getA_reg(){
   return this->a_reg;
 }
+bool Cpu::getF_carry(){
+  return this->f_carry;
+}
+bool Cpu::getF_zero(){
+  return this->f_zero;
+}
+bool Cpu::getF_interrupt(){
+  return this->f_interrupt;
+}
+bool Cpu::getF_decimal(){
+  return this->f_decimal; 
+}
+bool Cpu::getF_overflow(){
+  return this->f_overflow; 
+}
+bool Cpu::getF_negative(){
+  return this->f_negative;
+}
 Rom Cpu::getRom(){
   return this->rom;
 }
@@ -127,4 +145,21 @@ void Cpu::setY_reg(uint8_t _y_reg){
 void Cpu::setA_reg(uint8_t _a_reg){
   this->a_reg = _a_reg; 
 }
-  
+void Cpu::setF_carry(bool carry){
+  this->f_carry = carry; 
+}
+void Cpu::setF_zero(bool zero){
+  this->f_zero = zero; 
+}
+void Cpu::setF_interrupt(bool interrupt){
+  this->f_interrupt = interrupt; 
+}
+void Cpu::setF_decimal(bool decimal){
+  this->f_decimal = decimal; 
+}
+void Cpu::setF_overflow(bool overflow){
+  this->f_overflow = overflow; 
+}
+void Cpu::setF_negative(bool negative){
+  this->f_negative = negative; 
+}
