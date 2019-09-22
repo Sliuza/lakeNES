@@ -3,7 +3,6 @@
 #ifndef Cpu_hpp
 #define Cpu_hpp
 
-#include "Memory.hpp"
 #include "Rom.hpp"
 #include <bitset>
 #include <fstream>
@@ -24,21 +23,26 @@ private:
   uint8_t y_reg = 0; // y register
   uint8_t a_reg = 0; // a register
   Rom rom;
-  Memory ram;
+  uint8_t ram[0x800];
 
 public:
   Cpu();
   int getNumberOfPrgBlocks();
   void loadROM(string path);
   void printROM();
-
+  void startCpu();
+  enum Interrupt_type { BRK = 0, IRQ, NMI, reset };
+  uint8_t read_mem(uint16_t addr);
+  void push(uint8_t val);
+  uint8_t pull();
+  void interrupt(Interrupt_type interruption);
+  void run();
   //GETTERS
   uint16_t getPc_reg(); // program counter, 2 byte
   uint8_t getSp_reg();  // stack pointer
   uint8_t getX_reg(); // x register
   uint8_t getY_reg(); // y register
   Rom getRom();
-  Memory getRam();
   
   //SETTERS
   void setPc_reg(uint16_t _pc_reg); // program counter, 2 byte

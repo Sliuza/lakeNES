@@ -11,11 +11,6 @@ class Nes {
 public:
   Nes(string pathToRom);
   void load();
-  // void run(){
-  //     while(1){
-  //         // cpu.executeNextInstruction();
-  //     }
-  // }
 };
 
 #endif

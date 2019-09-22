@@ -67,15 +67,14 @@ clean:
 #g++ -c Nes.cpp -std=c++11
 #g++ -c Cpu.cpp -std=c++11
 #g++ -c Rom.cpp -std=c++11
-#g++ -c Memory.cpp -std=c++11
 #g++ -c Instruction.cpp -std=c++11
 
-#g++ -o main main.o Nes.o Cpu.o Rom.o Memory.o Instruction.o -std=c++11
+#g++ -o main main.o Nes.o Cpu.o Rom.o Instruction.o -std=c++11
 
 build: main clear
 
-main: main.o Nes.o Cpu.o Rom.o Memory.o Instruction.o InstructionFactory.o
-	$(CC) $(CFLAGS) -o main main.o Nes.o Cpu.o Rom.o Memory.o Instruction.o InstructionFactory.o
+main: main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o
+	$(CC) $(CFLAGS) -o main main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o
 
 main.o: emulator/src/main.cpp
 	$(CC) $(CFLAGS) -c emulator/src/main.cpp
@@ -88,9 +87,6 @@ Cpu.o: emulator/src/Cpu.cpp emulator/include/Cpu.hpp
 
 Rom.o: emulator/src/Rom.cpp emulator/include/Rom.hpp
 	$(CC) $(CFLAGS) -c emulator/src/Rom.cpp
-
-Memory.o: emulator/src/Memory.cpp emulator/include/Memory.hpp
-	$(CC) $(CFLAGS) -c emulator/src/Memory.cpp
 
 Instruction.o: emulator/src/Instruction.cpp emulator/include/Instruction.hpp
 	$(CC) $(CFLAGS) -c emulator/src/Instruction.cpp
