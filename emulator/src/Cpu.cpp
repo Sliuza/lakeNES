@@ -58,7 +58,7 @@ uint8_t Cpu::read_mem(uint16_t addr) {
 
     switch (addr) {
     case 0x0000 ... 0x1FFF: res = this->ram[addr & 0x7FF];      break;
-    // case 0x8000 ... 0xFFFF: res = this->rom.read_prg(addr);     break;
+    case 0x8000 ... 0xFFFF: res = this->rom.readPgr(addr);     break;
     }
     return res;
 }

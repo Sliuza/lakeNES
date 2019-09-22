@@ -15,12 +15,26 @@ void Rom::load(string path) {
     // read mapper
     this->mapper_number = ((header[6] >> 4) & 0xf) | (header[7] & 0xf0);
     cout << "Mapper #: " << +this->mapper_number << std::endl;
+    // TODO: support more mappers
+    if(this->mapper_number != 0){
+        cout << "ERROR: This emulator only support mapper NROM" << endl;
+    }
     // read game logic
     this->prg_rom.resize(0x4000 * num_prg_banks);
     romFile.read(reinterpret_cast<char*>(&this->prg_rom[0]), 0x4000 * num_prg_banks);
     // read game graphics
     this->chr_rom.resize(0x2000 * this->num_chr_banks);
     romFile.read(reinterpret_cast<char*>(&this->chr_rom[0]), 0x2000 * this->num_chr_banks);
+}
+// By now we are only using NROM mapper
+std::uint8_t Rom::readPgr(uint16_t adress){
+    if (num_prg_banks == 1)
+        return this->getPgr()[adress - 0x8000];
+    else if(num_prg_banks == 2)
+        return this->getPgr()[(adress - 0x8000) & 0x3fff];
+    else{
+        cout << "Number of banks not supported" << endl;
+    }
 }
 
 // getter
