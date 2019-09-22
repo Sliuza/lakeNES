@@ -13,57 +13,66 @@ Cpu::Cpu() {
 };
 
 int Cpu::getNumberOfPrgBlocks() { return 2; }
-void Cpu::startCpu(){
+void Cpu::startCpu() {
   // Initiate ram with 0xFF
   init_array(this->ram, (uint8_t)0xFF);
 };
 
-void Cpu::interrupt(Interrupt_type interruption){
-    uint16_t addr;
+void Cpu::interrupt(Interrupt_type interruption) {
+  uint16_t addr;
 
-    if (interruption != BRK) {
-        // For BRK, these have already been done
-        read_mem(this->pc_reg);
-        read_mem(this->pc_reg);
-    }
+  if (interruption != BRK) {
+    // For BRK, these have already been done
+    read_mem(this->pc_reg);
+    read_mem(this->pc_reg);
+  }
 
-    if (interruption == reset) {
-        addr = 0xFFFC;
-    }
-    this->pc_reg  = read_mem(addr);
-    this->pc_reg |= read_mem(addr + 1) << 8;
+  if (interruption == reset) {
+    addr = 0xFFFC;
+  }
+  this->pc_reg = read_mem(addr);
+  this->pc_reg |= read_mem(addr + 1) << 8;
 }
 void Cpu::push(uint8_t val) {
-    this->ram[0x100 + this->sp_reg--] = val;
+  this->ram[0x100 + this->sp_reg--] = val;
 }
 
 uint8_t Cpu::pull() {
-    return this->ram[0x100 + ++sp_reg];
+  return this->ram[0x100 + ++sp_reg];
 }
-void Cpu::run(){
+void Cpu::run() {
   this->startCpu();
   this->interrupt(reset);
-  while(1){
-    Instruction *instruction;
-    InstructionFactory factory;
+  Instruction *instruction;
+  InstructionFactory factory;
+  uint16_t address = 0;
+  while (1) {
     uint8_t opcode = read_mem(this->pc_reg++);
     instruction = factory.createInstruction(opcode);
-    instruction->execute(this, this->pc_reg);
+    address = getAddressBasedOnAddressingMode(instruction->getAddressingMode() + uint16_t(1));
+    instruction->execute(this, address);
+    this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
   }
 }
 uint8_t Cpu::read_mem(uint16_t addr) {
-    uint8_t res;
+  uint8_t res;
 
-    switch (addr) {
-    case 0x0000 ... 0x1FFF: res = this->ram[addr & 0x7FF];      break;
-    case 0x8000 ... 0xFFFF: res = this->rom.readPgr(addr);     break;
-    }
-    return res;
+  switch (addr) {
+    case 0x0000 ... 0x1FFF:
+      res = this->ram[addr & 0x7FF];
+      break;
+    case 0x8000 ... 0xFFFF:
+      res = this->rom.readPgr(addr);
+      break;
+  }
+  return res;
 }
 void Cpu::write_mem(uint8_t val, uint16_t addr) {
-    switch (addr) {
-    case 0x0000 ... 0x1FFF: this->ram[addr & 0x7FF] = val;      break;
-    }
+  switch (addr) {
+    case 0x0000 ... 0x1FFF:
+      this->ram[addr & 0x7FF] = val;
+      break;
+  }
 }
 void Cpu::loadROM(string path) {
   cout << "Running ROM: " << path << std::endl;
@@ -90,74 +99,103 @@ void Cpu::printROM() {
   cout << "[PC]: " << this->pc_reg << "\n";
 }
 
+uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
+  uint16_t address = 0;
+  switch (addressingMode) {
+    case ABSOLUTE: {
+      address = this->read16BitsAddress(this->pc_reg + uint16_t(1));
+      break;
+    }
+    case INDEXED_ABSOLUTE_X: {
+      address = this->read16BitsAddress(this->pc_reg + uint16_t(1)) + uint16_t(this->getX_reg);
+      break;
+    }
+    case INDEXED_ABSOLUTE_Y: {
+      address = this->read16BitsAddress(this->pc_reg + uint16_t(1)) + uint16_t(this->getY_reg);
+      break;
+    }
+    case IMMEDIATE: {
+      address = this->pc_reg + uint16_t(1);
+      break;
+    }
+  }
+  return address;
+}
+
+uint16_t Cpu::read16BitsAddress(uint16_t address) {
+  uint16_t lo = this->read_mem(address);
+  uint16_t hi = this->read_mem(address + uint16_t(1)) << 8;
+  return hi | lo;
+}
+
 //GETTERS
-uint16_t Cpu::getPc_reg(){
+uint16_t Cpu::getPc_reg() {
   return this->pc_reg;
 }
-uint8_t Cpu::getSp_reg(){
+uint8_t Cpu::getSp_reg() {
   return this->sp_reg;
 }
-uint8_t Cpu::getX_reg(){
+uint8_t Cpu::getX_reg() {
   return this->x_reg;
 }
-uint8_t Cpu::getY_reg(){
+uint8_t Cpu::getY_reg() {
   return this->y_reg;
 }
-uint8_t Cpu::getA_reg(){
+uint8_t Cpu::getA_reg() {
   return this->a_reg;
 }
-bool Cpu::getF_carry(){
+bool Cpu::getF_carry() {
   return this->f_carry;
 }
-bool Cpu::getF_zero(){
+bool Cpu::getF_zero() {
   return this->f_zero;
 }
-bool Cpu::getF_interrupt(){
+bool Cpu::getF_interrupt() {
   return this->f_interrupt;
 }
-bool Cpu::getF_decimal(){
-  return this->f_decimal; 
+bool Cpu::getF_decimal() {
+  return this->f_decimal;
 }
-bool Cpu::getF_overflow(){
-  return this->f_overflow; 
+bool Cpu::getF_overflow() {
+  return this->f_overflow;
 }
-bool Cpu::getF_negative(){
+bool Cpu::getF_negative() {
   return this->f_negative;
 }
-Rom Cpu::getRom(){
+Rom Cpu::getRom() {
   return this->rom;
 }
 //SETTERS
-void Cpu::setPc_reg(uint16_t _pc_reg){
+void Cpu::setPc_reg(uint16_t _pc_reg) {
   this->pc_reg = _pc_reg;
-} 
-void Cpu::setSp_reg(uint8_t _sp_reg){
+}
+void Cpu::setSp_reg(uint8_t _sp_reg) {
   this->sp_reg = _sp_reg;
 }
-void Cpu::setX_reg(uint8_t _x_reg){
-  this->x_reg = _x_reg; 
+void Cpu::setX_reg(uint8_t _x_reg) {
+  this->x_reg = _x_reg;
 }
-void Cpu::setY_reg(uint8_t _y_reg){
-  this->y_reg = _y_reg; 
+void Cpu::setY_reg(uint8_t _y_reg) {
+  this->y_reg = _y_reg;
 }
-void Cpu::setA_reg(uint8_t _a_reg){
-  this->a_reg = _a_reg; 
+void Cpu::setA_reg(uint8_t _a_reg) {
+  this->a_reg = _a_reg;
 }
-void Cpu::setF_carry(bool carry){
-  this->f_carry = carry; 
+void Cpu::setF_carry(bool carry) {
+  this->f_carry = carry;
 }
-void Cpu::setF_zero(bool zero){
-  this->f_zero = zero; 
+void Cpu::setF_zero(bool zero) {
+  this->f_zero = zero;
 }
-void Cpu::setF_interrupt(bool interrupt){
-  this->f_interrupt = interrupt; 
+void Cpu::setF_interrupt(bool interrupt) {
+  this->f_interrupt = interrupt;
 }
-void Cpu::setF_decimal(bool decimal){
-  this->f_decimal = decimal; 
+void Cpu::setF_decimal(bool decimal) {
+  this->f_decimal = decimal;
 }
-void Cpu::setF_overflow(bool overflow){
-  this->f_overflow = overflow; 
+void Cpu::setF_overflow(bool overflow) {
+  this->f_overflow = overflow;
 }
-void Cpu::setF_negative(bool negative){
-  this->f_negative = negative; 
+void Cpu::setF_negative(bool negative) {
+  this->f_negative = negative;
 }

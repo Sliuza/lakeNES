@@ -3,13 +3,21 @@
 #include "../include/InstructionID.hpp"
 
 InstructionFactory::InstructionFactory() {
-  this->addressingModeSize = {{ABSOLUTE, 3},           {INDEXED_ABSOLUTE_X, 3},
-                              {INDEXED_ABSOLUTE_Y, 3}, {ACCUMULATOR, 1},
-                              {IMMEDIATE, 2},          {IMPLIED, 1},
-                              {INDIRECT, 2},           {INDIRECT_INDEXED, 2},
-                              {INDEXED_INDIRECT, 2},   {RELATIVE, 2},
-                              {ZERO_PAGE, 2},          {INDEXED_ZERO_PAGE_X, 2},
-                              {INDEXED_ZERO_PAGE_Y, 2}};
+
+  this->addressingModeSize = {
+      {ABSOLUTE, 3},
+      {INDEXED_ABSOLUTE_X, 3},
+      {INDEXED_ABSOLUTE_Y, 3},
+      {ACCUMULATOR, 1},
+      {IMMEDIATE, 2},
+      {IMPLIED, 1},
+      {INDIRECT, 2},
+      {INDIRECT_INDEXED, 2},
+      {INDEXED_INDIRECT, 2},
+      {RELATIVE, 2},
+      {ZERO_PAGE, 2},
+      {INDEXED_ZERO_PAGE_X, 2},
+      {INDEXED_ZERO_PAGE_Y, 2}};
 
   this->instructions = {
 
@@ -49,7 +57,7 @@ InstructionFactory::InstructionFactory() {
       {0xA2, make_pair(LDX, IMMEDIATE)},
       {0xA6, make_pair(LDX, ZERO_PAGE)},
       {0xB6, make_pair(LDX, INDEXED_ZERO_PAGE_Y)},
-      {0xAE, make_pair(LDX, ABSOLUTE)},      
+      {0xAE, make_pair(LDX, ABSOLUTE)},
       {0xBE, make_pair(LDX, INDEXED_ABSOLUTE_Y)},
 
       /* LDY Instructions*/
@@ -60,13 +68,13 @@ InstructionFactory::InstructionFactory() {
       {0xBC, make_pair(LDY, INDEXED_ABSOLUTE_X)},
 
       /*STA Instructions*/
-      {0x85,make_pair(STA,ZERO_PAGE)},
-      {0X95,make_pair(STA,INDEXED_ZERO_PAGE_X)},
-      {0x8D,make_pair(STA,ABSOLUTE)},
-      {0X9D,make_pair(STA,INDEXED_ABSOLUTE_X)},
-      {0X99,make_pair(STA,INDEXED_ABSOLUTE_Y)},
-      {0X81,make_pair(STA,INDIRECT_INDEXED)},
-      {0X91,make_pair(STA,INDEXED_INDIRECT)},
+      {0x85, make_pair(STA, ZERO_PAGE)},
+      {0X95, make_pair(STA, INDEXED_ZERO_PAGE_X)},
+      {0x8D, make_pair(STA, ABSOLUTE)},
+      {0X9D, make_pair(STA, INDEXED_ABSOLUTE_X)},
+      {0X99, make_pair(STA, INDEXED_ABSOLUTE_Y)},
+      {0X81, make_pair(STA, INDIRECT_INDEXED)},
+      {0X91, make_pair(STA, INDEXED_INDIRECT)},
   };
 };
 
@@ -88,32 +96,32 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
   uint addressingMode = pair.second;
 
   switch (instructionID) {
-  case ADC: {
-    return new ADCInstruction(addressingMode, instructionSize);
-    break;
-  }
-  case AND: {
-    return new ANDInstruction(addressingMode, instructionSize);
-    break;
-  }
-  case LDA: {
-    return new LDAInstruction(addressingMode, instructionSize);
-    break;
-  }
-  case LDX: {
-    return new LDXInstruction(addressingMode, instructionSize);
-    break;
-  }
-  case LDY: {
-    return new LDYInstruction(addressingMode, instructionSize);
-    break;
-  }
+    case ADC: {
+      return new ADCInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case AND: {
+      return new ANDInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case LDA: {
+      return new LDAInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case LDX: {
+      return new LDXInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case LDY: {
+      return new LDYInstruction(addressingMode, instructionSize);
+      break;
+    }
     case STA: {
-    return new STAInstruction(addressingMode, instructionSize);
-    break;
-  }
+      return new STAInstruction(addressingMode, instructionSize);
+      break;
+    }
 
-  default: { break; }
+    default: { break; }
   }
 
   return NULL;
