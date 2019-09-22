@@ -58,6 +58,7 @@ uint8_t Cpu::read_mem(uint16_t addr) {
 
     switch (addr) {
     case 0x0000 ... 0x1FFF: res = this->ram[addr & 0x7FF];      break;
+    // case 0x8000 ... 0xFFFF: res = this->rom.read_prg(addr);     break;
     }
     return res;
 }
@@ -67,27 +68,12 @@ void Cpu::write_mem(uint8_t val, uint16_t addr) {
     }
 }
 void Cpu::loadROM(string path) {
-  cout << "loadROM\n";
-  ifstream input(path, ios::binary);
-  int counter = 0;
-  int byteCounter = 0xc000;
-  uint8_t a;
-  vector<uint8_t> bytes(65536);
-
-  while (!input.eof()) {
-    input >> a;
-    if (counter > 16) {
-      bytes.insert(bytes.begin() + byteCounter, (uint8_t)(a));
-      byteCounter += 1;
-    }
-    counter += 1;
-  }
-  this->rom.setBytes(bytes);
+  cout << "Running ROM: " << path << std::endl;
+  this->rom.load(path);
 }
 
 void Cpu::printROM() {
   cout << "printROM\n";
-  vector<uint8_t> r = this->rom.getRom();
 
   Instruction *instruction;
   InstructionFactory factory;

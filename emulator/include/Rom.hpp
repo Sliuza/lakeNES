@@ -13,18 +13,16 @@ using namespace std;
 
 class Rom {
 private:
-  unsigned int memory_start_location = 0x8000;
-  int memory_end_location = 0xFFFF;
-  int header_size = 0x10;
-  int num_prg_blocks;
-  bool hasROM = false;
-  vector<uint8_t> rom_bytes;
-
+  int num_prg_banks;
+  int num_chr_banks;
+  std::vector<uint8_t> prg_rom;
+  std::vector<uint8_t> chr_rom;
+  uint8_t mapper_number;
 public:
-  // Rom(vector<uint8_t> rom_bytes);
   Rom();
-  void setBytes(vector<uint8_t> rom_bytes);
-  vector<uint8_t> getRom();
+  void load(string path);
+  vector<uint8_t> getPgr();
+  vector<uint8_t> getChr();
 };
 
 #endif
