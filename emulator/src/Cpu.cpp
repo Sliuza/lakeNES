@@ -46,8 +46,11 @@ void Cpu::run(){
   startCpu();
   interrupt(reset);
   while(1){
+    Instruction *instruction;
+    InstructionFactory factory;
     uint8_t opcode = read_mem(this->pc_reg++);
-
+    instruction = factory.createInstruction(opcode);
+    instruction->execute(this, this->pc_reg);
   }
 }
 uint8_t Cpu::read_mem(uint16_t addr) {
