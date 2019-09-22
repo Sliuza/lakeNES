@@ -7,5 +7,6 @@ Nes::Nes(string pathToRom) {
 
 void Nes::load() {
   cpu.loadROM(this->pathToRom);
+  cpu.run();
   cpu.printROM();
 }

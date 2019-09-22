@@ -3,12 +3,12 @@
 #include "../include/InstructionFactory.hpp"
 #include "Utils.cpp"
 Cpu::Cpu() {
-  this->pc_reg = 0;
-  this->sp_reg = 0;
+  this->pc_reg = 0xfffc;
+  this->sp_reg = 0xfd;
   this->x_reg = 0;
   this->y_reg = 0;
   this->a_reg = 0;
-  this->ram[0x800];
+  this->ram;
   this->rom = Rom();
 };
 
@@ -16,9 +16,7 @@ int Cpu::getNumberOfPrgBlocks() { return 2; }
 void Cpu::startCpu(){
   // Initiate ram with 0xFF
   init_array(this->ram, (uint8_t)0xFF);
-
 };
-enum Interrupt_type { BRK = 0, IRQ, NMI, reset };
 
 void Cpu::interrupt(Interrupt_type interruption){
     uint16_t addr;
@@ -32,8 +30,8 @@ void Cpu::interrupt(Interrupt_type interruption){
     if (interruption == reset) {
         addr = 0xFFFC;
     }
-    pc_reg  = read_mem(addr);
-    pc_reg |= read_mem(addr + 1) << 8;
+    this->pc_reg  = read_mem(addr);
+    this->pc_reg |= read_mem(addr + 1) << 8;
 }
 void Cpu::push(uint8_t val) {
     this->ram[0x100 + this->sp_reg--] = val;
@@ -43,8 +41,8 @@ uint8_t Cpu::pull() {
     return this->ram[0x100 + ++sp_reg];
 }
 void Cpu::run(){
-  startCpu();
-  interrupt(reset);
+  this->startCpu();
+  this->interrupt(reset);
   while(1){
     Instruction *instruction;
     InstructionFactory factory;
@@ -108,6 +106,24 @@ uint8_t Cpu::getY_reg(){
 uint8_t Cpu::getA_reg(){
   return this->a_reg;
 }
+bool Cpu::getF_carry(){
+  return this->f_carry;
+}
+bool Cpu::getF_zero(){
+  return this->f_zero;
+}
+bool Cpu::getF_interrupt(){
+  return this->f_interrupt;
+}
+bool Cpu::getF_decimal(){
+  return this->f_decimal; 
+}
+bool Cpu::getF_overflow(){
+  return this->f_overflow; 
+}
+bool Cpu::getF_negative(){
+  return this->f_negative;
+}
 Rom Cpu::getRom(){
   return this->rom;
 }
@@ -127,4 +143,21 @@ void Cpu::setY_reg(uint8_t _y_reg){
 void Cpu::setA_reg(uint8_t _a_reg){
   this->a_reg = _a_reg; 
 }
-  
+void Cpu::setF_carry(bool carry){
+  this->f_carry = carry; 
+}
+void Cpu::setF_zero(bool zero){
+  this->f_zero = zero; 
+}
+void Cpu::setF_interrupt(bool interrupt){
+  this->f_interrupt = interrupt; 
+}
+void Cpu::setF_decimal(bool decimal){
+  this->f_decimal = decimal; 
+}
+void Cpu::setF_overflow(bool overflow){
+  this->f_overflow = overflow; 
+}
+void Cpu::setF_negative(bool negative){
+  this->f_negative = negative; 
+}

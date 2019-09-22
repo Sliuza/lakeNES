@@ -8,9 +8,10 @@ void Rom::load(string path) {
     std::vector<uint8_t> header;
     header.resize(0x10);
     // read header
-    this->num_prg_banks = header.at(4);
+    romFile.read(reinterpret_cast<char*>(&header[0]), 0x10);
+    this->num_prg_banks = header[4];
     cout << "16KB PRG Banks: " << + this->num_prg_banks << std::endl;
-    this->num_chr_banks = header.at(5);
+    this->num_chr_banks = header[5];
     cout << "8KB CHR Banks: " << +this->num_chr_banks << std::endl;
     // read mapper
     this->mapper_number = ((header[6] >> 4) & 0xf) | (header[7] & 0xf0);
@@ -28,13 +29,10 @@ void Rom::load(string path) {
 }
 // By now we are only using NROM mapper
 std::uint8_t Rom::readPgr(uint16_t adress){
-    if (num_prg_banks == 1)
+    if (num_prg_banks != 1)
         return this->getPgr()[adress - 0x8000];
-    else if(num_prg_banks == 2)
+    else
         return this->getPgr()[(adress - 0x8000) & 0x3fff];
-    else{
-        cout << "Number of banks not supported" << endl;
-    }
 }
 
 // getter

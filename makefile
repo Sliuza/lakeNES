@@ -3,7 +3,8 @@
 
 CC=g++
 # CCFLAGS=-std=gnu++11 -O3
-CFLAGS = -std=c++11
+CFLAGS = -std=c++11 -ggdb
+
 # CCFLAGS = -std=c++11 -lncurses //TODO: Fix warnings when compiling with this option.
 
 TST=./emulator/tst
