@@ -9,7 +9,8 @@ enum InstructionID {
   ASL,
   LDA,
   LDX,
-  LDY
+  LDY,
+  STA
   /*TODO: Fill it up with the others IDs.*/
 };
 

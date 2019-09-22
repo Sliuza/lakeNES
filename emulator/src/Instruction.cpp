@@ -57,7 +57,19 @@ void LDAInstruction::execute(Cpu *cpu, uint16_t address) {
   if (address >= 0x0000 && address <= 0xFFFF){
     uint8_t value = cpu->read_mem(address);
     cpu->setA_reg(value);
+    cout << "a = " << hex << (unsigned)(uint8_t)cpu->getA_reg() << "\n";
   }
+}
+
+STAInstruction::STAInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[STAInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void STAInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[STAInstruction] -  execute()\n";
+  cpu->write_mem(cpu->getA_reg(),address);
 }
 
 LDXInstruction::LDXInstruction(uint8_t addressingMode, uint8_t instructionSize)

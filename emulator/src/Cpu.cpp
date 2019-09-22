@@ -16,8 +16,8 @@ int Cpu::getNumberOfPrgBlocks() { return 2; }
 void Cpu::startCpu(){
   // Initiate ram with 0xFF
   init_array(this->ram, (uint8_t)0xFF);
-
 };
+
 enum Interrupt_type { BRK = 0, IRQ, NMI, reset };
 
 void Cpu::interrupt(Interrupt_type interruption){
@@ -80,7 +80,12 @@ void Cpu::printROM() {
 
   // TODO : Create a Instruction Factory responsible for create the
   // instance according to the instruction pointed by PC.
-  instruction = factory.createInstruction(0x69);
+  instruction = factory.createInstruction(0x85);
+  a_reg = 8;
+
+  instruction->execute(this, 0x123);
+  instruction = factory.createInstruction(0xA5);
+
 
   instruction->execute(this, 0x123);
   // for (int i = 0xc000; i < r.size(); i++) {

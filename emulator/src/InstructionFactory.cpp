@@ -58,8 +58,15 @@ InstructionFactory::InstructionFactory() {
       {0xB4, make_pair(LDY, INDEXED_ZERO_PAGE_X)},
       {0xAC, make_pair(LDY, ABSOLUTE)},
       {0xBC, make_pair(LDY, INDEXED_ABSOLUTE_X)},
-      
 
+      /*STA Instructions*/
+      {0x85,make_pair(STA,ZERO_PAGE)},
+      {0X95,make_pair(STA,INDEXED_ZERO_PAGE_X)},
+      {0x8D,make_pair(STA,ABSOLUTE)},
+      {0X9D,make_pair(STA,INDEXED_ABSOLUTE_X)},
+      {0X99,make_pair(STA,INDEXED_ABSOLUTE_Y)},
+      {0X81,make_pair(STA,INDIRECT_INDEXED)},
+      {0X91,make_pair(STA,INDEXED_INDIRECT)},
   };
 };
 
@@ -101,6 +108,11 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
     return new LDYInstruction(addressingMode, instructionSize);
     break;
   }
+    case STA: {
+    return new STAInstruction(addressingMode, instructionSize);
+    break;
+  }
+
   default: { break; }
   }
 
