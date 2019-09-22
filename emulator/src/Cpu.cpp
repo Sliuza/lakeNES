@@ -58,6 +58,11 @@ uint8_t Cpu::read_mem(uint16_t addr) {
     }
     return res;
 }
+void Cpu::write_mem(uint8_t val, uint16_t addr) {
+    switch (addr) {
+    case 0x0000 ... 0x1FFF: this->ram[addr & 0x7FF] = val;      break;
+    }
+}
 void Cpu::loadROM(string path) {
   cout << "loadROM\n";
   ifstream input(path, ios::binary);
