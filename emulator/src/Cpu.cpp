@@ -107,11 +107,11 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
       break;
     }
     case INDEXED_ABSOLUTE_X: {
-      address = this->read16BitsAddress(this->pc_reg + uint16_t(1)) + uint16_t(this->getX_reg);
+      address = this->read16BitsAddress(this->pc_reg + uint16_t(1)) + uint16_t(this->getX_reg());
       break;
     }
     case INDEXED_ABSOLUTE_Y: {
-      address = this->read16BitsAddress(this->pc_reg + uint16_t(1)) + uint16_t(this->getY_reg);
+      address = this->read16BitsAddress(this->pc_reg + uint16_t(1)) + uint16_t(this->getY_reg());
       break;
     }
     case IMMEDIATE: {

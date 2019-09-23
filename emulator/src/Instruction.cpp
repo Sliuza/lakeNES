@@ -1,6 +1,6 @@
 #include "../include/Instruction.hpp"
-#include "../include/Cpu.hpp"
 #include "../include/AddressingMode.hpp"
+#include "../include/Cpu.hpp"
 
 BaseInstruction::BaseInstruction(uint8_t addressingMode,
                                  uint8_t instructionSize) {
