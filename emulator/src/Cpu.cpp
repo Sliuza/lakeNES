@@ -8,7 +8,6 @@ Cpu::Cpu() {
   this->x_reg = 0;
   this->y_reg = 0;
   this->a_reg = 0;
-  this->ram;
   this->rom = Rom();
 };
 
@@ -85,10 +84,7 @@ void Cpu::printROM() {
   Instruction *instruction;
   InstructionFactory factory;
 
-  // TODO : Create a Instruction Factory responsible for create the
-  // instance according to the instruction pointed by PC.
   instruction = factory.createInstruction(0x69);
-
   instruction->execute(this, 0x123);
   // for (int i = 0xc000; i < r.size(); i++) {
   //   cout << std::hex << (unsigned)(uint8_t)r.at(i);
@@ -103,28 +99,50 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
   uint16_t address = 0;
   switch (addressingMode) {
     case ABSOLUTE: {
-      address = this->read16BitsAddress(this->pc_reg + uint16_t(1));
+      address = this->get16BitsAddress(this->getPc_reg() + uint16_t(1));
       break;
     }
     case INDEXED_ABSOLUTE_X: {
-      address = this->read16BitsAddress(this->pc_reg + uint16_t(1)) + uint16_t(this->getX_reg);
+      address = this->get16BitsAddress(this->getPc_reg() + uint16_t(1)) + uint16_t(this->getX_reg());
       break;
     }
     case INDEXED_ABSOLUTE_Y: {
-      address = this->read16BitsAddress(this->pc_reg + uint16_t(1)) + uint16_t(this->getY_reg);
+      address = this->get16BitsAddress(this->getPc_reg() + uint16_t(1)) + uint16_t(this->getY_reg());
       break;
     }
     case IMMEDIATE: {
       address = this->pc_reg + uint16_t(1);
       break;
     }
+    case INDIRECT: {
+      uint16_t baseAddress = get16BitsAddress(this->getPc_reg() + uint16_t(1));
+      address = this->get16BitsAddressInMemory(baseAddress);
+      break;
+    }
+    case INDIRECT_INDEXED: {
+      uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
+      address = this->get16BitsAddressInMemory(baseAddress) + uint16_t(this->getY_reg());
+      break;
+    }
+    case INDEXED_INDIRECT: {
+      uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
+      address = this->get16BitsAddressInMemory(baseAddress) + uint16_t(this->getX_reg());
+      break;
+    }
   }
   return address;
 }
 
-uint16_t Cpu::read16BitsAddress(uint16_t address) {
+uint16_t Cpu::get16BitsAddress(uint16_t address) {
   uint16_t lo = this->read_mem(address);
   uint16_t hi = this->read_mem(address + uint16_t(1)) << 8;
+  return hi | lo;
+}
+
+uint16_t Cpu::get16BitsAddressInMemory(uint16_t address) {
+  uint16_t lo = this->read_mem(address);
+  uint16_t hiAddress = (address & 0xFF00) | ((address + 1) & 0xFF);
+  uint16_t hi = this->read_mem(hiAddress) << 8;
   return hi | lo;
 }
 

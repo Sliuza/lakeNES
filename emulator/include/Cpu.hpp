@@ -30,7 +30,7 @@ class Cpu {
   bool f_overflow;
   bool f_negative;
   Rom rom;
-  uint8_t ram[0x800];
+  uint8_t ram[0xFFFF];
 
   public:
   Cpu();
@@ -49,10 +49,12 @@ class Cpu {
   void interrupt(Interrupt_type interruption);
   void run();
   uint16_t getAddressBasedOnAddressingMode(uint8_t addressingMode);
-  uint16_t read16BitsAddress(uint16_t address);
+  uint16_t get16BitsAddress(uint16_t address);
+  uint16_t get16BitsAddressInMemory(uint16_t address);
 
   //GETTERS
-  uint16_t getPc_reg();  // program counter, 2 byte
+  uint16_t
+  getPc_reg();           // program counter, 2 byte
   uint8_t getSp_reg();   // stack pointer
   uint8_t getX_reg();    // x register
   uint8_t getY_reg();    // y register
