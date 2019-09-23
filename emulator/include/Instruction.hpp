@@ -40,6 +40,12 @@ public:
   void execute(Cpu *cpu, uint16_t address = 0);
 };
 
+class ASLInstruction : public BaseInstruction {
+public:
+  ASLInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
 class LDAInstruction : public BaseInstruction {
 public:
   LDAInstruction(uint8_t addressingMode, uint8_t instructionSize);

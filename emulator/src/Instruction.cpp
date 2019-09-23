@@ -1,5 +1,6 @@
 #include "../include/Instruction.hpp"
 #include "../include/Cpu.hpp"
+#include "../include/AddressingMode.hpp"
 
 BaseInstruction::BaseInstruction(uint8_t addressingMode,
                                  uint8_t instructionSize) {
@@ -25,7 +26,7 @@ void ADCInstruction::execute(Cpu *cpu, uint16_t address) {
   //TODO: Set Flags
   cout << "[ADCInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF){
-    uint8_t value = cpu->read_mem(address);
+    uint16_t value = cpu->read_mem(address);
     uint8_t a_regValue = cpu->getA_reg();
     cpu->setA_reg(a_regValue+value);
   }
@@ -41,8 +42,37 @@ void ANDInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[ANDInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF){
     uint8_t value = cpu->read_mem(address);
-    uint8_t a_regValue = cpu->getA_reg();
-    cpu->setA_reg(a_regValue & value);
+    uint8_t a_regValue = cpu->getA_reg() & value;
+    cpu->setA_reg(a_regValue);
+    a_regValue & 0x00FF == 0?cpu->setF_zero(true):cpu->setF_zero(false);
+    a_regValue & 0x80?cpu->setF_negative(true):cpu->setF_negative(false);
+  }
+}
+
+ASLInstruction::ASLInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[ASLInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void ASLInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[ASLInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF){
+    if(ASLInstruction::getAddressingMode() == IMPLIED){
+      uint8_t a_regValue = cpu->getA_reg << 1;
+      a_regValue & 0xFF00 > 0?cpu->setF_carry(true) :cpu->setF_carry(false);
+      a_regValue & 0x00FF == 0?cpu->setF_zero(true):cpu->setF_zero(false);
+      a_regValue & 0x80?cpu->setF_negative(true):cpu->setF_negative(false);
+      cpu->setA_reg(a_regValue && 0x00FF);
+    }
+    else
+    {
+      uint8_t value = cpu->read_mem(address) << 1;
+      value & 0xFF00 > 0?cpu->setF_carry(true):cpu->setF_carry(false);
+      value & 0x00FF == 0?cpu->setF_zero(true):cpu->setF_zero(false);
+      value & 0x80?cpu->setF_negative(true):cpu->setF_negative(false);
+      cpu->write_mem(value & 0x00FF, address);
+    }
   }
 }
 

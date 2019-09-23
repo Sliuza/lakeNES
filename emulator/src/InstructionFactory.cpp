@@ -43,6 +43,13 @@ InstructionFactory::InstructionFactory() {
       {0x21, make_pair(AND, INDIRECT_INDEXED)},
       {0x31, make_pair(AND, INDEXED_INDIRECT)},
 
+      /* ASL Instruction */
+      {0x0A, make_pair(ASL, IMMEDIATE)},
+      {0x06, make_pair(ASL, ZERO_PAGE)},
+      {0x16, make_pair(ASL, INDEXED_ZERO_PAGE_X)},
+      {0x0E, make_pair(ASL, ABSOLUTE)},
+      {0x0E, make_pair(ASL, INDEXED_ABSOLUTE_X)},
+
       /* LDA Instructions*/
       {0xA9, make_pair(LDA, IMMEDIATE)},
       {0xA5, make_pair(LDA, ZERO_PAGE)},
