@@ -34,7 +34,7 @@ void ADCInstruction::execute(Cpu *cpu, uint16_t address) {
     aux > 255?cpu->setF_carry(true) :cpu->setF_carry(false);
     aux & 0x00FF == 0?cpu->setF_zero(true):cpu->setF_zero(false);
     aux & 0x80?cpu->setF_negative(true):cpu->setF_negative(false);
-    (~((uint16_t)a_regValue ^ (uint16_t)value) & ((uint16_t)a_regValue ^ (uint16_t)aux)) & 0x0080?cpu->setF_overflow(true);cpu->setF_overflow(false);
+    (~((uint16_t)a_regValue ^ (uint16_t)value) & ((uint16_t)a_regValue ^ (uint16_t)aux)) & 0x0080?cpu->setF_overflow(true):cpu->setF_overflow(false);
 
     cpu->setA_reg(aux & 0x00FF);
   }
