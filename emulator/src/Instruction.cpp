@@ -32,9 +32,9 @@ void ADCInstruction::execute(Cpu *cpu, uint16_t address) {
     uint8_t a_regValue = cpu->getA_reg();
     uint16_t aux = cpu->getA_reg() + value + carry;
 
-    aux > 255 ? cpu->setF_carry(true) : cpu->setF_carry(false);
-    aux & 0x00FF == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
-    aux & 0x80 ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    (aux > 255) ? cpu->setF_carry(true) : cpu->setF_carry(false);
+    (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
     (~((uint16_t)a_regValue ^ (uint16_t)value) & ((uint16_t)a_regValue ^ (uint16_t)aux)) & 0x0080 ? cpu->setF_overflow(true) : cpu->setF_overflow(false);
     cpu->setA_reg(aux & 0x00FF);
   }
@@ -93,8 +93,8 @@ void LDAInstruction::execute(Cpu *cpu, uint16_t address) {
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t value = cpu->read_mem(address);
     cpu->setA_reg(value);
-    value & 0x00FF == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
-    value & 0x80 ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    (value & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (value & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
     cout << "a = " << hex << (unsigned)(uint8_t)cpu->getA_reg() << "\n";
   }
 }
@@ -121,8 +121,8 @@ void LDXInstruction::execute(Cpu *cpu, uint16_t address) {
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t value = cpu->read_mem(address);
     cpu->setX_reg(value);
-    value & 0x00FF == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
-    value & 0x80 ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    (value & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (value & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
   }
 }
 
@@ -137,7 +137,7 @@ void LDYInstruction::execute(Cpu *cpu, uint16_t address) {
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t value = cpu->read_mem(address);
     cpu->setY_reg(value);
-    value & 0x00FF == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
-    value & 0x80 ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    (value & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (value & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
   }
 }
