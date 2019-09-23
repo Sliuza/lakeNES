@@ -129,6 +129,13 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
       address = this->get16BitsAddressInMemory(baseAddress) + uint16_t(this->getX_reg());
       break;
     }
+    case RELATIVE: { //read relative address and set address to branch
+      uint16_t rel = this->read_mem(this->pc_reg + uint16_t(1));
+      if(rel & 0x80) 
+        rel |= 0xFF00;
+      address = this->pc_reg + rel;
+      break;
+    }
   }
   return address;
 }
