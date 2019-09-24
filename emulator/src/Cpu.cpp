@@ -16,7 +16,7 @@ void Cpu::startCpu() {
   init_array(this->ram, (uint8_t)0xFF);
   this->reset();
 };
-void Cpu::reset(){
+void Cpu::reset() {
   this->a_reg, this->x_reg, this->y_reg = 0;
   this->f_interrupt = true;
   this->f_negative, this->f_overflow, this->f_zero, this->f_carry, this->f_decimal = false;
@@ -121,9 +121,23 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
     }
     case RELATIVE: { //read relative address and set address to branch
       uint16_t rel = this->read_mem(this->pc_reg + uint16_t(1));
-      if(rel & 0x80) 
+      if (rel & 0x80)
         rel |= 0xFF00;
       address = this->pc_reg + rel;
+      break;
+    }
+    case ZERO_PAGE: {
+      address = this->read_mem(this->getPc_reg() + uint16_t(1));
+      break;
+    }
+    case INDEXED_ZERO_PAGE_X: {
+      uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
+      address = (baseAddress + uint16_t(this->getX_reg())) & 0xFF;
+      break;
+    }
+    case INDEXED_ZERO_PAGE_Y: {
+      uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
+      address = (baseAddress + uint16_t(this->getY_reg())) & 0xFF;
       break;
     }
   }
