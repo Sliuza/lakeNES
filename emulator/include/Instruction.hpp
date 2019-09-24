@@ -88,4 +88,22 @@ public:
   void execute(Cpu *cpu, uint16_t address = 0);
 };
 
+class INCInstruction : public BaseInstruction {
+public:
+  INCInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class INXInstruction : public BaseInstruction {
+public:
+  INXInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class INYInstruction : public BaseInstruction {
+public:
+  INYInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
 #endif

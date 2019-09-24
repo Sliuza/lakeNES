@@ -183,3 +183,45 @@ void DEYInstruction::execute(Cpu *cpu, uint16_t address){
   cpu->setF_negative(true);
   cpu->setY_reg(value);
 }
+
+INCInstruction::INCInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[INCInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void INCInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t value = cpu->read_mem(address);
+  value += 1;
+  cpu->setF_zero(true);
+  cpu->setF_negative(true);
+  cpu->write_mem(value, address);
+}
+
+INXInstruction::INXInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[INXInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void INXInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t value = cpu->getX_reg();
+  value += 1;
+  cpu->setF_zero(true);
+  cpu->setF_negative(true);
+  cpu->setX_reg(value);
+}
+
+INYInstruction::INYInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[INYInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void INYInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t value = cpu->getY_reg();
+  value += 1;
+  cpu->setF_zero(true);
+  cpu->setF_negative(true);
+  cpu->setY_reg(value);
+}
