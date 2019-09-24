@@ -16,7 +16,8 @@ enum InstructionID {
   DEY,
   INC,
   INX,
-  INY
+  INY,
+  SBC
   /*TODO: Fill it up with the others IDs.*/
 };
 

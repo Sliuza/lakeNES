@@ -107,6 +107,16 @@ InstructionFactory::InstructionFactory() {
       /*INY instructions*/
       {0xC8, make_pair(INY, IMPLIED)},
 
+      /*SBC instructions*/
+      {0xE9, make_pair(SBC, IMMEDIATE)},
+      {0xE5, make_pair(SBC, ZERO_PAGE)},
+      {0xF5, make_pair(SBC, INDEXED_ZERO_PAGE_X)},
+      {0xED, make_pair(SBC, ABSOLUTE)},
+      {0xFD, make_pair(SBC, INDEXED_ABSOLUTE_X)},
+      {0xF9, make_pair(SBC, INDEXED_ABSOLUTE_Y)},
+      {0xF1, make_pair(SBC, INDIRECT_INDEXED)},
+      {0xE1, make_pair(SBC, INDEXED_INDIRECT)},
+
   };
 };
 
@@ -174,6 +184,10 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
     }
     case INY:{
       return new INYInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case SBC:{
+      return new SBCInstruction(addressingMode, instructionSize);
       break;
     }
 

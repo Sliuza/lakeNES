@@ -150,8 +150,8 @@ DECInstruction::DECInstruction(uint8_t addressingMode, uint8_t instructionSize)
 void DECInstruction::execute(Cpu *cpu, uint16_t address){
   uint8_t value = cpu->read_mem(address);
   value -= 1;
-  cpu->setF_zero(true);
-  cpu->setF_negative(true);
+  cpu->setF_zero(!value);
+  cpu->setF_negative(value & 0x80);
   cpu->write_mem(value, address);
 }
 
@@ -165,8 +165,8 @@ DEXInstruction::DEXInstruction(uint8_t addressingMode, uint8_t instructionSize)
 void DEXInstruction::execute(Cpu *cpu, uint16_t address){
   uint8_t value = cpu->getX_reg();
   value -= 1;
-  cpu->setF_zero(true);
-  cpu->setF_negative(true);
+  cpu->setF_zero(!value);
+  cpu->setF_negative(value & 0x80);
   cpu->setX_reg(value);
 }
 
@@ -179,8 +179,8 @@ DEYInstruction::DEYInstruction(uint8_t addressingMode, uint8_t instructionSize)
 void DEYInstruction::execute(Cpu *cpu, uint16_t address){
   uint8_t value = cpu->getY_reg();
   value -= 1;
-  cpu->setF_zero(true);
-  cpu->setF_negative(true);
+  cpu->setF_zero(!value);
+  cpu->setF_negative(value & 0x80);
   cpu->setY_reg(value);
 }
 
@@ -193,8 +193,8 @@ INCInstruction::INCInstruction(uint8_t addressingMode, uint8_t instructionSize)
 void INCInstruction::execute(Cpu *cpu, uint16_t address){
   uint8_t value = cpu->read_mem(address);
   value += 1;
-  cpu->setF_zero(true);
-  cpu->setF_negative(true);
+  cpu->setF_zero(!value);
+  cpu->setF_negative(value & 0x80);
   cpu->write_mem(value, address);
 }
 
@@ -207,8 +207,8 @@ INXInstruction::INXInstruction(uint8_t addressingMode, uint8_t instructionSize)
 void INXInstruction::execute(Cpu *cpu, uint16_t address){
   uint8_t value = cpu->getX_reg();
   value += 1;
-  cpu->setF_zero(true);
-  cpu->setF_negative(true);
+  cpu->setF_zero(!value);
+  cpu->setF_negative(value & 0x80);
   cpu->setX_reg(value);
 }
 
@@ -221,7 +221,24 @@ INYInstruction::INYInstruction(uint8_t addressingMode, uint8_t instructionSize)
 void INYInstruction::execute(Cpu *cpu, uint16_t address){
   uint8_t value = cpu->getY_reg();
   value += 1;
-  cpu->setF_zero(true);
-  cpu->setF_negative(true);
+  cpu->setF_zero(!value);
+  cpu->setF_negative(value & 0x80);
   cpu->setY_reg(value);
+}
+
+SBCInstruction::SBCInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[SBCInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void SBCInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t value = cpu->read_mem(address);
+  uint8_t a = cpu->getA_reg();
+  unsigned const diff = a - value - (uint8_t)cpu->getF_carry();
+  cpu->setF_carry(diff > 0xFF);
+  cpu->setF_overflow((a ^ diff) & (~value ^ diff) & 0x80);
+  cpu->setA_reg(diff);
+  cpu->setF_zero(!diff);
+  cpu->setF_negative(diff & 0x80);
 }
