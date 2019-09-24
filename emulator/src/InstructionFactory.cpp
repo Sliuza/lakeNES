@@ -135,13 +135,22 @@ InstructionFactory::InstructionFactory() {
       {0x11, make_pair(ORA, INDEXED_INDIRECT)},
       
       /* PHA Instructions*/
-      {0x48, make_pair(PHA, IMMEDIATE)},
+      {0x48, make_pair(PHA, IMPLIED)},
       /* PHP Instructions*/
-      {0x09, make_pair(PHP, IMMEDIATE)},
+      {0x09, make_pair(PHP, IMPLIED)},
       /* PLA Instructions*/
-      {0x69, make_pair(PLA, IMMEDIATE)},
+      {0x69, make_pair(PLA, IMPLIED)},
       /* PLP Instructions*/
-      {0x29, make_pair(PLP, IMMEDIATE)},
+      {0x29, make_pair(PLP, IMPLIED)},
+      
+      /* RTI Instructions*/
+      {0x40, make_pair(RTI, IMPLIED)},
+      /* RTS Instructions*/
+      {0x60, make_pair(RTS, IMPLIED)},
+      
+      /* SEC Instructions*/
+      {0x38, make_pair(SEC, IMPLIED)},
+
 
       /* LDA Instructions*/
       {0xA9, make_pair(LDA, IMMEDIATE)},
@@ -175,6 +184,17 @@ InstructionFactory::InstructionFactory() {
       {0X99, make_pair(STA, INDEXED_ABSOLUTE_Y)},
       {0X81, make_pair(STA, INDIRECT_INDEXED)},
       {0X91, make_pair(STA, INDEXED_INDIRECT)},
+      
+      /*STX Instructions*/
+      {0x86, make_pair(STX, ZERO_PAGE)},
+      {0X96, make_pair(STX, INDEXED_ZERO_PAGE_Y)},
+      {0x8E, make_pair(STX, ABSOLUTE)},
+      
+      /*STY Instructions*/
+      {0x84, make_pair(STY, ZERO_PAGE)},
+      {0X94, make_pair(STY, INDEXED_ZERO_PAGE_X)},
+      {0x8C, make_pair(STY, ABSOLUTE)},
+      
 
       /*DEC instructions*/
       {0xC6, make_pair(DEC, ZERO_PAGE)},

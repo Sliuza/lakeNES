@@ -37,14 +37,19 @@ enum InstructionID {
   PHP,
   PLA,
   PLP,
+  RTI,
+  RTS,
   STA,
+  STX,
+  STY,
   DEC,
   DEX,
   DEY,
   INC,
   INX,
   INY,
-  SBC
+  SBC,
+  SEC
   /*TODO: Fill it up with the others IDs.*/
 };
 
