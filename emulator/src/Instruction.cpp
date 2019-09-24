@@ -82,6 +82,157 @@ void ASLInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
+BCCInstruction::BCCInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[BCCInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void BCCInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[BCCInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    if(!cpu->getF_carry())
+      cpu->setPc_reg(address);
+  }
+}
+
+BCSInstruction::BCSInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[BCSInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void BCSInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[BCSInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    if(cpu->getF_carry())
+      cpu->setPc_reg(address);
+  }
+}
+
+BEQInstruction::BEQInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[BEQInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void BEQInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[BEQInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    if(cpu->getF_zero())
+      cpu->setPc_reg(address);
+  }
+}
+
+BITInstruction::BITInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[BITInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void BITInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[BITInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint16_t value = cpu->read_mem(address);
+    uint16_t aux = cpu->getA_reg() & value;
+    
+    (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (value & (1 << 7)) ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    (value & (1 << 6)) ? cpu->setF_overflow(true) : cpu->setF_overflow(false);
+  }
+}
+
+BMIInstruction::BMIInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[BMIInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void BMIInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[BMIInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    if(cpu->getF_negative())
+      cpu->setPc_reg(address);
+  }
+}
+
+BNEInstruction::BNEInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[BNEInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void BNEInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[BNEInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    if(!cpu->getF_zero())
+      cpu->setPc_reg(address);
+  }
+}
+
+BPLInstruction::BPLInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[BPLInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void BPLInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[BPLInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    if(!cpu->getF_negative())
+      cpu->setPc_reg(address);
+  }
+}
+
+BRKInstruction::BRKInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[BRKInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void BRKInstruction::execute(Cpu *cpu, uint16_t address) {
+  //TODO: Entender o BRK
+  cout << "[BRKInstruction] -  execute()\n";
+  //set interrupt flag 
+  cpu->setF_interrupt(true);
+  uint8_t stack = cpu->getSp_reg();
+  uint16_t pc = cpu->getPc_reg();
+  cpu->write_mem(0x0100 + stack, (pc >> 8) & 0x00FF);
+  stack--;
+  cpu->write_mem(0x0100 + stack, pc & 0x00FF);
+
+  pc = (uint16_t)cpu->read_mem(0xFFFE) | ((uint16_t)cpu->read_mem(0xFFFF) << 8);
+  cpu->setPc_reg(pc);
+}
+
+BVCInstruction::BVCInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[BVCInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void BVCInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[BVCInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    if(!cpu->getF_overflow())
+      cpu->setPc_reg(address);
+  }
+}
+
+BVSInstruction::BVSInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[BVSInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void BVSInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[BVSInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    if(cpu->getF_overflow())
+      cpu->setPc_reg(address);
+  }
+}
+
 LDAInstruction::LDAInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
   cout << "[LDAInstruction] - constructor(" << unsigned(instructionSize)
