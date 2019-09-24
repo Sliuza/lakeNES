@@ -96,6 +96,44 @@ InstructionFactory::InstructionFactory() {
       {0xC0, make_pair(CPY, IMMEDIATE)},
       {0xC4, make_pair(CPY, ZERO_PAGE)},
       {0xCC, make_pair(CPY, ABSOLUTE)},
+      
+      /* EOR Instructions*/
+      {0x49, make_pair(EOR, IMMEDIATE)},
+      {0x45, make_pair(EOR, ZERO_PAGE)},
+      {0x55, make_pair(EOR, INDEXED_ZERO_PAGE_X)},
+      {0x4D, make_pair(EOR, ABSOLUTE)},
+      {0x5D, make_pair(EOR, INDEXED_ABSOLUTE_X)},
+      {0x59, make_pair(EOR, INDEXED_ABSOLUTE_Y)},
+      {0x41, make_pair(EOR, INDIRECT_INDEXED)},
+      {0x51, make_pair(EOR, INDEXED_INDIRECT)},
+      
+      /* JMP Instructions*/
+      {0x4C, make_pair(JMP, ABSOLUTE)},
+      {0x6C, make_pair(JMP, INDIRECT)},
+      
+      /* JSR Instructions*/
+      {0x20, make_pair(JSR, ABSOLUTE)},
+      
+      /* LSR Instructions*/
+      {0x4A, make_pair(LSR, ACCUMULATOR)},
+      {0x46, make_pair(LSR, ZERO_PAGE)},
+      {0x56, make_pair(LSR, INDEXED_ZERO_PAGE_X)},
+      {0x4E, make_pair(LSR, ABSOLUTE)},
+      {0x5E, make_pair(LSR, INDEXED_ABSOLUTE_X)},
+      
+      /* NOP Instructions*/
+      {0xEA, make_pair(NOP, IMPLIED)},
+      
+      /* ORA Instructions*/
+      {0x09, make_pair(ORA, IMMEDIATE)},
+      {0x05, make_pair(ORA, ZERO_PAGE)},
+      {0x15, make_pair(ORA, INDEXED_ZERO_PAGE_X)},
+      {0x0D, make_pair(ORA, ABSOLUTE)},
+      {0x1D, make_pair(ORA, INDEXED_ABSOLUTE_X)},
+      {0x19, make_pair(ORA, INDEXED_ABSOLUTE_Y)},
+      {0x01, make_pair(ORA, INDIRECT_INDEXED)},
+      {0x11, make_pair(ORA, INDEXED_INDIRECT)},
+      
 
       /* LDA Instructions*/
       {0xA9, make_pair(LDA, IMMEDIATE)},

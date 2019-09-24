@@ -148,6 +148,42 @@ public:
   void execute(Cpu *cpu, uint16_t address = 0);
 };
 
+class EORInstruction : public BaseInstruction {
+public:
+  EORInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class JMPInstruction : public BaseInstruction {
+public:
+  JMPInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class JSRInstruction : public BaseInstruction {
+public:
+  JSRInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class LSRInstruction : public BaseInstruction {
+public:
+  LSRInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class NOPInstruction : public BaseInstruction {
+public:
+  NOPInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class ORAInstruction : public BaseInstruction {
+public:
+  ORAInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
 class LDAInstruction : public BaseInstruction {
 public:
   LDAInstruction(uint8_t addressingMode, uint8_t instructionSize);

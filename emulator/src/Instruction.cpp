@@ -200,7 +200,9 @@ void BRKInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->write_mem(0x0100 + stack, (pc >> 8) & 0x00FF);
   stack--;
   cpu->write_mem(0x0100 + stack, pc & 0x00FF);
-
+  stack--; 
+  
+  cpu->setSp_reg(stack);
   pc = (uint16_t)cpu->read_mem(0xFFFE) | ((uint16_t)cpu->read_mem(0xFFFF) << 8);
   cpu->setPc_reg(pc);
 }
@@ -282,7 +284,7 @@ void CMPInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[CMPInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t value = cpu->read_mem(address);
-    uint8_t a_regValue ->getA_reg();
+    uint8_t a_regValue = cpu->getA_reg();
     uint16_t aux = (uint16_t)a_regValue - (uint16_t)value;
     (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
     (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
@@ -299,7 +301,7 @@ void CPXInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[CPXInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t value = cpu->read_mem(address);
-    uint8_t x_regValue ->getX_reg();
+    uint8_t x_regValue = cpu->getX_reg();
     uint16_t aux = (uint16_t)x_regValue - (uint16_t)value;
     (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
     (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
@@ -316,11 +318,111 @@ void CPYInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[CPYInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t value = cpu->read_mem(address);
-    uint8_t y_regValue ->getY_reg();
+    uint8_t y_regValue = cpu->getY_reg();
     uint16_t aux = (uint16_t)y_regValue - (uint16_t)value;
     (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
     (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
     (y_regValue >= value) ? cpu->setF_carry(true) : cpu->setF_carry(false);
+  }
+}
+
+EORInstruction::EORInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[EORInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void EORInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[EORInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t value = cpu->read_mem(address);
+    uint8_t a_regValue = cpu->getA_reg();
+    uint8_t aux = a_regValue ^ value;
+    (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    cpu->setA_reg(aux);
+  }
+}
+
+JMPInstruction::JMPInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[JMPInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void JMPInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[JMPInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    cpu->setPc_reg(address);
+  }
+}
+
+JSRInstruction::JSRInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[JSRInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void JSRInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[JSRInstruction] -  execute()\n";
+  //PUSH PC INTO STACK, SET PC ADDRESS.
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t stack = cpu->getSp_reg();
+    uint16_t pc = cpu->getPc_reg();
+    cpu->write_mem(0x0100 + stack, (pc >> 8) & 0x00FF);
+    stack--;
+    cpu->write_mem(0x0100 + stack, pc & 0x00FF);
+    stack--;
+    
+    cpu->setSp_reg(stack);
+    cpu->setPc_reg(address);
+  }
+}
+
+
+LSRInstruction::LSRInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[LSRInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void LSRInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[LSRInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t value = cpu->read_mem(address);
+    (value & 0x0001) ? cpu->setF_carry(true) : cpu->setF_carry(false);
+    
+    uint8_t aux = value >> 1;
+    (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    if (LSRInstruction::getAddressingMode() == IMPLIED) {
+        cpu->setA_reg(aux & 0x00FF);
+    }
+    else{
+        cpu->write_mem(address, aux & 0x00FF);
+    }
+  }
+}
+
+NOPInstruction::NOPInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[NOPInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void NOPInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[NOPInstruction] -  execute()\n";
+}
+
+ORAInstruction::ORAInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[ORAInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void ORAInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[ORAInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t value = cpu->read_mem(address);
+    uint8_t a_regValue = cpu->getA_reg();
+    uint8_t aux = a_regValue | value;
+    (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    cpu->setA_reg(aux);
   }
 }
 
