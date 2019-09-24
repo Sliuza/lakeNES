@@ -154,3 +154,32 @@ void DECInstruction::execute(Cpu *cpu, uint16_t address){
   cpu->setF_negative(true);
   cpu->write_mem(value, address);
 }
+
+
+DEXInstruction::DEXInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[DEXInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void DEXInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t value = cpu->getX_reg();
+  value -= 1;
+  cpu->setF_zero(true);
+  cpu->setF_negative(true);
+  cpu->setX_reg(value);
+}
+
+DEYInstruction::DEYInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[DEYInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void DEYInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t value = cpu->getY_reg();
+  value -= 1;
+  cpu->setF_zero(true);
+  cpu->setF_negative(true);
+  cpu->setY_reg(value);
+}
