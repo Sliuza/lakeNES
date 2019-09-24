@@ -70,6 +70,32 @@ InstructionFactory::InstructionFactory() {
       /* BVC,BVS Instruction */
       {0x50, make_pair(BVC, RELATIVE)},
       {0x70, make_pair(BVS, RELATIVE)},
+      
+      /* CLC Instruction */
+      {0x18, make_pair(CLC, IMPLIED)},
+      /* CLD Instruction */
+      {0xD8, make_pair(CLD, IMPLIED)},
+      /* CLI Instruction */
+      {0x58, make_pair(CLI, IMPLIED)},
+      /* CLV Instruction */
+      {0xB8, make_pair(CLV, IMPLIED)},
+      /* CMP Instruction */
+      {0xC9, make_pair(CMP, IMMEDIATE)},
+      {0xC5, make_pair(CMP, ZERO_PAGE)},
+      {0xD5, make_pair(CMP, INDEXED_ZERO_PAGE_X)},
+      {0xCD, make_pair(CMP, ABSOLUTE)},
+      {0xDD, make_pair(CMP, INDEXED_ABSOLUTE_X)},
+      {0xD9, make_pair(CMP, INDEXED_ABSOLUTE_Y)},
+      {0xC1, make_pair(CMP, INDIRECT_INDEXED)},
+      {0xD1, make_pair(CMP, INDEXED_INDIRECT)},
+      /* CPX Instruction */
+      {0xE0, make_pair(CPX, IMMEDIATE)},
+      {0xE4, make_pair(CPX, ZERO_PAGE)},
+      {0xEC, make_pair(CPX, ABSOLUTE)},
+      /* CPY Instruction */
+      {0xC0, make_pair(CPY, IMMEDIATE)},
+      {0xC4, make_pair(CPY, ZERO_PAGE)},
+      {0xCC, make_pair(CPY, ABSOLUTE)},
 
       /* LDA Instructions*/
       {0xA9, make_pair(LDA, IMMEDIATE)},

@@ -106,6 +106,48 @@ public:
   void execute(Cpu *cpu, uint16_t address = 0);
 };
 
+class CLCInstruction : public BaseInstruction {
+public:
+  CLCInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class CLDInstruction : public BaseInstruction {
+public:
+  CLDInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class CLIInstruction : public BaseInstruction {
+public:
+  CLIInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class CLVInstruction : public BaseInstruction {
+public:
+  CLVInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class CMPInstruction : public BaseInstruction {
+public:
+  CMPInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class CPXInstruction : public BaseInstruction {
+public:
+  CPXInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class CPYInstruction : public BaseInstruction {
+public:
+  CPYInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
 class LDAInstruction : public BaseInstruction {
 public:
   LDAInstruction(uint8_t addressingMode, uint8_t instructionSize);

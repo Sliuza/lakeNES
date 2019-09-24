@@ -233,6 +233,97 @@ void BVSInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
+CLCInstruction::CLCInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[CLCInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void CLCInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[CLCInstruction] -  execute()\n";
+  cpu->setF_carry(false);
+}
+
+CLDInstruction::CLDInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[CLDInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void CLDInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[CLDInstruction] -  execute()\n";
+  cpu->setF_decimal(false);
+}
+
+CLIInstruction::CLIInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[CLIInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void CLIInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[CLIInstruction] -  execute()\n";
+  cpu->setF_interrupt(false);
+}
+
+CLVInstruction::CLVInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[CLVInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void CLVInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[CLVInstruction] -  execute()\n";
+  cpu->setF_overflow(false);
+}
+
+CMPInstruction::CMPInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[CMPInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void CMPInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[CMPInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t value = cpu->read_mem(address);
+    uint8_t a_regValue ->getA_reg();
+    uint16_t aux = (uint16_t)a_regValue - (uint16_t)value;
+    (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    (a_regValue >= value) ? cpu->setF_carry(true) : cpu->setF_carry(false);
+  }
+}
+
+CPXInstruction::CPXInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[CPXInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void CPXInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[CPXInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t value = cpu->read_mem(address);
+    uint8_t x_regValue ->getX_reg();
+    uint16_t aux = (uint16_t)x_regValue - (uint16_t)value;
+    (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    (x_regValue >= value) ? cpu->setF_carry(true) : cpu->setF_carry(false);
+  }
+}
+
+CPYInstruction::CPYInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[CPYInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void CPYInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[CPYInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t value = cpu->read_mem(address);
+    uint8_t y_regValue ->getY_reg();
+    uint16_t aux = (uint16_t)y_regValue - (uint16_t)value;
+    (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    (y_regValue >= value) ? cpu->setF_carry(true) : cpu->setF_carry(false);
+  }
+}
+
 LDAInstruction::LDAInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
   cout << "[LDAInstruction] - constructor(" << unsigned(instructionSize)
