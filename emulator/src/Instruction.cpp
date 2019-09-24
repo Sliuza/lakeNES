@@ -141,3 +141,16 @@ void LDYInstruction::execute(Cpu *cpu, uint16_t address) {
     (value & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
   }
 }
+DECInstruction::DECInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[DECInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void DECInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t value = cpu->read_mem(address);
+  value -= 1;
+  cpu->setF_zero(true);
+  cpu->setF_negative(true);
+  cpu->write_mem(value, address);
+}

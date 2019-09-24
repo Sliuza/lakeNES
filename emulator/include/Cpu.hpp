@@ -34,20 +34,15 @@ class Cpu {
 
   public:
   Cpu();
-  int getNumberOfPrgBlocks();
   void loadROM(string path);
   void printROM();
   void startCpu();
-  enum Interrupt_type { BRK = 0,
-                        IRQ,
-                        NMI,
-                        reset };
   uint8_t read_mem(uint16_t addr);
   void write_mem(uint8_t val, uint16_t addr);
   void push(uint8_t val);
   uint8_t pull();
-  void interrupt(Interrupt_type interruption);
   void run();
+  void reset();
   uint16_t getAddressBasedOnAddressingMode(uint8_t addressingMode);
   uint16_t get16BitsAddress(uint16_t address);
   uint16_t get16BitsAddressInMemory(uint16_t address);

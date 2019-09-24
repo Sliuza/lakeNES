@@ -11,26 +11,17 @@ Cpu::Cpu() {
   this->rom = Rom();
 };
 
-int Cpu::getNumberOfPrgBlocks() { return 2; }
 void Cpu::startCpu() {
   // Initiate ram with 0xFF
   init_array(this->ram, (uint8_t)0xFF);
+  this->reset();
 };
-
-void Cpu::interrupt(Interrupt_type interruption) {
-  uint16_t addr;
-
-  if (interruption != BRK) {
-    // For BRK, these have already been done
-    read_mem(this->pc_reg);
-    read_mem(this->pc_reg);
-  }
-
-  if (interruption == reset) {
-    addr = 0xFFFC;
-  }
-  this->pc_reg = read_mem(addr);
-  this->pc_reg |= read_mem(addr + 1) << 8;
+void Cpu::reset(){
+  this->a_reg, this->x_reg, this->y_reg = 0;
+  this->f_interrupt = true;
+  this->f_negative, this->f_overflow, this->f_zero, this->f_carry, this->f_decimal = false;
+  this->pc_reg = 0xfffc;
+  this->sp_reg = 0xfd;
 }
 void Cpu::push(uint8_t val) {
   this->ram[0x100 + this->sp_reg--] = val;
@@ -41,7 +32,6 @@ uint8_t Cpu::pull() {
 }
 void Cpu::run() {
   this->startCpu();
-  this->interrupt(reset);
   Instruction *instruction;
   InstructionFactory factory;
   uint16_t address = 0;

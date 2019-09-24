@@ -82,6 +82,13 @@ InstructionFactory::InstructionFactory() {
       {0X99, make_pair(STA, INDEXED_ABSOLUTE_Y)},
       {0X81, make_pair(STA, INDIRECT_INDEXED)},
       {0X91, make_pair(STA, INDEXED_INDIRECT)},
+
+      /*DEC instructions*/
+      /* AND Instruction */
+      {0xC6, make_pair(DEC, ZERO_PAGE)},
+      {0xD6, make_pair(DEC, INDEXED_ZERO_PAGE_X)},
+      {0xCE, make_pair(DEC, ABSOLUTE)},
+      {0xDE, make_pair(DEC, INDEXED_ABSOLUTE_X)},
   };
 };
 
@@ -125,6 +132,10 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
     }
     case STA: {
       return new STAInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case DEC:{
+      return new DECInstruction(addressingMode, instructionSize);
       break;
     }
 
