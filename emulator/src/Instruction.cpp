@@ -658,3 +658,81 @@ void SBCInstruction::execute(Cpu *cpu, uint16_t address){
   cpu->setF_zero(!diff);
   cpu->setF_negative(diff & 0x80);
 }
+
+TAXInstruction::TAXInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[TAXInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void TAXInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t value = cpu->getA_reg(); 
+  cpu->setX_reg(value);
+  cpu->setF_zero(!value);
+  cpu->setF_negative(value & 0x80);
+}
+
+TAYInstruction::TAYInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[TAYInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void TAYInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t value = cpu->getA_reg(); 
+  cpu->setY_reg(value);
+  cpu->setF_zero(!value);
+  cpu->setF_negative(value & 0x80);
+}
+
+TSXInstruction::TSXInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[TSXInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void TSXInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t value = cpu->getSp_reg();
+  cpu->setX_reg(value);
+  cpu->setF_zero(!value);
+  cpu->setF_negative(value & 0x80);
+}
+
+TXAInstruction::TXAInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[TXAInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void TXAInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t value = cpu->getX_reg();
+  cpu->setA_reg(value);
+  cpu->setF_zero(!value);
+  cpu->setF_negative(value & 0x80);
+}
+
+TXSInstruction::TXSInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[TXSInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void TXSInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t value = cpu->getX_reg();
+  cpu->setSp_reg(value);
+  cpu->setF_zero(!value);
+  cpu->setF_negative(value & 0x80);
+}
+
+TYAInstruction::TYAInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[TYAInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void TYAInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t value = cpu->getY_reg();
+  cpu->setA_reg(value);
+  cpu->setF_zero(!value);
+  cpu->setF_negative(value & 0x80);
+}

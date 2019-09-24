@@ -273,4 +273,40 @@ public:
   void execute(Cpu *cpu, uint16_t address = 0);
 };
 
+class TAXInstruction : public BaseInstruction {
+public:
+  TAXInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class TAYInstruction : public BaseInstruction {
+public:
+  TAYInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class TSXInstruction : public BaseInstruction {
+public:
+  TSXInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class TXAInstruction : public BaseInstruction {
+public:
+  TXAInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class TXSInstruction : public BaseInstruction {
+public:
+  TXSInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class TYAInstruction : public BaseInstruction {
+public:
+  TYAInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
 #endif

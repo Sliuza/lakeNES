@@ -44,7 +44,13 @@ enum InstructionID {
   INC,
   INX,
   INY,
-  SBC
+  SBC,
+  TAX,
+  TAY,
+  TSX,
+  TXA,
+  TXS,
+  TYA
   /*TODO: Fill it up with the others IDs.*/
 };
 

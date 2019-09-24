@@ -210,6 +210,23 @@ InstructionFactory::InstructionFactory() {
       {0xF1, make_pair(SBC, INDIRECT_INDEXED)},
       {0xE1, make_pair(SBC, INDEXED_INDIRECT)},
 
+      /*TAX instructions*/
+      {0xAA, make_pair(TAX, IMPLIED)},
+
+      /*TAY instructions*/
+      {0xA8, make_pair(TAY, IMPLIED)},
+
+      /*TSX instructions*/
+      {0xA8, make_pair(TSX, IMPLIED)},
+
+      /*TXA instructions*/
+      {0x8A, make_pair(TXA, IMPLIED)},
+
+      /*TXS instructions*/
+      {0x9A, make_pair(TXA, IMPLIED)},
+
+      /*TYA instructions*/
+      {0x98, make_pair(TYA, IMPLIED)},
   };
 };
 
@@ -281,6 +298,30 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
     }
     case SBC:{
       return new SBCInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case TAX:{
+      return new TAXInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case TAY:{
+      return new TAYInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case TSX:{
+      return new TSXInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case TXA:{
+      return new TSXInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case TXS:{
+      return new TSXInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case TYA:{
+      return new TSXInstruction(addressingMode, instructionSize);
       break;
     }
 
