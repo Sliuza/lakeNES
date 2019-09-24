@@ -207,6 +207,25 @@ public:
   ORAInstruction(uint8_t addressingMode, uint8_t instructionSize);
   void execute(Cpu *cpu, uint16_t address = 0);
 };
+
+class RTIInstruction : public BaseInstruction {
+public:
+  RTIInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class RTSInstruction : public BaseInstruction {
+public:
+  RTSInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class SECInstruction : public BaseInstruction {
+public:
+  SECInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
 class LDAInstruction : public BaseInstruction {
 public:
   LDAInstruction(uint8_t addressingMode, uint8_t instructionSize);
@@ -230,6 +249,19 @@ public:
   STAInstruction(uint8_t addressingMode, uint8_t instructionSize);
   void execute(Cpu *cpu, uint16_t address = 0);
 };
+
+class STXInstruction : public BaseInstruction {
+public:
+  STXInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class STYInstruction : public BaseInstruction {
+public:
+  STYInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
 
 class DECInstruction : public BaseInstruction {
 public:

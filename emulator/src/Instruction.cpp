@@ -480,6 +480,57 @@ void PHPInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
+RTIInstruction::RTIInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[RTIInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void RTIInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[RTIInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t stack = cpu->getSp_reg();
+    stack++;
+    uint8_t status = cpu->read_mem(0x0100+stack);
+    
+    stack++;
+    uint16_t pc = (uint16_t) cpu->read_mem(0x0100+stack);
+    stack++;
+    pc |= (uint16_t) cpu->read_mem(0x0100+stack) << 8;
+    
+    cpu->setPc_reg(pc);
+    cpu->setSp_reg(stack);
+  }
+}
+
+RTSInstruction::RTSInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[RTIInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void RTSInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[RTSInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t stack = cpu->getSp_reg();
+    
+    stack++;
+    uint16_t pc = (uint16_t) cpu->read_mem(0x0100+stack);
+    stack++;
+    pc |= (uint16_t) cpu->read_mem(0x0100+stack) << 8;
+    pc++;
+    cpu->setPc_reg(pc);
+    cpu->setSp_reg(stack);
+  }
+}
+
+SECInstruction::SECInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[SECInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void SECInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[SECInstruction] -  execute()\n";
+  cpu->setF_carry(true);
+}
 
 ORAInstruction::ORAInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
@@ -524,6 +575,28 @@ STAInstruction::STAInstruction(uint8_t addressingMode, uint8_t instructionSize)
 void STAInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[STAInstruction] -  execute()\n";
   cpu->write_mem(cpu->getA_reg(), address);
+}
+
+STXInstruction::STXInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[STXInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void STXInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[STXInstruction] -  execute()\n";
+  cpu->write_mem(cpu->getX_reg(), address);
+}
+
+STYInstruction::STYInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[STYInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void STYInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[STYInstruction] -  execute()\n";
+  cpu->write_mem(cpu->getY_reg(), address);
 }
 
 LDXInstruction::LDXInstruction(uint8_t addressingMode, uint8_t instructionSize)
