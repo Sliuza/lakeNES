@@ -50,6 +50,27 @@ InstructionFactory::InstructionFactory() {
       {0x0E, make_pair(ASL, ABSOLUTE)},
       {0x0E, make_pair(ASL, INDEXED_ABSOLUTE_X)},
 
+      /* BCC,BCS,BEQ Instruction */
+      {0x90, make_pair(BCC, RELATIVE)},
+      {0xB0, make_pair(BCS, RELATIVE)},
+      {0xF0, make_pair(BEQ, RELATIVE)},
+
+      /* BIT Instruction */
+      {0x24, make_pair(BIT, ZERO_PAGE)},
+      {0x2C, make_pair(BIT, ABSOLUTE)},
+
+      /* BMI,BNE,BPL Instruction */
+      {0x30, make_pair(BMI, RELATIVE)},
+      {0xD0, make_pair(BNE, RELATIVE)},
+      {0x10, make_pair(BPL, RELATIVE)},
+      
+      /* BRK Instruction */
+      {0x00, make_pair(BRK, IMPLIED)},
+      
+      /* BVC,BVS Instruction */
+      {0x50, make_pair(BVC, RELATIVE)},
+      {0x70, make_pair(BVS, RELATIVE)},
+
       /* LDA Instructions*/
       {0xA9, make_pair(LDA, IMMEDIATE)},
       {0xA5, make_pair(LDA, ZERO_PAGE)},
@@ -176,7 +197,6 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
       return new INYInstruction(addressingMode, instructionSize);
       break;
     }
-
     default: { break; }
   }
 

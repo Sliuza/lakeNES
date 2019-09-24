@@ -46,6 +46,66 @@ public:
   void execute(Cpu *cpu, uint16_t address = 0);
 };
 
+class BCCInstruction : public BaseInstruction {
+public:
+  BCCInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class BCSInstruction : public BaseInstruction {
+public:
+  BCSInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class BEQInstruction : public BaseInstruction {
+public:
+  BEQInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class BITInstruction : public BaseInstruction {
+public:
+  BITInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class BMIInstruction : public BaseInstruction {
+public:
+  BMIInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class BNEInstruction : public BaseInstruction {
+public:
+  BNEInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class BPLInstruction : public BaseInstruction {
+public:
+  BPLInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class BRKInstruction : public BaseInstruction {
+public:
+  BRKInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class BVCInstruction : public BaseInstruction {
+public:
+  BVCInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class BVSInstruction : public BaseInstruction {
+public:
+  BVSInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
 class LDAInstruction : public BaseInstruction {
 public:
   LDAInstruction(uint8_t addressingMode, uint8_t instructionSize);
