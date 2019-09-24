@@ -134,6 +134,14 @@ InstructionFactory::InstructionFactory() {
       {0x01, make_pair(ORA, INDIRECT_INDEXED)},
       {0x11, make_pair(ORA, INDEXED_INDIRECT)},
       
+      /* PHA Instructions*/
+      {0x48, make_pair(PHA, IMMEDIATE)},
+      /* PHP Instructions*/
+      {0x09, make_pair(PHP, IMMEDIATE)},
+      /* PLA Instructions*/
+      {0x69, make_pair(PLA, IMMEDIATE)},
+      /* PLP Instructions*/
+      {0x29, make_pair(PLP, IMMEDIATE)},
 
       /* LDA Instructions*/
       {0xA9, make_pair(LDA, IMMEDIATE)},

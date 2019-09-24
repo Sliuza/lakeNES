@@ -178,12 +178,35 @@ public:
   void execute(Cpu *cpu, uint16_t address = 0);
 };
 
+class PHPInstruction : public BaseInstruction {
+public:
+  PHPInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class PHAInstruction : public BaseInstruction {
+public:
+  PHAInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class PLAInstruction : public BaseInstruction {
+public:
+  PLAInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class PLPInstruction : public BaseInstruction {
+public:
+  PLPInstruction(uint8_t addressingMode, uint8_t instructionSize);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
 class ORAInstruction : public BaseInstruction {
 public:
   ORAInstruction(uint8_t addressingMode, uint8_t instructionSize);
   void execute(Cpu *cpu, uint16_t address = 0);
 };
-
 class LDAInstruction : public BaseInstruction {
 public:
   LDAInstruction(uint8_t addressingMode, uint8_t instructionSize);

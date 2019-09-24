@@ -409,6 +409,78 @@ void NOPInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[NOPInstruction] -  execute()\n";
 }
 
+PLAInstruction::PLAInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[PLAInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void PLAInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[PLAInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t stack = cpu->getSp_reg();
+    stack ++;
+    cpu->setSp_reg(stack);
+    
+    uint8_t a_regValue = cpu->getA_reg();
+    uint8_t aux = cpu->read_mem(0x0100+stack);
+    
+    (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    cpu->setA_reg(aux);
+  }
+}
+
+PLPInstruction::PLPInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[PLPInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void PLPInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[PLPInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t stack = cpu->getSp_reg();
+    stack ++;
+    cpu->setSp_reg(stack);
+    
+    uint8_t a_regValue = cpu->getA_reg();
+    uint8_t aux = cpu->read_mem(0x0100+stack);
+    
+  }
+}
+
+PHAInstruction::PHAInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[PHAInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void PHAInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[PHAInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t stack = cpu->getSp_reg();
+    uint8_t a_regValue = cpu->getA_reg();
+    cpu->write_mem(0x0100+stack, a_regValue);
+    stack --;
+    cpu->setSp_reg(stack);
+  }
+}
+
+PHPInstruction::PHPInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[PHPInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+void PHPInstruction::execute(Cpu *cpu, uint16_t address) {
+  cout << "[PHPInstruction] -  execute()\n";
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t stack = cpu->getSp_reg();
+    uint8_t status = cpu->getA_reg();
+    cpu->write_mem(0x0100+stack, status);
+    stack --;
+    cpu->setSp_reg(stack);
+  }
+}
+
+
 ORAInstruction::ORAInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
   cout << "[ORAInstruction] - constructor(" << unsigned(instructionSize)
