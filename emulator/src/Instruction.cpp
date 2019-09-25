@@ -809,3 +809,93 @@ void TYAInstruction::execute(Cpu *cpu, uint16_t address){
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
 }
+
+RORInstruction::RORInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[RORInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void RORInstruction::execute(Cpu *cpu, uint16_t address){
+    uint8_t aux;
+    uint8_t op;
+    if(getAddressingMode() == 4){
+      aux = cpu->getA_reg();
+      op = 0b00000001 & aux;
+      aux = aux >> 1;
+      if(cpu->getF_carry())
+        aux = + 0b10000000;
+      cpu->setA_reg(aux);
+    }     
+    else{
+      aux = cpu->read_mem(address);
+      op = 0b00000001 & aux;
+      aux = aux >> 1;
+      if(cpu->getF_carry())
+        aux = + 0b10000000;
+      cpu->write_mem(aux,address);
+  }
+
+   if(op == 0)
+    cpu->setF_carry(0);
+  else
+    cpu->setF_carry(1);
+
+
+   if((0b10000000 & op) == 128)
+    cpu->setF_negative(true);
+  else
+    cpu ->setF_negative(false);
+
+
+  if(aux == 0)
+    cpu->setF_zero(true);
+  else
+    cpu->setF_zero(false);
+}
+
+
+ROLInstruction::ROLInstruction(uint8_t addressingMode, uint8_t instructionSize)
+    : BaseInstruction(addressingMode, instructionSize) {
+  cout << "[ROLInstruction] - constructor(" << unsigned(instructionSize)
+       << ") \n";
+}
+
+void ROLInstruction::execute(Cpu *cpu, uint16_t address){
+  uint8_t aux;
+  uint8_t op;
+  if(getAddressingMode() == 4){
+    aux = cpu->getA_reg();
+    op = 0b10000000 & aux;
+    aux = aux << 1;
+    if(cpu->getF_carry())
+        aux = aux + 0b00000001;
+    cpu->setA_reg(aux);
+  }
+  else{
+      aux = cpu->read_mem(address);
+      op = 0b10000000 & aux;
+      aux = aux << 1;
+      if(cpu->getF_carry())
+        aux = aux + 0b00000001;
+      cpu->write_mem(aux,address);
+  }
+
+  if(op == 0)
+    cpu->setF_carry(0);
+  else
+    cpu->setF_carry(1);
+
+
+  if((0b10000000 & op) == 128)
+    cpu->setF_negative(true);
+  else
+    cpu ->setF_negative(false);
+
+
+  if(aux == 0)
+    cpu->setF_zero(true);
+  else
+    cpu->setF_zero(false);
+}
+
