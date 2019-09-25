@@ -229,6 +229,20 @@ InstructionFactory::InstructionFactory() {
       {0xF9, make_pair(SBC, INDEXED_ABSOLUTE_Y)},
       {0xF1, make_pair(SBC, INDIRECT_INDEXED)},
       {0xE1, make_pair(SBC, INDEXED_INDIRECT)},
+    
+      /*ROR instructions*/
+      {0x6A,make_pair(ROR,ACCUMULATOR)},
+      {0X66,make_pair(ROR,ZERO_PAGE)},
+      {0X76,make_pair(ROR,INDEXED_ZERO_PAGE_X)},
+      {0X6E,make_pair(ROR,ABSOLUTE)},
+      {0X7E,make_pair(ROR,INDEXED_ABSOLUTE_X)},
+
+      /*ROL instructions*/
+      {0x2A,make_pair(ROL,ACCUMULATOR)},
+      {0X26,make_pair(ROL,ZERO_PAGE)},
+      {0X36,make_pair(ROL,INDEXED_ZERO_PAGE_X)},
+      {0X2E,make_pair(ROL,ABSOLUTE)},
+      {0X3E,make_pair(ROL,INDEXED_ABSOLUTE_X)},
 
       /*TAX instructions*/
       {0xAA, make_pair(TAX, IMPLIED)},
@@ -343,6 +357,13 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
     case TYA:{
       return new TSXInstruction(addressingMode, instructionSize);
       break;
+    }
+      
+    case ROR:{
+      return new RORInstruction(addressingMode, instructionSize);
+    }
+    case ROL:{
+      return new ROLInstruction(addressingMode, instructionSize);
     }
 
     default: { break; }
