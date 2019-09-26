@@ -12,7 +12,7 @@ RES=./emulator/res
 BIN=./emulator/bin
 LOG=./emulator/log
 EXT=./emulator/ext
-NES= main
+NES=./main
 
 TESTS=$(addprefix ${BIN}/, $(notdir $(patsubst %.s,%,$(sort $(wildcard ${TST}/*.s)))))
 CROSS_AS=${EXT}/asm6/asm6

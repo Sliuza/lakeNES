@@ -20,7 +20,7 @@ void Cpu::reset() {
   this->a_reg, this->x_reg, this->y_reg = 0;
   this->f_interrupt = true;
   this->f_negative, this->f_overflow, this->f_zero, this->f_carry, this->f_decimal = false;
-  this->pc_reg = 0xfffc;
+  this->pc_reg = this->read_mem(0xfffc) | this->read_mem(0xfffc + 1) << 8;
   this->sp_reg = 0xfd;
 }
 void Cpu::push(uint8_t val) {
