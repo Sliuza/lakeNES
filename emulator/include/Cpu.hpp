@@ -50,11 +50,11 @@ class Cpu {
 
   //GETTERS
   uint16_t
-  getPc_reg();           // program counter, 2 byte
-  uint8_t getSp_reg();   // stack pointer
-  uint8_t getX_reg();    // x register
-  uint8_t getY_reg();    // y register
-  uint8_t getA_reg();    // a register
+  getPc_reg();              // program counter, 2 byte
+  uint8_t getSp_reg();      // stack pointer
+  uint8_t getX_reg();       // x register
+  uint8_t getY_reg();       // y register
+  uint8_t getA_reg();       // a register
   uint8_t getF_carry();     // carry flag
   uint8_t getF_zero();      // zero flag
   uint8_t getF_interrupt(); // interrupt flag
@@ -62,14 +62,13 @@ class Cpu {
   uint8_t getF_overflow();  // overflow flag
   uint8_t getF_negative();  // negative flag
 
-
   Rom getRom();
   //SETTERS
-  void setPc_reg(uint16_t _pc_reg);    // program counter, 2 byte
-  void setSp_reg(uint8_t _sp_reg);     // stack pointer
-  void setX_reg(uint8_t _x_reg);       // x register
-  void setY_reg(uint8_t _y_reg);       // y register
-  void setA_reg(uint8_t _a_reg);       // a register
+  void setPc_reg(uint16_t _pc_reg);       // program counter, 2 byte
+  void setSp_reg(uint8_t _sp_reg);        // stack pointer
+  void setX_reg(uint8_t _x_reg);          // x register
+  void setY_reg(uint8_t _y_reg);          // y register
+  void setA_reg(uint8_t _a_reg);          // a register
   void setF_carry(uint8_t carry);         // carry flag
   void setF_zero(uint8_t zero);           // zero flag
   void setF_interrupt(uint8_t interrupt); // interrupt flag
@@ -78,6 +77,6 @@ class Cpu {
   void setF_negative(uint8_t negative);   // negative flag
 };
 
-uint8_t make_P(uint8_t t1,uint8_t t2,uint8_t t3,uint8_t t4,uint8_t t5,uint8_t t6);
+uint8_t make_P(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint8_t t6);
 
 #endif

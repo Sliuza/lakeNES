@@ -63,24 +63,27 @@ InstructionFactory::InstructionFactory() {
       {0x30, make_pair(BMI, RELATIVE)},
       {0xD0, make_pair(BNE, RELATIVE)},
       {0x10, make_pair(BPL, RELATIVE)},
-      
+
       /* BRK Instruction */
       {0x00, make_pair(BRK, IMPLIED)},
 
       /* BVC,BVS Instruction */
       {0x50, make_pair(BVC, RELATIVE)},
       {0x70, make_pair(BVS, RELATIVE)},
-      
+
       /* CLC Instruction */
       {0x18, make_pair(CLC, IMPLIED)},
+
       /* CLD Instruction */
       {0xD8, make_pair(CLD, IMPLIED)},
+
       /* CLI Instruction */
       {0x58, make_pair(CLI, IMPLIED)},
+
       /* CLV Instruction */
-     
+
       {0xB8, make_pair(CLV, IMPLIED)},
-      
+
       /* CMP Instruction */
       {0xC9, make_pair(CMP, IMMEDIATE)},
       {0xC5, make_pair(CMP, ZERO_PAGE)},
@@ -98,7 +101,7 @@ InstructionFactory::InstructionFactory() {
       {0xC0, make_pair(CPY, IMMEDIATE)},
       {0xC4, make_pair(CPY, ZERO_PAGE)},
       {0xCC, make_pair(CPY, ABSOLUTE)},
-      
+
       /* EOR Instructions*/
       {0x49, make_pair(EOR, IMMEDIATE)},
       {0x45, make_pair(EOR, ZERO_PAGE)},
@@ -108,24 +111,24 @@ InstructionFactory::InstructionFactory() {
       {0x59, make_pair(EOR, INDEXED_ABSOLUTE_Y)},
       {0x41, make_pair(EOR, INDIRECT_INDEXED)},
       {0x51, make_pair(EOR, INDEXED_INDIRECT)},
-      
+
       /* JMP Instructions*/
       {0x4C, make_pair(JMP, ABSOLUTE)},
       {0x6C, make_pair(JMP, INDIRECT)},
-      
+
       /* JSR Instructions*/
       {0x20, make_pair(JSR, ABSOLUTE)},
-      
+
       /* LSR Instructions*/
       {0x4A, make_pair(LSR, ACCUMULATOR)},
       {0x46, make_pair(LSR, ZERO_PAGE)},
       {0x56, make_pair(LSR, INDEXED_ZERO_PAGE_X)},
       {0x4E, make_pair(LSR, ABSOLUTE)},
       {0x5E, make_pair(LSR, INDEXED_ABSOLUTE_X)},
-      
+
       /* NOP Instructions*/
       {0xEA, make_pair(NOP, IMPLIED)},
-      
+
       /* ORA Instructions*/
       {0x09, make_pair(ORA, IMMEDIATE)},
       {0x05, make_pair(ORA, ZERO_PAGE)},
@@ -135,7 +138,7 @@ InstructionFactory::InstructionFactory() {
       {0x19, make_pair(ORA, INDEXED_ABSOLUTE_Y)},
       {0x01, make_pair(ORA, INDIRECT_INDEXED)},
       {0x11, make_pair(ORA, INDEXED_INDIRECT)},
-      
+
       /* PHA Instructions*/
       {0x48, make_pair(PHA, IMPLIED)},
       /* PHP Instructions*/
@@ -144,15 +147,14 @@ InstructionFactory::InstructionFactory() {
       {0x69, make_pair(PLA, IMPLIED)},
       /* PLP Instructions*/
       {0x29, make_pair(PLP, IMPLIED)},
-      
+
       /* RTI Instructions*/
       {0x40, make_pair(RTI, IMPLIED)},
       /* RTS Instructions*/
       {0x60, make_pair(RTS, IMPLIED)},
-      
+
       /* SEC Instructions*/
       {0x38, make_pair(SEC, IMPLIED)},
-
 
       /* LDA Instructions*/
       {0xA9, make_pair(LDA, IMMEDIATE)},
@@ -186,17 +188,16 @@ InstructionFactory::InstructionFactory() {
       {0X99, make_pair(STA, INDEXED_ABSOLUTE_Y)},
       {0X81, make_pair(STA, INDIRECT_INDEXED)},
       {0X91, make_pair(STA, INDEXED_INDIRECT)},
-      
+
       /*STX Instructions*/
       {0x86, make_pair(STX, ZERO_PAGE)},
       {0X96, make_pair(STX, INDEXED_ZERO_PAGE_Y)},
       {0x8E, make_pair(STX, ABSOLUTE)},
-      
+
       /*STY Instructions*/
       {0x84, make_pair(STY, ZERO_PAGE)},
       {0X94, make_pair(STY, INDEXED_ZERO_PAGE_X)},
       {0x8C, make_pair(STY, ABSOLUTE)},
-      
 
       /*DEC instructions*/
       {0xC6, make_pair(DEC, ZERO_PAGE)},
@@ -231,20 +232,20 @@ InstructionFactory::InstructionFactory() {
       {0xF9, make_pair(SBC, INDEXED_ABSOLUTE_Y)},
       {0xF1, make_pair(SBC, INDIRECT_INDEXED)},
       {0xE1, make_pair(SBC, INDEXED_INDIRECT)},
-    
+
       /*ROR instructions*/
-      {0x6A,make_pair(ROR,ACCUMULATOR)},
-      {0X66,make_pair(ROR,ZERO_PAGE)},
-      {0X76,make_pair(ROR,INDEXED_ZERO_PAGE_X)},
-      {0X6E,make_pair(ROR,ABSOLUTE)},
-      {0X7E,make_pair(ROR,INDEXED_ABSOLUTE_X)},
+      {0x6A, make_pair(ROR, ACCUMULATOR)},
+      {0X66, make_pair(ROR, ZERO_PAGE)},
+      {0X76, make_pair(ROR, INDEXED_ZERO_PAGE_X)},
+      {0X6E, make_pair(ROR, ABSOLUTE)},
+      {0X7E, make_pair(ROR, INDEXED_ABSOLUTE_X)},
 
       /*ROL instructions*/
-      {0x2A,make_pair(ROL,ACCUMULATOR)},
-      {0X26,make_pair(ROL,ZERO_PAGE)},
-      {0X36,make_pair(ROL,INDEXED_ZERO_PAGE_X)},
-      {0X2E,make_pair(ROL,ABSOLUTE)},
-      {0X3E,make_pair(ROL,INDEXED_ABSOLUTE_X)},
+      {0x2A, make_pair(ROL, ACCUMULATOR)},
+      {0X26, make_pair(ROL, ZERO_PAGE)},
+      {0X36, make_pair(ROL, INDEXED_ZERO_PAGE_X)},
+      {0X2E, make_pair(ROL, ABSOLUTE)},
+      {0X3E, make_pair(ROL, INDEXED_ABSOLUTE_X)},
 
       /*TAX instructions*/
       {0xAA, make_pair(TAX, IMPLIED)},
@@ -282,13 +283,13 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
   uint instructionSize = this->getInstructionSize(opCode);
   uint instructionID = pair.first;
   uint addressingMode = pair.second;
-  
+
   switch (instructionID) {
-      case ASL: {
-        return new ASLInstruction(addressingMode, instructionSize);
-        break;
-      }
-      case BCC: {
+    case ASL: {
+      return new ASLInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case BCC: {
       return new BCCInstruction(addressingMode, instructionSize);
       break;
     }
@@ -325,50 +326,49 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
       break;
     }
     case BVS: {
-        return new BVSInstruction(addressingMode, instructionSize);
-        break;
-      }
+      return new BVSInstruction(addressingMode, instructionSize);
+      break;
+    }
     case CLC: {
-        return new CLCInstruction(addressingMode, instructionSize);
-        break;
-      }
+      return new CLCInstruction(addressingMode, instructionSize);
+      break;
+    }
     case CLD: {
-        return new CLDInstruction(addressingMode, instructionSize);
-        break;
-      }
+      return new CLDInstruction(addressingMode, instructionSize);
+      break;
+    }
     case CLI: {
-        return new CLIInstruction(addressingMode, instructionSize);
-        break;
-      }
+      return new CLIInstruction(addressingMode, instructionSize);
+      break;
+    }
     case CLV: {
-        return new CLVInstruction(addressingMode, instructionSize);
-        break;
-      }
+      return new CLVInstruction(addressingMode, instructionSize);
+      break;
+    }
     case CMP: {
-        return new CMPInstruction(addressingMode, instructionSize);
-        break;
-      }
+      return new CMPInstruction(addressingMode, instructionSize);
+      break;
+    }
     case CPY: {
-        return new CPYInstruction(addressingMode, instructionSize);
-        break;
-      }
+      return new CPYInstruction(addressingMode, instructionSize);
+      break;
+    }
     case EOR: {
-        return new EORInstruction(addressingMode, instructionSize);
-        break;
-      }
-
+      return new EORInstruction(addressingMode, instructionSize);
+      break;
+    }
     case JSR: {
-        return new JSRInstruction(addressingMode, instructionSize);
-        break;
-      }
+      return new JSRInstruction(addressingMode, instructionSize);
+      break;
+    }
     case JMP: {
-        return new JMPInstruction(addressingMode, instructionSize);
-        break;
-      }
+      return new JMPInstruction(addressingMode, instructionSize);
+      break;
+    }
     case LSR: {
       return new LSRInstruction(addressingMode, instructionSize);
       break;
-      }
+    }
     case ORA: {
       return new ORAInstruction(addressingMode, instructionSize);
       break;
@@ -405,7 +405,6 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
       return new ANDInstruction(addressingMode, instructionSize);
       break;
     }
-
     case LDA: {
       return new LDAInstruction(addressingMode, instructionSize);
       break;
@@ -430,73 +429,71 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
       return new STYInstruction(addressingMode, instructionSize);
       break;
     }
-    case DEC:{
+    case DEC: {
       return new DECInstruction(addressingMode, instructionSize);
       break;
     }
-    case DEX:{
+    case DEX: {
       return new DEXInstruction(addressingMode, instructionSize);
       break;
     }
-    case DEY:{
+    case DEY: {
       return new DEYInstruction(addressingMode, instructionSize);
       break;
     }
-    case INC:{
+    case INC: {
       return new INCInstruction(addressingMode, instructionSize);
       break;
     }
-    case INX:{
+    case INX: {
       return new INXInstruction(addressingMode, instructionSize);
       break;
     }
-    case INY:{
+    case INY: {
       return new INYInstruction(addressingMode, instructionSize);
       break;
     }
-    case SBC:{
+    case SBC: {
       return new SBCInstruction(addressingMode, instructionSize);
       break;
     }
-    case TAX:{
+    case TAX: {
       return new TAXInstruction(addressingMode, instructionSize);
       break;
     }
-    case TAY:{
+    case TAY: {
       return new TAYInstruction(addressingMode, instructionSize);
       break;
     }
-    case TSX:{
+    case TSX: {
       return new TSXInstruction(addressingMode, instructionSize);
       break;
     }
-    case TXA:{
+    case TXA: {
       return new TSXInstruction(addressingMode, instructionSize);
       break;
     }
-    case TXS:{
+    case TXS: {
       return new TSXInstruction(addressingMode, instructionSize);
       break;
     }
-    case TYA:{
+    case TYA: {
       return new TSXInstruction(addressingMode, instructionSize);
       break;
     }
-      
-    case ROR:{
+
+    case ROR: {
       return new RORInstruction(addressingMode, instructionSize);
       break;
     }
-    case ROL:{
+    case ROL: {
       return new ROLInstruction(addressingMode, instructionSize);
       break;
     }
-
-    case NOP:{
+    case NOP: {
       return new NOPInstruction(addressingMode, instructionSize);
       break;
     }
-
     default: { break; }
   }
 

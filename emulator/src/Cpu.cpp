@@ -4,9 +4,9 @@
 #include "Utils.cpp"
 #include <iomanip>
 
-  uint8_t make_P(uint8_t t1,uint8_t t2,uint8_t t3,uint8_t t4,uint8_t t5,uint8_t t6){
-    uint8_t b = t1 + t2*2 + t3*4 + t4*8 + t5*64 + t6*128;
-    return b;
+uint8_t make_P(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint8_t t6) {
+  uint8_t b = t1 + t2 * 2 + t3 * 4 + t4 * 8 + t5 * 64 + t6 * 128;
+  return b;
 }
 
 void print(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc,
@@ -28,7 +28,6 @@ void printls(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc,
        << addr << "] = 0x" << hex << setw(2) << (unsigned)data << " |" << endl;
 }
 
-
 Cpu::Cpu() {
   this->pc_reg = 0xfffc;
   this->sp_reg = 0xfd;
@@ -44,9 +43,9 @@ void Cpu::startCpu() {
   this->reset();
 };
 void Cpu::reset() {
-  this->a_reg, this->x_reg, this->y_reg = 0;
+  this->a_reg = this->x_reg = this->y_reg = 0;
   this->f_interrupt = 1;
-  this->f_negative, this->f_overflow, this->f_zero, this->f_carry, this->f_decimal = 0;
+  this->f_negative = this->f_overflow = this->f_zero = this->f_carry = this->f_decimal = 0;
   this->pc_reg = this->read_mem(0xfffc) | this->read_mem(0xfffc + 1) << 8;
   this->sp_reg = 0xfd;
 }
@@ -67,7 +66,7 @@ void Cpu::run() {
 
     uint8_t opcode = read_mem(this->pc_reg);
     // cout << "pc = " << hex << (unsigned)this->pc_reg << endl;
-    if(opcode == 0x00)
+    if (opcode == 0x00)
       br = false;
 
     this->pc_reg++;
@@ -75,14 +74,13 @@ void Cpu::run() {
     // cout << "opcode = " << (unsigned)opcode << endl;
     instruction = factory.createInstruction(opcode);
 
-
     address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
     instruction->execute(this, address);
     this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()) - 1);
 
-    print(getA_reg(),getX_reg(),getY_reg(),getSp_reg(),getPc_reg(),make_P(getF_carry(),getF_zero(),getF_interrupt(),getF_decimal(),getF_overflow(),getF_negative()));
-    printls(getA_reg(), getX_reg(), getY_reg(), getSp_reg(), getPc_reg(), make_P(getF_carry(),getF_zero(),getF_interrupt(),getF_decimal(),getF_overflow(),getF_negative()),
-    address,read_mem(address));
+    print(getA_reg(), getX_reg(), getY_reg(), getSp_reg(), getPc_reg(), make_P(getF_carry(), getF_zero(), getF_interrupt(), getF_decimal(), getF_overflow(), getF_negative()));
+    printls(getA_reg(), getX_reg(), getY_reg(), getSp_reg(), getPc_reg(), make_P(getF_carry(), getF_zero(), getF_interrupt(), getF_decimal(), getF_overflow(), getF_negative()),
+            address, read_mem(address));
   }
 }
 uint8_t Cpu::read_mem(uint16_t addr) {
