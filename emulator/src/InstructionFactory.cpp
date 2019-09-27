@@ -280,7 +280,7 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
   uint instructionSize = this->getInstructionSize(opCode);
   uint instructionID = pair.first;
   uint addressingMode = pair.second;
-
+  
   switch (instructionID) {
     case ADC: {
       return new ADCInstruction(addressingMode, instructionSize);
@@ -361,9 +361,21 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
       
     case ROR:{
       return new RORInstruction(addressingMode, instructionSize);
+      break;
     }
     case ROL:{
       return new ROLInstruction(addressingMode, instructionSize);
+      break;
+    }
+
+    case NOP:{
+      return new NOPInstruction(addressingMode, instructionSize);
+      break;
+    }
+
+    case BRK:{
+      return new BRKInstruction(addressingMode, instructionSize);
+      break;
     }
 
     default: { break; }

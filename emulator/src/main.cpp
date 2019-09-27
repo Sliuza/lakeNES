@@ -28,17 +28,21 @@ void printls(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc,
 }
 
 int main(int argc, const char *argv[]) {
-  if (argc == 2) {
-    cout << "Starting rom " << argv[1] << endl;
-  } else if (argc < 2) {
-    cout << "Please choose the rom" << endl;
-    exit(1);
-  } else {
-    cout << "Too many arguments" << endl;
-    exit(1);
-  }
+  // if (argc == 2) {
+  //   cout << "Starting rom " << argv[1] << endl;
+  // } else if (argc < 2) {
+  //   cout << "Please choose the rom" << endl;
+  //   exit(1);
+  // } else {
+  //   cout << "Too many arguments" << endl;
+  //   exit(1);
+  // }
   string pathToROM = argv[1];
   Nes nes(pathToROM);
   nes.load();
+
+  	// print(0xFF, 0xEE, 0xDD, 0xCCCC, 0xBBBB, 0xAA);
+    // printls(0xFF, 0xEE, 0xDD, 0xCCCC, 0xBBBB, 0xAA, 0xFFFF, 0x99);
+    
   return 0;
 }

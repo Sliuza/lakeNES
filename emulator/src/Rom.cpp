@@ -10,16 +10,16 @@ void Rom::load(string path) {
     // read header
     romFile.read(reinterpret_cast<char*>(&header[0]), 0x10);
     this->num_prg_banks = header[4];
-    cout << "16KB PRG Banks: " << + this->num_prg_banks << std::endl;
+    // cout << "16KB PRG Banks: " << + this->num_prg_banks << std::endl;
     this->num_chr_banks = header[5];
-    cout << "8KB CHR Banks: " << +this->num_chr_banks << std::endl;
+    // cout << "8KB CHR Banks: " << +this->num_chr_banks << std::endl;
     // read mapper
     this->mapper_number = ((header[6] >> 4) & 0xf) | (header[7] & 0xf0);
-    cout << "Mapper #: " << +this->mapper_number << std::endl;
+    // cout << "Mapper #: " << +this->mapper_number << std::endl;
     // TODO: support more mappers
-    if(this->mapper_number != 0){
-        cout << "ERROR: This emulator only support mapper NROM" << endl;
-    }
+    // if(this->mapper_number != 0){
+    //     cout << "ERROR: This emulator only support mapper NROM" << endl;
+    // }
     // read game logic
     this->prg_rom.resize(0x4000 * num_prg_banks);
     romFile.read(reinterpret_cast<char*>(&this->prg_rom[0]), 0x4000 * num_prg_banks);

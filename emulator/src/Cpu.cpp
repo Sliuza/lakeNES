@@ -35,13 +35,28 @@ void Cpu::run() {
   Instruction *instruction;
   InstructionFactory factory;
   uint16_t address = 0;
-  while (1) {
-    uint8_t opcode = read_mem(this->pc_reg++);
+  bool br = true;
+  while (br) {
+
+    uint8_t opcode = read_mem(this->pc_reg);
+    // cout << "pc = " << hex << (unsigned)this->pc_reg << endl;
+    if(opcode == 0x00)
+      br = false;
+
+    this->pc_reg++;
+
+    // cout << "opcode = " << (unsigned)opcode << endl;
     instruction = factory.createInstruction(opcode);
-    address = getAddressBasedOnAddressingMode(instruction->getAddressingMode() + uint16_t(1));
-    instruction->execute(this, address);
-    this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
+    
+      
+      address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
+      instruction->execute(this, address);
+      this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()) - 1);
+    
   }
+
+  cout <<   "CPU FINISHED RUNNING\n";
+  
 }
 uint8_t Cpu::read_mem(uint16_t addr) {
   uint8_t res;
@@ -64,7 +79,7 @@ void Cpu::write_mem(uint8_t val, uint16_t addr) {
   }
 }
 void Cpu::loadROM(string path) {
-  cout << "Running ROM: " << path << std::endl;
+  // cout << "Running ROM: " << path << std::endl;
   this->rom.load(path);
 }
 
@@ -74,8 +89,8 @@ void Cpu::printROM() {
   Instruction *instruction;
   InstructionFactory factory;
 
-  instruction = factory.createInstruction(0x69);
-  instruction->execute(this, 0x123);
+  // instruction = factory.createInstruction(0x69);
+  // instruction->execute(this, 0x123);
   // for (int i = 0xc000; i < r.size(); i++) {
   //   cout << std::hex << (unsigned)(uint8_t)r.at(i);
   // }
@@ -86,40 +101,49 @@ void Cpu::printROM() {
 }
 
 uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
+  
   uint16_t address = 0;
   switch (addressingMode) {
     case ABSOLUTE: {
+      cout << "addressing mode = ABSOLUTE\n";
       address = this->get16BitsAddress(this->getPc_reg() + uint16_t(1));
       break;
     }
     case INDEXED_ABSOLUTE_X: {
+      cout << "addressing mode = INDEXED_ABSOLUTE_X\n";
       address = this->get16BitsAddress(this->getPc_reg() + uint16_t(1)) + uint16_t(this->getX_reg());
       break;
     }
     case INDEXED_ABSOLUTE_Y: {
+      cout << "addressing mode = INDEXED_ABSOLUTE_Y\n";
       address = this->get16BitsAddress(this->getPc_reg() + uint16_t(1)) + uint16_t(this->getY_reg());
       break;
     }
     case IMMEDIATE: {
-      address = this->pc_reg + uint16_t(1);
+      cout << "addressing mode = IMMEDIATE\n";
+      address = this->pc_reg;
       break;
     }
     case INDIRECT: {
+      cout << "addressing mode = INDIRECT\n";
       uint16_t baseAddress = get16BitsAddress(this->getPc_reg() + uint16_t(1));
       address = this->get16BitsAddressInMemory(baseAddress);
       break;
     }
     case INDIRECT_INDEXED: {
+      cout << "addressing mode = INDIRECT_INDEXED\n";
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = this->get16BitsAddressInMemory(baseAddress) + uint16_t(this->getY_reg());
       break;
     }
     case INDEXED_INDIRECT: {
+      cout << "addressing mode = INDEXED_INDIRECT\n";
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = this->get16BitsAddressInMemory(baseAddress) + uint16_t(this->getX_reg());
       break;
     }
     case RELATIVE: { //read relative address and set address to branch
+      cout << "addressing mode = RELATIVE\n";
       uint16_t rel = this->read_mem(this->pc_reg + uint16_t(1));
       if (rel & 0x80)
         rel |= 0xFF00;
@@ -127,19 +151,28 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
       break;
     }
     case ZERO_PAGE: {
+      cout << "addressing mode = ZERO_PAGE\n";
       address = this->read_mem(this->getPc_reg() + uint16_t(1));
       break;
     }
     case INDEXED_ZERO_PAGE_X: {
+      cout << "addressing mode = INDEXED_ZERO_PAGE_X\n";
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = (baseAddress + uint16_t(this->getX_reg())) & 0xFF;
       break;
     }
     case INDEXED_ZERO_PAGE_Y: {
+      cout << "addressing mode = INDEXED_ZERO_PAGE_Y\n";
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = (baseAddress + uint16_t(this->getY_reg())) & 0xFF;
       break;
     }
+    // default:{
+    //   cout << "addressing mode = default\n";
+    //   address = 0;
+    //   break;
+    // }
+      
   }
   return address;
 }

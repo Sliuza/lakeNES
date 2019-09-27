@@ -45,6 +45,8 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 
 Reset:
    nop
+   nop
+   lda #$1
 
 NMI:
    brk
@@ -58,7 +60,6 @@ IRQ:
    ;NOTE: IRQ code goes here
 
 loop: 
-   rts
 
 ;----------------------------------------------------------------
 ; interrupt vectors
