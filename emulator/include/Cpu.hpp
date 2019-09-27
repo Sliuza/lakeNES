@@ -23,12 +23,13 @@ class Cpu {
   uint8_t y_reg = 0; // y register
   uint8_t a_reg = 0; // a register
   // flags
-  bool f_carry;
-  bool f_zero;
-  bool f_interrupt;
-  bool f_decimal;
-  bool f_overflow;
-  bool f_negative;
+  uint8_t f_carry = 0;
+  uint8_t f_zero = 0;
+  uint8_t f_interrupt = 0;
+  uint8_t f_decimal = 0;
+  uint8_t f_overflow = 0;
+  uint8_t f_negative = 0;
+  uint8_t flags = 0;
   Rom rom;
   uint8_t ram[0xFFFF];
 
@@ -54,12 +55,14 @@ class Cpu {
   uint8_t getX_reg();    // x register
   uint8_t getY_reg();    // y register
   uint8_t getA_reg();    // a register
-  bool getF_carry();     // carry flag
-  bool getF_zero();      // zero flag
-  bool getF_interrupt(); // interrupt flag
-  bool getF_decimal();   // decimal flag
-  bool getF_overflow();  // overflow flag
-  bool getF_negative();  // negative flag
+  uint8_t getF_carry();     // carry flag
+  uint8_t getF_zero();      // zero flag
+  uint8_t getF_interrupt(); // interrupt flag
+  uint8_t getF_decimal();   // decimal flag
+  uint8_t getF_overflow();  // overflow flag
+  uint8_t getF_negative();  // negative flag
+
+
   Rom getRom();
   //SETTERS
   void setPc_reg(uint16_t _pc_reg);    // program counter, 2 byte
@@ -67,12 +70,14 @@ class Cpu {
   void setX_reg(uint8_t _x_reg);       // x register
   void setY_reg(uint8_t _y_reg);       // y register
   void setA_reg(uint8_t _a_reg);       // a register
-  void setF_carry(bool carry);         // carry flag
-  void setF_zero(bool zero);           // zero flag
-  void setF_interrupt(bool interrupt); // interrupt flag
-  void setF_decimal(bool decimal);     // decimal flag
-  void setF_overflow(bool overflow);   // overflow flag
-  void setF_negative(bool negative);   // negative flag
+  void setF_carry(uint8_t carry);         // carry flag
+  void setF_zero(uint8_t zero);           // zero flag
+  void setF_interrupt(uint8_t interrupt); // interrupt flag
+  void setF_decimal(uint8_t decimal);     // decimal flag
+  void setF_overflow(uint8_t overflow);   // overflow flag
+  void setF_negative(uint8_t negative);   // negative flag
 };
+
+uint8_t make_P(uint8_t t1,uint8_t t2,uint8_t t3,uint8_t t4,uint8_t t5,uint8_t t6);
 
 #endif

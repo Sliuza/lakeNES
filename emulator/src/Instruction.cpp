@@ -18,13 +18,13 @@ uint8_t BaseInstruction::getInstructionSize() {
 
 ADCInstruction::ADCInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[ADCInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void ADCInstruction::execute(Cpu *cpu, uint16_t address) {
   //TODO: Set Flags
-  cout << "[ADCInstruction] -  execute()\n";
+  cout << "[ADCInstruction]\n";
 
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint16_t carry = (cpu->getF_carry() ? 1 : 0);
@@ -42,8 +42,8 @@ void ADCInstruction::execute(Cpu *cpu, uint16_t address) {
 
 ANDInstruction::ANDInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[ANDInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void ANDInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -59,8 +59,8 @@ void ANDInstruction::execute(Cpu *cpu, uint16_t address) {
 
 ASLInstruction::ASLInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[ASLInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void ASLInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -84,8 +84,8 @@ void ASLInstruction::execute(Cpu *cpu, uint16_t address) {
 
 BCCInstruction::BCCInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[BCCInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void BCCInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -98,8 +98,8 @@ void BCCInstruction::execute(Cpu *cpu, uint16_t address) {
 
 BCSInstruction::BCSInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[BCSInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void BCSInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -112,8 +112,8 @@ void BCSInstruction::execute(Cpu *cpu, uint16_t address) {
 
 BEQInstruction::BEQInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[BEQInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void BEQInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -126,8 +126,8 @@ void BEQInstruction::execute(Cpu *cpu, uint16_t address) {
 
 BITInstruction::BITInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[BITInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void BITInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -144,8 +144,8 @@ void BITInstruction::execute(Cpu *cpu, uint16_t address) {
 
 BMIInstruction::BMIInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[BMIInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void BMIInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -158,8 +158,8 @@ void BMIInstruction::execute(Cpu *cpu, uint16_t address) {
 
 BNEInstruction::BNEInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[BNEInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void BNEInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -172,8 +172,8 @@ void BNEInstruction::execute(Cpu *cpu, uint16_t address) {
 
 BPLInstruction::BPLInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[BPLInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void BPLInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -187,14 +187,13 @@ void BPLInstruction::execute(Cpu *cpu, uint16_t address) {
 
 BRKInstruction::BRKInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-      cout << "[BRKInstruction] - constructor(" << unsigned(instructionSize) << ") \n";
         this->getAddressingMode();
         this->getInstructionSize(); 
 }
 
 void BRKInstruction::execute(Cpu *cpu, uint16_t address) {
   //TODO: Entender o BRK
-  cout << "[BRKInstruction] -  execute()\n";
+  cout << "[BRKInstruction]\n";
   //set interrupt flag 
   cpu->setF_interrupt(true);
   uint8_t stack = cpu->getSp_reg();
@@ -211,8 +210,8 @@ void BRKInstruction::execute(Cpu *cpu, uint16_t address) {
 
 BVCInstruction::BVCInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[BVCInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void BVCInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -225,8 +224,8 @@ void BVCInstruction::execute(Cpu *cpu, uint16_t address) {
 
 BVSInstruction::BVSInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[BVSInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void BVSInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -239,8 +238,8 @@ void BVSInstruction::execute(Cpu *cpu, uint16_t address) {
 
 CLCInstruction::CLCInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[CLCInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void CLCInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[CLCInstruction] -  execute()\n";
@@ -249,8 +248,8 @@ void CLCInstruction::execute(Cpu *cpu, uint16_t address) {
 
 CLDInstruction::CLDInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[CLDInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void CLDInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[CLDInstruction] -  execute()\n";
@@ -259,8 +258,8 @@ void CLDInstruction::execute(Cpu *cpu, uint16_t address) {
 
 CLIInstruction::CLIInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[CLIInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void CLIInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[CLIInstruction] -  execute()\n";
@@ -269,8 +268,8 @@ void CLIInstruction::execute(Cpu *cpu, uint16_t address) {
 
 CLVInstruction::CLVInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[CLVInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void CLVInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[CLVInstruction] -  execute()\n";
@@ -279,8 +278,8 @@ void CLVInstruction::execute(Cpu *cpu, uint16_t address) {
 
 CMPInstruction::CMPInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[CMPInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void CMPInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[CMPInstruction] -  execute()\n";
@@ -296,9 +295,10 @@ void CMPInstruction::execute(Cpu *cpu, uint16_t address) {
 
 CPXInstruction::CPXInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[CPXInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
+
 void CPXInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[CPXInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -313,9 +313,10 @@ void CPXInstruction::execute(Cpu *cpu, uint16_t address) {
 
 CPYInstruction::CPYInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[CPYInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
+
 void CPYInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[CPYInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -330,8 +331,8 @@ void CPYInstruction::execute(Cpu *cpu, uint16_t address) {
 
 EORInstruction::EORInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[EORInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void EORInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[EORInstruction] -  execute()\n";
@@ -347,8 +348,8 @@ void EORInstruction::execute(Cpu *cpu, uint16_t address) {
 
 JMPInstruction::JMPInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[JMPInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void JMPInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[JMPInstruction] -  execute()\n";
@@ -359,9 +360,10 @@ void JMPInstruction::execute(Cpu *cpu, uint16_t address) {
 
 JSRInstruction::JSRInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[JSRInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
+
 void JSRInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[JSRInstruction] -  execute()\n";
   //PUSH PC INTO STACK, SET PC ADDRESS.
@@ -381,8 +383,8 @@ void JSRInstruction::execute(Cpu *cpu, uint16_t address) {
 
 LSRInstruction::LSRInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[LSRInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void LSRInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[LSRInstruction] -  execute()\n";
@@ -406,17 +408,17 @@ NOPInstruction::NOPInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
       this->getAddressingMode();
       this->getInstructionSize();
-      cout << "[NOPInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
 }
+
 void NOPInstruction::execute(Cpu *cpu, uint16_t address) {
-  cout << "[NOPInstruction] -  execute()\n";
+
+  cout << "[NOPInstruction]\n";
 }
 
 PLAInstruction::PLAInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[PLAInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void PLAInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[PLAInstruction] -  execute()\n";
@@ -436,8 +438,8 @@ void PLAInstruction::execute(Cpu *cpu, uint16_t address) {
 
 PLPInstruction::PLPInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[PLPInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void PLPInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[PLPInstruction] -  execute()\n";
@@ -454,9 +456,10 @@ void PLPInstruction::execute(Cpu *cpu, uint16_t address) {
 
 PHAInstruction::PHAInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[PHAInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
+
 void PHAInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[PHAInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -470,8 +473,8 @@ void PHAInstruction::execute(Cpu *cpu, uint16_t address) {
 
 PHPInstruction::PHPInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[PHPInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void PHPInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[PHPInstruction] -  execute()\n";
@@ -486,8 +489,8 @@ void PHPInstruction::execute(Cpu *cpu, uint16_t address) {
 
 RTIInstruction::RTIInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[RTIInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void RTIInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[RTIInstruction] -  execute()\n";
@@ -508,8 +511,8 @@ void RTIInstruction::execute(Cpu *cpu, uint16_t address) {
 
 RTSInstruction::RTSInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[RTIInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void RTSInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[RTSInstruction] -  execute()\n";
@@ -528,8 +531,8 @@ void RTSInstruction::execute(Cpu *cpu, uint16_t address) {
 
 SECInstruction::SECInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[SECInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void SECInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[SECInstruction] -  execute()\n";
@@ -538,8 +541,8 @@ void SECInstruction::execute(Cpu *cpu, uint16_t address) {
 
 ORAInstruction::ORAInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[ORAInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 void ORAInstruction::execute(Cpu *cpu, uint16_t address) {
   cout << "[ORAInstruction] -  execute()\n";
@@ -557,25 +560,23 @@ LDAInstruction::LDAInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
         this->getAddressingMode();
         this->getInstructionSize();
-  cout << "[LDAInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
 }
 
 void LDAInstruction::execute(Cpu *cpu, uint16_t address) {
-  cout << "[LDAInstruction] -  execute()\n";
+  cout << "[LDAInstruction]\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t value = cpu->read_mem(address);
     cpu->setA_reg(value);
     (value & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
     (value & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
-    cout << "a = " << hex << (unsigned)(uint8_t)cpu->getA_reg() << "\n";
+    // cout << "a = " << hex << (unsigned)(uint8_t)cpu->getA_reg() << "\n";
   }
 }
 
 STAInstruction::STAInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[STAInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void STAInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -585,8 +586,8 @@ void STAInstruction::execute(Cpu *cpu, uint16_t address) {
 
 STXInstruction::STXInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[STXInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void STXInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -596,8 +597,8 @@ void STXInstruction::execute(Cpu *cpu, uint16_t address) {
 
 STYInstruction::STYInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[STYInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void STYInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -607,8 +608,8 @@ void STYInstruction::execute(Cpu *cpu, uint16_t address) {
 
 LDXInstruction::LDXInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[LDXInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void LDXInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -623,8 +624,8 @@ void LDXInstruction::execute(Cpu *cpu, uint16_t address) {
 
 LDYInstruction::LDYInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[LDYInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void LDYInstruction::execute(Cpu *cpu, uint16_t address) {
@@ -638,8 +639,8 @@ void LDYInstruction::execute(Cpu *cpu, uint16_t address) {
 }
 DECInstruction::DECInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[DECInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void DECInstruction::execute(Cpu *cpu, uint16_t address){
@@ -653,8 +654,8 @@ void DECInstruction::execute(Cpu *cpu, uint16_t address){
 
 DEXInstruction::DEXInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[DEXInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void DEXInstruction::execute(Cpu *cpu, uint16_t address){
@@ -667,8 +668,8 @@ void DEXInstruction::execute(Cpu *cpu, uint16_t address){
 
 DEYInstruction::DEYInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[DEYInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void DEYInstruction::execute(Cpu *cpu, uint16_t address){
@@ -681,8 +682,8 @@ void DEYInstruction::execute(Cpu *cpu, uint16_t address){
 
 INCInstruction::INCInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[INCInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void INCInstruction::execute(Cpu *cpu, uint16_t address){
@@ -695,8 +696,8 @@ void INCInstruction::execute(Cpu *cpu, uint16_t address){
 
 INXInstruction::INXInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[INXInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void INXInstruction::execute(Cpu *cpu, uint16_t address){
@@ -709,8 +710,8 @@ void INXInstruction::execute(Cpu *cpu, uint16_t address){
 
 INYInstruction::INYInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[INYInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void INYInstruction::execute(Cpu *cpu, uint16_t address){
@@ -723,8 +724,8 @@ void INYInstruction::execute(Cpu *cpu, uint16_t address){
 
 SBCInstruction::SBCInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[SBCInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void SBCInstruction::execute(Cpu *cpu, uint16_t address){
@@ -740,8 +741,8 @@ void SBCInstruction::execute(Cpu *cpu, uint16_t address){
 
 TAXInstruction::TAXInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[TAXInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void TAXInstruction::execute(Cpu *cpu, uint16_t address){
@@ -753,8 +754,8 @@ void TAXInstruction::execute(Cpu *cpu, uint16_t address){
 
 TAYInstruction::TAYInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[TAYInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void TAYInstruction::execute(Cpu *cpu, uint16_t address){
@@ -766,8 +767,8 @@ void TAYInstruction::execute(Cpu *cpu, uint16_t address){
 
 TSXInstruction::TSXInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[TSXInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void TSXInstruction::execute(Cpu *cpu, uint16_t address){
@@ -779,8 +780,8 @@ void TSXInstruction::execute(Cpu *cpu, uint16_t address){
 
 TXAInstruction::TXAInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[TXAInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void TXAInstruction::execute(Cpu *cpu, uint16_t address){
@@ -792,8 +793,8 @@ void TXAInstruction::execute(Cpu *cpu, uint16_t address){
 
 TXSInstruction::TXSInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[TXSInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void TXSInstruction::execute(Cpu *cpu, uint16_t address){
@@ -805,8 +806,8 @@ void TXSInstruction::execute(Cpu *cpu, uint16_t address){
 
 TYAInstruction::TYAInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[TYAInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void TYAInstruction::execute(Cpu *cpu, uint16_t address){
@@ -818,8 +819,8 @@ void TYAInstruction::execute(Cpu *cpu, uint16_t address){
 
 RORInstruction::RORInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[RORInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void RORInstruction::execute(Cpu *cpu, uint16_t address){
@@ -863,8 +864,8 @@ void RORInstruction::execute(Cpu *cpu, uint16_t address){
 
 ROLInstruction::ROLInstruction(uint8_t addressingMode, uint8_t instructionSize)
     : BaseInstruction(addressingMode, instructionSize) {
-  cout << "[ROLInstruction] - constructor(" << unsigned(instructionSize)
-       << ") \n";
+      this->getAddressingMode();
+      this->getInstructionSize();
 }
 
 void ROLInstruction::execute(Cpu *cpu, uint16_t address){
@@ -904,4 +905,6 @@ void ROLInstruction::execute(Cpu *cpu, uint16_t address){
   else
     cpu->setF_zero(false);
 }
+
+
 

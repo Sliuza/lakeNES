@@ -47,6 +47,7 @@ Reset:
    nop
    nop
    lda #$1
+   adc #$3
    brk
 
 NMI:

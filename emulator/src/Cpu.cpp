@@ -2,6 +2,33 @@
 #include "../include/Instruction.hpp"
 #include "../include/InstructionFactory.hpp"
 #include "Utils.cpp"
+#include <iomanip>
+
+  uint8_t make_P(uint8_t t1,uint8_t t2,uint8_t t3,uint8_t t4,uint8_t t5,uint8_t t6){
+    uint8_t b = t1 + t2*2 + t3*4 + t4*8 + t5*64 + t6*128;
+    return b;
+}
+
+void print(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc,
+           uint8_t p) {
+  cout << setfill('0') << "| pc = 0x" << hex << setw(4) << pc << " | a = 0x"
+       << hex << setw(2) << (unsigned)a << " | x = 0x" << hex << setw(2)
+       << (unsigned)x << " | y = 0x" << hex << setw(2) << (unsigned)y
+       << " | sp = 0x" << hex << setw(4) << sp
+       << " | p[NV-BDIZC] = " << bitset<8>(p) << " |" << endl;
+}
+
+void printls(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc,
+             uint8_t p, uint16_t addr, uint8_t data) {
+  cout << setfill('0') << "| pc = 0x" << hex << setw(4) << pc << " | a = 0x"
+       << hex << setw(2) << (unsigned)a << " | x = 0x" << hex << setw(2)
+       << (unsigned)x << " | y = 0x" << hex << setw(2) << (unsigned)y
+       << " | sp = 0x" << hex << setw(4) << sp
+       << " | p[NV-BDIZC] = " << bitset<8>(p) << " | MEM[0x" << hex << setw(4)
+       << addr << "] = 0x" << hex << setw(2) << (unsigned)data << " |" << endl;
+}
+
+
 Cpu::Cpu() {
   this->pc_reg = 0xfffc;
   this->sp_reg = 0xfd;
@@ -18,8 +45,8 @@ void Cpu::startCpu() {
 };
 void Cpu::reset() {
   this->a_reg, this->x_reg, this->y_reg = 0;
-  this->f_interrupt = true;
-  this->f_negative, this->f_overflow, this->f_zero, this->f_carry, this->f_decimal = false;
+  this->f_interrupt = 1;
+  this->f_negative, this->f_overflow, this->f_zero, this->f_carry, this->f_decimal = 0;
   this->pc_reg = this->read_mem(0xfffc) | this->read_mem(0xfffc + 1) << 8;
   this->sp_reg = 0xfd;
 }
@@ -53,6 +80,9 @@ void Cpu::run() {
       instruction->execute(this, address);
       this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()) - 1);
     
+    print(getA_reg(),getX_reg(),getY_reg(),getSp_reg(),getPc_reg(),make_P(getF_carry(),getF_zero(),getF_interrupt(),getF_decimal(),getF_overflow(),getF_negative()));
+    printls(getA_reg(), getX_reg(), getY_reg(), getSp_reg(), getPc_reg(), make_P(getF_carry(),getF_zero(),getF_interrupt(),getF_decimal(),getF_overflow(),getF_negative()),
+    address,read_mem(address));
   }
 
   cout <<   "CPU FINISHED RUNNING\n";
@@ -79,7 +109,6 @@ void Cpu::write_mem(uint8_t val, uint16_t addr) {
   }
 }
 void Cpu::loadROM(string path) {
-  // cout << "Running ROM: " << path << std::endl;
   this->rom.load(path);
 }
 
@@ -88,12 +117,6 @@ void Cpu::printROM() {
 
   Instruction *instruction;
   InstructionFactory factory;
-
-  // instruction = factory.createInstruction(0x69);
-  // instruction->execute(this, 0x123);
-  // for (int i = 0xc000; i < r.size(); i++) {
-  //   cout << std::hex << (unsigned)(uint8_t)r.at(i);
-  // }
 
   this->pc_reg += instruction->getInstructionSize();
 
@@ -120,7 +143,6 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
       break;
     }
     case IMMEDIATE: {
-      cout << "addressing mode = IMMEDIATE\n";
       address = this->pc_reg;
       break;
     }
@@ -166,13 +188,7 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = (baseAddress + uint16_t(this->getY_reg())) & 0xFF;
       break;
-    }
-    // default:{
-    //   cout << "addressing mode = default\n";
-    //   address = 0;
-    //   break;
-    // }
-      
+    } 
   }
   return address;
 }
@@ -206,22 +222,22 @@ uint8_t Cpu::getY_reg() {
 uint8_t Cpu::getA_reg() {
   return this->a_reg;
 }
-bool Cpu::getF_carry() {
+uint8_t Cpu::getF_carry() {
   return this->f_carry;
 }
-bool Cpu::getF_zero() {
+uint8_t Cpu::getF_zero() {
   return this->f_zero;
 }
-bool Cpu::getF_interrupt() {
+uint8_t Cpu::getF_interrupt() {
   return this->f_interrupt;
 }
-bool Cpu::getF_decimal() {
+uint8_t Cpu::getF_decimal() {
   return this->f_decimal;
 }
-bool Cpu::getF_overflow() {
+uint8_t Cpu::getF_overflow() {
   return this->f_overflow;
 }
-bool Cpu::getF_negative() {
+uint8_t Cpu::getF_negative() {
   return this->f_negative;
 }
 Rom Cpu::getRom() {
@@ -243,21 +259,21 @@ void Cpu::setY_reg(uint8_t _y_reg) {
 void Cpu::setA_reg(uint8_t _a_reg) {
   this->a_reg = _a_reg;
 }
-void Cpu::setF_carry(bool carry) {
+void Cpu::setF_carry(uint8_t carry) {
   this->f_carry = carry;
 }
-void Cpu::setF_zero(bool zero) {
+void Cpu::setF_zero(uint8_t zero) {
   this->f_zero = zero;
 }
-void Cpu::setF_interrupt(bool interrupt) {
+void Cpu::setF_interrupt(uint8_t interrupt) {
   this->f_interrupt = interrupt;
 }
-void Cpu::setF_decimal(bool decimal) {
+void Cpu::setF_decimal(uint8_t decimal) {
   this->f_decimal = decimal;
 }
-void Cpu::setF_overflow(bool overflow) {
+void Cpu::setF_overflow(uint8_t overflow) {
   this->f_overflow = overflow;
 }
-void Cpu::setF_negative(bool negative) {
+void Cpu::setF_negative(uint8_t negative) {
   this->f_negative = negative;
 }
