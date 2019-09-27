@@ -74,19 +74,16 @@ void Cpu::run() {
 
     // cout << "opcode = " << (unsigned)opcode << endl;
     instruction = factory.createInstruction(opcode);
-    
-      
-      address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
-      instruction->execute(this, address);
-      this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()) - 1);
-    
+
+
+    address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
+    instruction->execute(this, address);
+    this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()) - 1);
+
     print(getA_reg(),getX_reg(),getY_reg(),getSp_reg(),getPc_reg(),make_P(getF_carry(),getF_zero(),getF_interrupt(),getF_decimal(),getF_overflow(),getF_negative()));
     printls(getA_reg(), getX_reg(), getY_reg(), getSp_reg(), getPc_reg(), make_P(getF_carry(),getF_zero(),getF_interrupt(),getF_decimal(),getF_overflow(),getF_negative()),
     address,read_mem(address));
   }
-
-  cout <<   "CPU FINISHED RUNNING\n";
-  
 }
 uint8_t Cpu::read_mem(uint16_t addr) {
   uint8_t res;
@@ -124,7 +121,7 @@ void Cpu::printROM() {
 }
 
 uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
-  
+
   uint16_t address = 0;
   switch (addressingMode) {
     case ABSOLUTE: {
@@ -188,7 +185,7 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = (baseAddress + uint16_t(this->getY_reg())) & 0xFF;
       break;
-    } 
+    }
   }
   return address;
 }
