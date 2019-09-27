@@ -1,6 +1,0 @@
-Starting rom ./emulator/bin/brk
-Running ROM: ./emulator/bin/brk
-16KB PRG Banks: 1
-8KB CHR Banks: 1
-Mapper #: 0
-Segmentation fault (core dumped)

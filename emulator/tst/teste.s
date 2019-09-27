@@ -42,25 +42,26 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 ;----------------------------------------------------------------
 
    .base $10000-(PRG_COUNT*$4000)
-
+   LDA #$01
+   STA $0200
+   LDA #$05
+   STA $0201
+   LDA #$08
+   STA $0202
 Reset:
-   nop
-   nop
-   lda #$1
-   brk
+   brk ; Abort execution
 
 NMI:
-   
-
    ;NOTE: NMI code goes here
 
 
 
 IRQ:
- 
+
    ;NOTE: IRQ code goes here
 
-loop: 
+loop:
+
 
 ;----------------------------------------------------------------
 ; interrupt vectors
@@ -71,4 +72,3 @@ loop:
    .dw NMI
    .dw Reset
    .dw IRQ
-
