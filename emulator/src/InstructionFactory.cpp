@@ -66,43 +66,6 @@ InstructionFactory::InstructionFactory() {
       
       /* BRK Instruction */
       {0x00, make_pair(BRK, IMPLIED)},
-      
-      case ASL: {
-                  return new ASLInstruction(addressingMode, instructionSize);
-                  break;
-                }
-      case BCC: {
-      return new BCCInstruction(addressingMode, instructionSize);
-      break;
-    }
-    case BEQ: {
-      return new BEQInstruction(addressingMode, instructionSize);
-      break;
-    }
-    case BIT: {
-      return new BITInstruction(addressingMode, instructionSize);
-      break;
-    }
-    case BCS: {
-      return new BCSInstruction(addressingMode, instructionSize);
-      break;
-    }
-    case BMI: {
-      return new BMIInstruction(addressingMode, instructionSize);
-      break;
-    }
-    case BNE: {
-      return new BNEInstruction(addressingMode, instructionSize);
-      break;
-    }
-    case BRK: {
-      return new BRKInstruction(addressingMode, instructionSize);
-      break;
-    }
-    case BVC: {
-      return new BVCInstruction(addressingMode, instructionSize);
-      break;
-    }
 
       /* BVC,BVS Instruction */
       {0x50, make_pair(BVC, RELATIVE)},
@@ -321,6 +284,42 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
   uint addressingMode = pair.second;
   
   switch (instructionID) {
+      case ASL: {
+        return new ASLInstruction(addressingMode, instructionSize);
+        break;
+      }
+      case BCC: {
+      return new BCCInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case BEQ: {
+      return new BEQInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case BIT: {
+      return new BITInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case BCS: {
+      return new BCSInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case BMI: {
+      return new BMIInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case BNE: {
+      return new BNEInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case BRK: {
+      return new BRKInstruction(addressingMode, instructionSize);
+      break;
+    }
+    case BVC: {
+      return new BVCInstruction(addressingMode, instructionSize);
+      break;
+    }
     case ADC: {
       return new ADCInstruction(addressingMode, instructionSize);
       break;
@@ -369,11 +368,7 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
     case LSR: {
       return new LSRInstruction(addressingMode, instructionSize);
       break;
-    }
-    case NOP: {
-      return new NOPInstruction(addressingMode, instructionSize);
-      break;
-    }
+      }
     case ORA: {
       return new ORAInstruction(addressingMode, instructionSize);
       break;
@@ -499,11 +494,6 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
 
     case NOP:{
       return new NOPInstruction(addressingMode, instructionSize);
-      break;
-    }
-
-    case BRK:{
-      return new BRKInstruction(addressingMode, instructionSize);
       break;
     }
 
