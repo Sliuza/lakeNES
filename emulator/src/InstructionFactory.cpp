@@ -346,64 +346,64 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
         break;
       }
     case CMP: {
-        return new BVCInstruction(addressingMode, instructionSize);
+        return new CMPInstruction(addressingMode, instructionSize);
         break;
       }
     case CPY: {
-        return new BVCInstruction(addressingMode, instructionSize);
+        return new CPYInstruction(addressingMode, instructionSize);
         break;
       }
     case EOR: {
-        return new BVCInstruction(addressingMode, instructionSize);
+        return new EORInstruction(addressingMode, instructionSize);
         break;
       }
 
     case JSR: {
-        return new BVCInstruction(addressingMode, instructionSize);
+        return new JSRInstruction(addressingMode, instructionSize);
         break;
       }
     case JMP: {
-        return new BVCInstruction(addressingMode, instructionSize);
+        return new JMPInstruction(addressingMode, instructionSize);
         break;
       }
     case LSR: {
-      return new BVCInstruction(addressingMode, instructionSize);
+      return new LSRInstruction(addressingMode, instructionSize);
       break;
     }
     case NOP: {
-      return new BVCInstruction(addressingMode, instructionSize);
+      return new NOPInstruction(addressingMode, instructionSize);
       break;
     }
     case ORA: {
-      return new BVCInstruction(addressingMode, instructionSize);
+      return new ORAInstruction(addressingMode, instructionSize);
       break;
     }
     case PHA: {
-      return new BVCInstruction(addressingMode, instructionSize);
+      return new PHAInstruction(addressingMode, instructionSize);
       break;
     }
     case PHP: {
-      return new BVCInstruction(addressingMode, instructionSize);
+      return new PHPInstruction(addressingMode, instructionSize);
       break;
     }
     case PLA: {
-      return new BVCInstruction(addressingMode, instructionSize);
+      return new PLAInstruction(addressingMode, instructionSize);
       break;
     }
     case PLP: {
-      return new BVCInstruction(addressingMode, instructionSize);
+      return new PLPInstruction(addressingMode, instructionSize);
       break;
     }
     case RTI: {
-      return new BVCInstruction(addressingMode, instructionSize);
+      return new RTIInstruction(addressingMode, instructionSize);
       break;
     }
     case RTS: {
-      return new BVCInstruction(addressingMode, instructionSize);
+      return new RTSInstruction(addressingMode, instructionSize);
       break;
     }
     case SEC: {
-      return new BVCInstruction(addressingMode, instructionSize);
+      return new SECInstruction(addressingMode, instructionSize);
       break;
     }
     case AND: {
