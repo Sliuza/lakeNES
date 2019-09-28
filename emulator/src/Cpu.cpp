@@ -9,25 +9,6 @@ uint8_t make_P(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint8
   return b;
 }
 
-void print(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc,
-           uint8_t p) {
-  cout << setfill('0') << "| pc = 0x" << hex << setw(4) << pc << " | a = 0x"
-       << hex << setw(2) << (unsigned)a << " | x = 0x" << hex << setw(2)
-       << (unsigned)x << " | y = 0x" << hex << setw(2) << (unsigned)y
-       << " | sp = 0x" << hex << setw(4) << sp
-       << " | p[NV-BDIZC] = " << bitset<8>(p) << " |" << endl;
-}
-
-void printls(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc,
-             uint8_t p, uint16_t addr, uint8_t data) {
-  cout << setfill('0') << "| pc = 0x" << hex << setw(4) << pc << " | a = 0x"
-       << hex << setw(2) << (unsigned)a << " | x = 0x" << hex << setw(2)
-       << (unsigned)x << " | y = 0x" << hex << setw(2) << (unsigned)y
-       << " | sp = 0x" << hex << setw(4) << sp
-       << " | p[NV-BDIZC] = " << bitset<8>(p) << " | MEM[0x" << hex << setw(4)
-       << addr << "] = 0x" << hex << setw(2) << (unsigned)data << " |" << endl;
-}
-
 Cpu::Cpu() {
   this->pc_reg = 0xfffc;
   this->sp_reg = 0xfd;
@@ -77,10 +58,6 @@ void Cpu::run() {
     address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
     instruction->execute(this, address);
     this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()) - 1);
-
-    print(getA_reg(), getX_reg(), getY_reg(), getSp_reg(), getPc_reg(), make_P(getF_carry(), getF_zero(), getF_interrupt(), getF_decimal(), getF_overflow(), getF_negative()));
-    printls(getA_reg(), getX_reg(), getY_reg(), getSp_reg(), getPc_reg(), make_P(getF_carry(), getF_zero(), getF_interrupt(), getF_decimal(), getF_overflow(), getF_negative()),
-            address, read_mem(address));
   }
 }
 uint8_t Cpu::read_mem(uint16_t addr) {
@@ -201,6 +178,37 @@ uint16_t Cpu::get16BitsAddressInMemory(uint16_t address) {
   return hi | lo;
 }
 
+void Cpu::printOutput(uint16_t printFuncion, uint16_t address) {
+  printFuncion == PRINT ? this->print() : this->printls(address);
+};
+
+void Cpu::print() {
+  unsigned p = this->getP_reg();
+
+  cout << setfill('0')
+       << "| pc = 0x" << hex << setw(4) << this->getPc_reg()
+       << " | a = 0x" << hex << setw(2) << (unsigned)this->getA_reg()
+       << " | x = 0x" << hex << setw(2) << (unsigned)this->getX_reg()
+       << " | y = 0x" << hex << setw(2) << (unsigned)this->getY_reg()
+       << " | sp = 0x" << hex << setw(4) << this->getSp_reg()
+       << " | p[NV-BDIZC] = " << bitset<8>(p) << " |" << endl;
+}
+
+void Cpu::printls(uint16_t address) {
+  uint8_t data = this->read_mem(address);
+  uint8_t p = this->getP_reg();
+
+  cout << setfill('0')
+       << "| pc = 0x" << hex << setw(4) << this->getPc_reg()
+       << " | a = 0x" << hex << setw(2) << (unsigned)this->getA_reg()
+       << " | x = 0x" << hex << setw(2) << (unsigned)this->getX_reg()
+       << " | y = 0x" << hex << setw(2) << (unsigned)this->getY_reg()
+       << " | sp = 0x" << hex << setw(4) << this->getSp_reg()
+       << " | p[NV-BDIZC] = " << bitset<8>(p) << " |" << endl
+       << " | MEM[0x" << hex << setw(4) << address
+       << "] = 0x" << hex << setw(2) << (unsigned)data << " |" << endl;
+}
+
 //GETTERS
 uint16_t Cpu::getPc_reg() {
   return this->pc_reg;
@@ -234,6 +242,20 @@ uint8_t Cpu::getF_overflow() {
 }
 uint8_t Cpu::getF_negative() {
   return this->f_negative;
+}
+
+uint8_t Cpu::getP_reg() {
+  uint8_t p = 0;
+
+  p |= f_negative ? uint8_t(1) << 6 : p;
+  p |= f_overflow ? uint8_t(1) << 5 : p;
+  p |= flags ? uint8_t(1) << 4 : p;
+  p |= f_decimal ? uint8_t(1) << 3 : p;
+  p |= f_interrupt ? uint8_t(1) << 2 : p;
+  p |= f_zero ? 1 << uint8_t(1) : p;
+  p |= f_carry ? uint8_t(1) : p;
+
+  return p;
 }
 Rom Cpu::getRom() {
   return this->rom;

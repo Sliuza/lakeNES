@@ -4,6 +4,7 @@
 #define Cpu_hpp
 
 #include "Rom.hpp"
+#include "PrintFunction.hpp"
 #include <bitset>
 #include <fstream>
 #include <iostream>
@@ -23,13 +24,13 @@ class Cpu {
   uint8_t y_reg = 0; // y register
   uint8_t a_reg = 0; // a register
   // flags
-  uint8_t f_carry = 0;
-  uint8_t f_zero = 0;
-  uint8_t f_interrupt = 0;
-  uint8_t f_decimal = 0;
-  uint8_t f_overflow = 0;
-  uint8_t f_negative = 0;
-  uint8_t flags = 0;
+  uint8_t f_carry = 0;     // Bit 0
+  uint8_t f_zero = 0;      // Bit 1
+  uint8_t f_interrupt = 0; // Bit 2
+  uint8_t f_decimal = 0;   // Bit 3
+  uint8_t flags = 0;       // Bit 4
+  uint8_t f_overflow = 0;  // Bit 5
+  uint8_t f_negative = 0;  // Bit 6
   Rom rom;
   uint8_t ram[0xFFFF];
 
@@ -47,6 +48,9 @@ class Cpu {
   uint16_t getAddressBasedOnAddressingMode(uint8_t addressingMode);
   uint16_t get16BitsAddress(uint16_t address);
   uint16_t get16BitsAddressInMemory(uint16_t address);
+  void printOutput(uint16_t printFuncion, uint16_t address);
+  void print();
+  void printls(uint16_t address);
 
   //GETTERS
   uint16_t
@@ -61,6 +65,7 @@ class Cpu {
   uint8_t getF_decimal();   // decimal flag
   uint8_t getF_overflow();  // overflow flag
   uint8_t getF_negative();  // negative flag
+  uint8_t getP_reg();
 
   Rom getRom();
   //SETTERS
