@@ -3,7 +3,7 @@
 
 enum PrintFunction {
   PRINT = 1,
-  PRINTLN
+  PRINTLS
 };
 
 #endif // PrintFunction_hpp

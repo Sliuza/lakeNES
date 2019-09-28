@@ -41,8 +41,6 @@ void ADCInstruction::execute(Cpu *cpu, uint16_t address) {
     (~((uint16_t)a_regValue ^ (uint16_t)value) & ((uint16_t)a_regValue ^ (uint16_t)aux)) & 0x0080 ? cpu->setF_overflow(true) : cpu->setF_overflow(false);
     cpu->setA_reg(aux & 0x00FF);
   }
-
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 ANDInstruction::ANDInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -58,7 +56,6 @@ void ANDInstruction::execute(Cpu *cpu, uint16_t address) {
     (a_regValue & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
     a_regValue & 0x80 ? cpu->setF_negative(true) : cpu->setF_negative(false);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 ASLInstruction::ASLInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -82,7 +79,6 @@ void ASLInstruction::execute(Cpu *cpu, uint16_t address) {
       cpu->write_mem(value & 0x00FF, address);
     }
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 BCCInstruction::BCCInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -95,7 +91,6 @@ void BCCInstruction::execute(Cpu *cpu, uint16_t address) {
     if (!cpu->getF_carry())
       cpu->setPc_reg(address);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 BCSInstruction::BCSInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -108,7 +103,6 @@ void BCSInstruction::execute(Cpu *cpu, uint16_t address) {
     if (cpu->getF_carry())
       cpu->setPc_reg(address);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 BEQInstruction::BEQInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -121,7 +115,6 @@ void BEQInstruction::execute(Cpu *cpu, uint16_t address) {
     if (cpu->getF_zero())
       cpu->setPc_reg(address);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 BITInstruction::BITInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -138,7 +131,6 @@ void BITInstruction::execute(Cpu *cpu, uint16_t address) {
     (value & (1 << 7)) ? cpu->setF_negative(true) : cpu->setF_negative(false);
     (value & (1 << 6)) ? cpu->setF_overflow(true) : cpu->setF_overflow(false);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 BMIInstruction::BMIInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -151,7 +143,6 @@ void BMIInstruction::execute(Cpu *cpu, uint16_t address) {
     if (cpu->getF_negative())
       cpu->setPc_reg(address);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 BNEInstruction::BNEInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -164,7 +155,6 @@ void BNEInstruction::execute(Cpu *cpu, uint16_t address) {
     if (!cpu->getF_zero())
       cpu->setPc_reg(address);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 BPLInstruction::BPLInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -177,7 +167,6 @@ void BPLInstruction::execute(Cpu *cpu, uint16_t address) {
     if (!cpu->getF_negative())
       cpu->setPc_reg(address);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 BRKInstruction::BRKInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -199,7 +188,6 @@ void BRKInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setSp_reg(stack);
   pc = (uint16_t)cpu->read_mem(0xFFFE) | ((uint16_t)cpu->read_mem(0xFFFF) << 8);
   cpu->setPc_reg(pc);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 BVCInstruction::BVCInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -212,7 +200,6 @@ void BVCInstruction::execute(Cpu *cpu, uint16_t address) {
     if (!cpu->getF_overflow())
       cpu->setPc_reg(address);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 BVSInstruction::BVSInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -225,7 +212,6 @@ void BVSInstruction::execute(Cpu *cpu, uint16_t address) {
     if (cpu->getF_overflow())
       cpu->setPc_reg(address);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 CLCInstruction::CLCInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -234,7 +220,6 @@ CLCInstruction::CLCInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void CLCInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[CLCInstruction] -  execute()\n";
   cpu->setF_carry(false);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 CLDInstruction::CLDInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -243,7 +228,6 @@ CLDInstruction::CLDInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void CLDInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[CLDInstruction] -  execute()\n";
   cpu->setF_decimal(false);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 CLIInstruction::CLIInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -252,7 +236,6 @@ CLIInstruction::CLIInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void CLIInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[CLIInstruction] -  execute()\n";
   cpu->setF_interrupt(false);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 CLVInstruction::CLVInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -261,7 +244,6 @@ CLVInstruction::CLVInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void CLVInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[CLVInstruction] -  execute()\n";
   cpu->setF_overflow(false);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 CMPInstruction::CMPInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -277,7 +259,6 @@ void CMPInstruction::execute(Cpu *cpu, uint16_t address) {
     (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
     (a_regValue >= value) ? cpu->setF_carry(true) : cpu->setF_carry(false);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 CPXInstruction::CPXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -294,7 +275,6 @@ void CPXInstruction::execute(Cpu *cpu, uint16_t address) {
     (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
     (x_regValue >= value) ? cpu->setF_carry(true) : cpu->setF_carry(false);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 CPYInstruction::CPYInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -311,7 +291,6 @@ void CPYInstruction::execute(Cpu *cpu, uint16_t address) {
     (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
     (y_regValue >= value) ? cpu->setF_carry(true) : cpu->setF_carry(false);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 EORInstruction::EORInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -327,7 +306,6 @@ void EORInstruction::execute(Cpu *cpu, uint16_t address) {
     (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
     cpu->setA_reg(aux);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 JMPInstruction::JMPInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -338,7 +316,6 @@ void JMPInstruction::execute(Cpu *cpu, uint16_t address) {
   if (address >= 0x0000 && address <= 0xFFFF) {
     cpu->setPc_reg(address);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 JSRInstruction::JSRInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -359,7 +336,6 @@ void JSRInstruction::execute(Cpu *cpu, uint16_t address) {
     cpu->setSp_reg(stack);
     cpu->setPc_reg(address);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 LSRInstruction::LSRInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -380,7 +356,6 @@ void LSRInstruction::execute(Cpu *cpu, uint16_t address) {
       cpu->write_mem(address, aux & 0x00FF);
     }
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 NOPInstruction::NOPInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -390,7 +365,6 @@ NOPInstruction::NOPInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void NOPInstruction::execute(Cpu *cpu, uint16_t address) {
 
   //cout << "[NOPInstruction]\n";
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 PLAInstruction::PLAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -410,7 +384,6 @@ void PLAInstruction::execute(Cpu *cpu, uint16_t address) {
     (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
     cpu->setA_reg(aux);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 PLPInstruction::PLPInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -426,7 +399,6 @@ void PLPInstruction::execute(Cpu *cpu, uint16_t address) {
     uint8_t a_regValue = cpu->getA_reg();
     uint8_t aux = cpu->read_mem(0x0100 + stack);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 PHAInstruction::PHAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -442,7 +414,6 @@ void PHAInstruction::execute(Cpu *cpu, uint16_t address) {
     stack--;
     cpu->setSp_reg(stack);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 PHPInstruction::PHPInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -457,7 +428,6 @@ void PHPInstruction::execute(Cpu *cpu, uint16_t address) {
     stack--;
     cpu->setSp_reg(stack);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 RTIInstruction::RTIInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -478,7 +448,6 @@ void RTIInstruction::execute(Cpu *cpu, uint16_t address) {
     cpu->setPc_reg(pc);
     cpu->setSp_reg(stack);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 RTSInstruction::RTSInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -497,7 +466,6 @@ void RTSInstruction::execute(Cpu *cpu, uint16_t address) {
     cpu->setPc_reg(pc);
     cpu->setSp_reg(stack);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 SECInstruction::SECInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -506,7 +474,6 @@ SECInstruction::SECInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void SECInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[SECInstruction] -  execute()\n";
   cpu->setF_carry(true);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 ORAInstruction::ORAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -522,7 +489,6 @@ void ORAInstruction::execute(Cpu *cpu, uint16_t address) {
     (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
     cpu->setA_reg(aux);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 LDAInstruction::LDAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -538,7 +504,6 @@ void LDAInstruction::execute(Cpu *cpu, uint16_t address) {
     (value & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
     // //cout << "a = " << hex << (unsigned)(uint8_t)cpu->getA_reg() << "\n";
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 STAInstruction::STAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -548,7 +513,6 @@ STAInstruction::STAInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void STAInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[STAInstruction] -  execute()\n";
   cpu->write_mem(cpu->getA_reg(), address);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 STXInstruction::STXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -558,7 +522,6 @@ STXInstruction::STXInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void STXInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[STXInstruction] -  execute()\n";
   cpu->write_mem(cpu->getX_reg(), address);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 STYInstruction::STYInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -568,7 +531,6 @@ STYInstruction::STYInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void STYInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[STYInstruction] -  execute()\n";
   cpu->write_mem(cpu->getY_reg(), address);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 LDXInstruction::LDXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -583,7 +545,6 @@ void LDXInstruction::execute(Cpu *cpu, uint16_t address) {
     (value & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
     (value & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 LDYInstruction::LDYInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -598,7 +559,6 @@ void LDYInstruction::execute(Cpu *cpu, uint16_t address) {
     (value & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
     (value & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
   }
-  cpu->printOutput(this->getPrintMode(), address);
 }
 DECInstruction::DECInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
     : BaseInstruction(addressingMode, instructionSize, printMode) {
@@ -610,7 +570,6 @@ void DECInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
   cpu->write_mem(value, address);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 DEXInstruction::DEXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -623,7 +582,6 @@ void DEXInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
   cpu->setX_reg(value);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 DEYInstruction::DEYInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -636,7 +594,6 @@ void DEYInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
   cpu->setY_reg(value);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 INCInstruction::INCInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -649,7 +606,6 @@ void INCInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
   cpu->write_mem(value, address);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 INXInstruction::INXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -662,7 +618,6 @@ void INXInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
   cpu->setX_reg(value);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 INYInstruction::INYInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -675,7 +630,6 @@ void INYInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
   cpu->setY_reg(value);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 SBCInstruction::SBCInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -691,7 +645,6 @@ void SBCInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setA_reg(diff);
   cpu->setF_zero(!diff);
   cpu->setF_negative(diff & 0x80);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 TAXInstruction::TAXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -703,7 +656,6 @@ void TAXInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setX_reg(value);
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 TAYInstruction::TAYInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -715,7 +667,6 @@ void TAYInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setY_reg(value);
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 TSXInstruction::TSXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -727,7 +678,6 @@ void TSXInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setX_reg(value);
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 TXAInstruction::TXAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -739,7 +689,6 @@ void TXAInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setA_reg(value);
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 TXSInstruction::TXSInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -751,7 +700,6 @@ void TXSInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setSp_reg(value);
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 TYAInstruction::TYAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -763,7 +711,6 @@ void TYAInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setA_reg(value);
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 RORInstruction::RORInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -803,7 +750,6 @@ void RORInstruction::execute(Cpu *cpu, uint16_t address) {
     cpu->setF_zero(true);
   else
     cpu->setF_zero(false);
-  cpu->printOutput(this->getPrintMode(), address);
 }
 
 ROLInstruction::ROLInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -843,5 +789,4 @@ void ROLInstruction::execute(Cpu *cpu, uint16_t address) {
     cpu->setF_zero(true);
   else
     cpu->setF_zero(false);
-  cpu->printOutput(this->getPrintMode(), address);
 }

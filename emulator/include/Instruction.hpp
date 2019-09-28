@@ -14,6 +14,7 @@ class Instruction {
   virtual void execute(Cpu *cpu, uint16_t address = 0) = 0;
   virtual uint8_t getInstructionSize() = 0;
   virtual uint8_t getAddressingMode() = 0;
+  virtual uint8_t getPrintMode() = 0;
 };
 
 class BaseInstruction : public Instruction {

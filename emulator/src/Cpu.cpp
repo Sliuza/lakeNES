@@ -54,10 +54,10 @@ void Cpu::run() {
 
     // cout << "opcode = " << (unsigned)opcode << endl;
     instruction = factory.createInstruction(opcode);
-
     address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
     instruction->execute(this, address);
     this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()) - 1);
+    this->printOutput(instruction->getPrintMode(), address);
   }
 }
 uint8_t Cpu::read_mem(uint16_t addr) {
