@@ -4,24 +4,24 @@
 
 #include "AddressingMode.hpp"
 #include "Instruction.hpp"
+#include "OperationAttributes.hpp"
 #include <cstdio>
 #include <map>
 #include <stdio.h>
 #include <vector>
 
 using namespace std;
-typedef pair<uint8_t, uint8_t> operation_pair_t;
 
 class InstructionFactory {
-private:
-  map<uint8_t, pair<uint8_t, uint8_t>> instructions;
+  private:
+  map<uint8_t, OperationAttributes> instructions;
   map<uint8_t, uint8_t> addressingModeSize;
 
-public:
+  public:
   InstructionFactory();
   ~InstructionFactory();
 
-  operation_pair_t getOperationPair(uint8_t opCode);
+  OperationAttributes getOperationAttributes(uint8_t opCode);
   uint8_t getInstructionSize(uint8_t opCode);
   Instruction *createInstruction(uint8_t opCode);
 };
