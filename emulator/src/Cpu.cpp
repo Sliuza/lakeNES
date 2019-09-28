@@ -252,7 +252,7 @@ uint8_t Cpu::getP_reg() {
   p |= flags ? uint8_t(1) << 4 : p;
   p |= f_decimal ? uint8_t(1) << 3 : p;
   p |= f_interrupt ? uint8_t(1) << 2 : p;
-  p |= f_zero ? 1 << uint8_t(1) : p;
+  p |= f_zero ? uint8_t(1) << 1 : p;
   p |= f_carry ? uint8_t(1) : p;
 
   return p;
