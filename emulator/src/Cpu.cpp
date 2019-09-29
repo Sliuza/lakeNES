@@ -50,16 +50,14 @@ void Cpu::run() {
     // cout << "pc = " << hex << (unsigned)this->pc_reg << endl;
     if (opcode == 0x00)
       br = false;
-    else{
-      this->pc_reg++;
-
-    // cout << "opcode = " << (unsigned)opcode << endl;
-    instruction = factory.createInstruction(opcode);
-    address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
-    instruction->execute(this, address);
-    this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()) - 1);
-    this->printOutput(instruction->getPrintMode(), address);
-
+    else {
+      // cout << "opcode = " << (unsigned)opcode << endl;
+      instruction = factory.createInstruction(opcode);
+      address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
+      cout << "opcode = " << (unsigned)address << endl;
+      instruction->execute(this, address);
+      this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
+      this->printOutput(instruction->getPrintMode(), address);
     }
   }
 }
@@ -104,7 +102,7 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
   switch (addressingMode) {
     case ABSOLUTE: {
       // cout << "addressing mode = ABSOLUTE\n";
-      address = this->get16BitsAddress(this->getPc_reg());
+      address = this->get16BitsAddress(this->getPc_reg() + uint16_t(1));
       break;
     }
     case INDEXED_ABSOLUTE_X: {
@@ -170,8 +168,7 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
 
 uint16_t Cpu::get16BitsAddress(uint16_t address) {
   uint16_t lo = this->read_mem(address);
-  uint16_t hi = this->read_mem(address + uint16_t(1)) << 8 | lo;
-  // cout << setfill('0') << "hi = " << hex << setw(2) << hi << endl;    
+  uint16_t hi = this->read_mem(address + uint16_t(1)) << 8;
   return hi | lo;
 }
 
