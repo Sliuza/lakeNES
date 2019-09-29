@@ -47,17 +47,16 @@ void Cpu::run() {
   while (br) {
 
     uint8_t opcode = read_mem(this->pc_reg);
-    // cout << "pc = " << hex << (unsigned)this->pc_reg << endl;
     if (opcode == 0x00)
       br = false;
     else {
-      // cout << "opcode = " << (unsigned)opcode << endl;
       instruction = factory.createInstruction(opcode);
       address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
-      cout << "opcode = " << (unsigned)address << endl;
+      cout << "Instruction Size = " << (unsigned)instruction->getInstructionSize() << endl;
       instruction->execute(this, address);
       this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
       this->printOutput(instruction->getPrintMode(), address);
+      cout << endl;
     }
   }
 }
