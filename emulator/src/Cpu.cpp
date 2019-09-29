@@ -52,11 +52,9 @@ void Cpu::run() {
     else {
       instruction = factory.createInstruction(opcode);
       address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
-      cout << "Instruction Size = " << (unsigned)instruction->getInstructionSize() << endl;
       instruction->execute(this, address);
       this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
       this->printOutput(instruction->getPrintMode(), address);
-      cout << endl;
     }
   }
 }
@@ -204,7 +202,7 @@ void Cpu::printls(uint16_t address) {
        << " | x = 0x" << hex << setw(2) << (unsigned)this->getX_reg()
        << " | y = 0x" << hex << setw(2) << (unsigned)this->getY_reg()
        << " | sp = 0x" << hex << setw(4) << (unsigned)this->getSp_reg()
-       << " | p[NV-BDIZC] = " << bitset<8>(p) << " |" << endl
+       << " | p[NV-BDIZC] = " << bitset<8>(p)
        << " | MEM[0x" << hex << setw(4) << address
        << "] = 0x" << hex << setw(2) << (unsigned)data << " |" << endl;
 }

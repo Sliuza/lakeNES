@@ -183,13 +183,13 @@ InstructionFactory::InstructionFactory() {
       {0xBC, {LDY, INDEXED_ABSOLUTE_X, PRINT}},
 
       /*STA Instructions*/
-      {0x85, {STA, ZERO_PAGE, PRINT}},
-      {0X95, {STA, INDEXED_ZERO_PAGE_X, PRINT}},
-      {0x8D, {STA, ABSOLUTE, PRINT}},
-      {0X9D, {STA, INDEXED_ABSOLUTE_X, PRINT}},
-      {0X99, {STA, INDEXED_ABSOLUTE_Y, PRINT}},
-      {0X81, {STA, INDIRECT_INDEXED, PRINT}},
-      {0X91, {STA, INDEXED_INDIRECT, PRINT}},
+      {0x85, {STA, ZERO_PAGE, PRINTLS}},
+      {0X95, {STA, INDEXED_ZERO_PAGE_X, PRINTLS}},
+      {0x8D, {STA, ABSOLUTE, PRINTLS}},
+      {0X9D, {STA, INDEXED_ABSOLUTE_X, PRINTLS}},
+      {0X99, {STA, INDEXED_ABSOLUTE_Y, PRINTLS}},
+      {0X81, {STA, INDIRECT_INDEXED, PRINTLS}},
+      {0X91, {STA, INDEXED_INDIRECT, PRINTLS}},
 
       /*STX Instructions*/
       {0x86, {STX, ZERO_PAGE, PRINT}},
