@@ -115,7 +115,7 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
       break;
     }
     case IMMEDIATE: {
-      address = this->pc_reg;
+      address = this->pc_reg + uint16_t(1);
       break;
     }
     case INDIRECT: {
