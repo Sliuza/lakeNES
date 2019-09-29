@@ -203,7 +203,7 @@ void Cpu::printls(uint16_t address) {
        << " | a = 0x" << hex << setw(2) << (unsigned)this->getA_reg()
        << " | x = 0x" << hex << setw(2) << (unsigned)this->getX_reg()
        << " | y = 0x" << hex << setw(2) << (unsigned)this->getY_reg()
-       << " | sp = 0x" << hex << setw(4) << this->getSp_reg()
+       << " | sp = 0x" << hex << setw(4) << (unsigned)this->getSp_reg()
        << " | p[NV-BDIZC] = " << bitset<8>(p) << " |" << endl
        << " | MEM[0x" << hex << setw(4) << address
        << "] = 0x" << hex << setw(2) << (unsigned)data << " |" << endl;
