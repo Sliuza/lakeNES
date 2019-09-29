@@ -1,4 +1,10 @@
-[BRKInstruction]
-| pc = 0xc010 | a = 0x00 | x = 0x00 | y = 0x00 | sp = 0x00fb | p[NV-BDIZC] = 00000100 |
-| pc = 0xc010 | a = 0x00 | x = 0x00 | y = 0x00 | sp = 0x00fb | p[NV-BDIZC] = 00000100 | MEM[0x0000] = 0xff |
-CPU FINISHED RUNNING
+| pc = 0xc002 | a = 0x01 | x = 0x00 | y = 0x00 | sp = 0x00fd | p[NV-BDIZC] = 00000100 |
+addressing mode = ABSOLUTE
+| pc = 0xc005 | a = 0x01 | x = 0x00 | y = 0x00 | sp = 0x00fd | p[NV-BDIZC] = 00000100 |
+| pc = 0xc007 | a = 0x05 | x = 0x00 | y = 0x00 | sp = 0x00fd | p[NV-BDIZC] = 00000100 |
+addressing mode = ABSOLUTE
+| pc = 0xc00a | a = 0x05 | x = 0x00 | y = 0x00 | sp = 0x00fd | p[NV-BDIZC] = 00000100 |
+| pc = 0xc00c | a = 0x08 | x = 0x00 | y = 0x00 | sp = 0x00fd | p[NV-BDIZC] = 00000100 |
+addressing mode = ABSOLUTE
+| pc = 0xc00f | a = 0x08 | x = 0x00 | y = 0x00 | sp = 0x00fd | p[NV-BDIZC] = 00000100 |
+| pc = 0xc010 | a = 0x08 | x = 0x00 | y = 0x00 | sp = 0x00fb | p[NV-BDIZC] = 00000100 |
