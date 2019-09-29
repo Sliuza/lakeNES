@@ -497,6 +497,8 @@ LDAInstruction::LDAInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 
 void LDAInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[LDAInstruction]\n";
+  
+  // cout << "LDAaddress = " << hex << (unsigned)address << endl;
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t value = cpu->read_mem(address);
     cpu->setA_reg(value);
@@ -512,6 +514,7 @@ STAInstruction::STAInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 
 void STAInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[STAInstruction] -  execute()\n";
+  // cout << "STAaddress = " << hex << (unsigned)address << endl;
   cpu->write_mem(cpu->getA_reg(), address);
 }
 

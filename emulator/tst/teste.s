@@ -47,8 +47,9 @@ Reset:
    LDA #$01
    STA $0200
    LDA #$05
-   STA $0201
-   LDA $0201
+   STA $0101
+   LDA #$06
+   LDA $0101
    STA $0202
    brk ; Abort execution
 

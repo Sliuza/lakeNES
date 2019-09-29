@@ -26,6 +26,7 @@ void Cpu::startCpu() {
 void Cpu::reset() {
   this->a_reg = this->x_reg = this->y_reg = 0;
   this->f_interrupt = 1;
+  this->flags = 1;
   this->f_negative = this->f_overflow = this->f_zero = this->f_carry = this->f_decimal = 0;
   this->pc_reg = this->read_mem(0xfffc) | this->read_mem(0xfffc + 1) << 8;
   this->sp_reg = 0xfd;
@@ -102,8 +103,8 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
   uint16_t address = 0;
   switch (addressingMode) {
     case ABSOLUTE: {
-      cout << "addressing mode = ABSOLUTE\n";
-      address = this->get16BitsAddress(this->getPc_reg() + uint16_t(1));
+      // cout << "addressing mode = ABSOLUTE\n";
+      address = this->get16BitsAddress(this->getPc_reg());
       break;
     }
     case INDEXED_ABSOLUTE_X: {
@@ -169,14 +170,15 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
 
 uint16_t Cpu::get16BitsAddress(uint16_t address) {
   uint16_t lo = this->read_mem(address);
-  uint16_t hi = this->read_mem(address + uint16_t(1)) << 8;
+  uint16_t hi = this->read_mem(address + uint16_t(1)) << 8 | lo;
+  // cout << setfill('0') << "hi = " << hex << setw(2) << hi << endl;    
   return hi | lo;
 }
 
 uint16_t Cpu::get16BitsAddressInMemory(uint16_t address) {
   uint16_t lo = this->read_mem(address);
   uint16_t hiAddress = (address & 0xFF00) | ((address + 1) & 0xFF);
-  uint16_t hi = this->read_mem(hiAddress) << 8;
+  uint16_t hi = (this->read_mem(hiAddress)) << 8;
   return hi | lo;
 }
 
@@ -249,8 +251,9 @@ uint8_t Cpu::getF_negative() {
 uint8_t Cpu::getP_reg() {
   uint8_t p = 0;
 
-  p |= f_negative ? uint8_t(1) << 6 : p;
-  p |= f_overflow ? uint8_t(1) << 5 : p;
+  p |= f_negative ? uint8_t(1) << 7 : p;
+  p |= f_overflow ? uint8_t(1) << 6 : p;
+  p |= flags ? uint8_t(1) << 5 : p;
   p |= flags ? uint8_t(1) << 4 : p;
   p |= f_decimal ? uint8_t(1) << 3 : p;
   p |= f_interrupt ? uint8_t(1) << 2 : p;
