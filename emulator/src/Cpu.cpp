@@ -83,14 +83,14 @@ void Cpu::loadROM(string path) {
 }
 
 void Cpu::printROM() {
-  cout << "printROM\n";
+  //cout << "printROM\n";
 
   Instruction *instruction;
   InstructionFactory factory;
 
   this->pc_reg += instruction->getInstructionSize();
 
-  cout << "[PC]: " << this->pc_reg << "\n";
+  //cout << "[PC]: " << this->pc_reg << "\n";
 }
 
 uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
@@ -98,17 +98,17 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
   uint16_t address = 0;
   switch (addressingMode) {
     case ABSOLUTE: {
-      // cout << "addressing mode = ABSOLUTE\n";
+      // //cout << "addressing mode = ABSOLUTE\n";
       address = this->get16BitsAddress(this->getPc_reg() + uint16_t(1));
       break;
     }
     case INDEXED_ABSOLUTE_X: {
-      cout << "addressing mode = INDEXED_ABSOLUTE_X\n";
+      //cout << "addressing mode = INDEXED_ABSOLUTE_X\n";
       address = this->get16BitsAddress(this->getPc_reg() + uint16_t(1)) + uint16_t(this->getX_reg());
       break;
     }
     case INDEXED_ABSOLUTE_Y: {
-      cout << "addressing mode = INDEXED_ABSOLUTE_Y\n";
+      //cout << "addressing mode = INDEXED_ABSOLUTE_Y\n";
       address = this->get16BitsAddress(this->getPc_reg() + uint16_t(1)) + uint16_t(this->getY_reg());
       break;
     }
@@ -117,25 +117,25 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
       break;
     }
     case INDIRECT: {
-      cout << "addressing mode = INDIRECT\n";
+      //cout << "addressing mode = INDIRECT\n";
       uint16_t baseAddress = get16BitsAddress(this->getPc_reg() + uint16_t(1));
       address = this->get16BitsAddressInMemory(baseAddress);
       break;
     }
     case INDIRECT_INDEXED: {
-      cout << "addressing mode = INDIRECT_INDEXED\n";
+      //cout << "addressing mode = INDIRECT_INDEXED\n";
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = this->get16BitsAddressInMemory(baseAddress) + uint16_t(this->getY_reg());
       break;
     }
     case INDEXED_INDIRECT: {
-      cout << "addressing mode = INDEXED_INDIRECT\n";
+      //cout << "addressing mode = INDEXED_INDIRECT\n";
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = this->get16BitsAddressInMemory(baseAddress) + uint16_t(this->getX_reg());
       break;
     }
     case RELATIVE: { //read relative address and set address to branch
-      cout << "addressing mode = RELATIVE\n";
+      //cout << "addressing mode = RELATIVE\n";
       uint16_t rel = this->read_mem(this->pc_reg + uint16_t(1));
       if (rel & 0x80)
         rel |= 0xFF00;
@@ -143,18 +143,18 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
       break;
     }
     case ZERO_PAGE: {
-      cout << "addressing mode = ZERO_PAGE\n";
+      //cout << "addressing mode = ZERO_PAGE\n";
       address = this->read_mem(this->getPc_reg() + uint16_t(1));
       break;
     }
     case INDEXED_ZERO_PAGE_X: {
-      cout << "addressing mode = INDEXED_ZERO_PAGE_X\n";
+      //cout << "addressing mode = INDEXED_ZERO_PAGE_X\n";
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = (baseAddress + uint16_t(this->getX_reg())) & 0xFF;
       break;
     }
     case INDEXED_ZERO_PAGE_Y: {
-      cout << "addressing mode = INDEXED_ZERO_PAGE_Y\n";
+      //cout << "addressing mode = INDEXED_ZERO_PAGE_Y\n";
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = (baseAddress + uint16_t(this->getY_reg())) & 0xFF;
       break;
@@ -188,7 +188,7 @@ void Cpu::print() {
        << " | a = 0x" << hex << setw(2) << (unsigned)this->getA_reg()
        << " | x = 0x" << hex << setw(2) << (unsigned)this->getX_reg()
        << " | y = 0x" << hex << setw(2) << (unsigned)this->getY_reg()
-       << " | sp = 0x" << hex << setw(4) << (unsigned)this->getSp_reg()
+       << " | sp = 0x" << hex << setw(4) << (unsigned)( 0x0100 + this->getSp_reg())
        << " | p[NV-BDIZC] = " << bitset<8>(p) << " |" << endl;
 }
 
@@ -201,7 +201,7 @@ void Cpu::printls(uint16_t address) {
        << " | a = 0x" << hex << setw(2) << (unsigned)this->getA_reg()
        << " | x = 0x" << hex << setw(2) << (unsigned)this->getX_reg()
        << " | y = 0x" << hex << setw(2) << (unsigned)this->getY_reg()
-       << " | sp = 0x" << hex << setw(4) << (unsigned)this->getSp_reg()
+       << " | sp = 0x" << hex << setw(4) << (unsigned)( 0x0100 + this->getSp_reg())
        << " | p[NV-BDIZC] = " << bitset<8>(p)
        << " | MEM[0x" << hex << setw(4) << address
        << "] = 0x" << hex << setw(2) << (unsigned)data << " |" << endl;
