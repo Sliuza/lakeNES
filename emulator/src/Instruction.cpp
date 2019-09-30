@@ -641,13 +641,14 @@ SBCInstruction::SBCInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 
 void SBCInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->read_mem(address);
+  uint8_t aux = value ^ 0x00FF;
   uint8_t a = cpu->getA_reg();
-  unsigned const diff = a - value - (uint8_t)cpu->getF_carry();
-  cpu->setF_carry(diff > 0xFF);
-  cpu->setF_overflow((a ^ diff) & (~value ^ diff) & 0x80);
-  cpu->setA_reg(diff);
-  cpu->setF_zero(!diff);
-  cpu->setF_negative(diff & 0x80);
+  uint16_t diff = a + aux +(uint8_t)cpu->getF_carry();
+  (diff & 0xFF00) ? cpu->setF_carry(true) : cpu->setF_carry(false);
+  (diff & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+  (diff & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
+  (((uint16_t)diff ^ (uint16_t)a) & ((uint16_t)diff ^ (uint16_t)aux) & 0x0080) ? cpu->setF_overflow(true) : cpu->setF_overflow(false);
+  cpu->setA_reg(diff & 0x00FF);
 }
 
 TAXInstruction::TAXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
