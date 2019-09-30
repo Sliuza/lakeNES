@@ -32,8 +32,8 @@ InstructionFactory::InstructionFactory() {
       {0x6D, {ADC, ABSOLUTE, PRINTLS}},
       {0x7D, {ADC, INDEXED_ABSOLUTE_X, PRINTLS}},
       {0x79, {ADC, INDEXED_ABSOLUTE_Y, PRINTLS}},
-      {0x61, {ADC, INDIRECT_INDEXED, PRINTLS}},
-      {0x71, {ADC, INDEXED_INDIRECT, PRINTLS}},
+      {0x71, {ADC, INDIRECT_INDEXED, PRINTLS}},
+      {0x61, {ADC, INDEXED_INDIRECT, PRINTLS}},
 
       /* AND Instruction */
       {0x29, {AND, IMMEDIATE, PRINT}},
@@ -42,8 +42,8 @@ InstructionFactory::InstructionFactory() {
       {0x2D, {AND, ABSOLUTE, PRINTLS}},
       {0x3D, {AND, INDEXED_ABSOLUTE_X, PRINTLS}},
       {0x39, {AND, INDEXED_ABSOLUTE_Y, PRINTLS}},
-      {0x21, {AND, INDIRECT_INDEXED, PRINTLS}},
-      {0x31, {AND, INDEXED_INDIRECT, PRINTLS}},
+      {0x31, {AND, INDIRECT_INDEXED, PRINTLS}},
+      {0x21, {AND, INDEXED_INDIRECT, PRINTLS}},
 
       /* ASL Instruction */
       {0x0A, {ASL, ACCUMULATOR, PRINT}},
@@ -96,8 +96,8 @@ InstructionFactory::InstructionFactory() {
       {0xCD, {CMP, ABSOLUTE, PRINTLS}},
       {0xDD, {CMP, INDEXED_ABSOLUTE_X, PRINTLS}},
       {0xD9, {CMP, INDEXED_ABSOLUTE_Y, PRINTLS}},
-      {0xC1, {CMP, INDIRECT_INDEXED, PRINTLS}},
-      {0xD1, {CMP, INDEXED_INDIRECT, PRINTLS}},
+      {0xD1, {CMP, INDIRECT_INDEXED, PRINTLS}},
+      {0xC1, {CMP, INDEXED_INDIRECT, PRINTLS}},
       /* CPX Instruction */
       {0xE0, {CPX, IMMEDIATE, PRINT}},
       {0xE4, {CPX, ZERO_PAGE, PRINTLS}},
@@ -114,8 +114,8 @@ InstructionFactory::InstructionFactory() {
       {0x4D, {EOR, ABSOLUTE, PRINTLS}},
       {0x5D, {EOR, INDEXED_ABSOLUTE_X, PRINTLS}},
       {0x59, {EOR, INDEXED_ABSOLUTE_Y, PRINTLS}},
-      {0x41, {EOR, INDIRECT_INDEXED, PRINTLS}},
-      {0x51, {EOR, INDEXED_INDIRECT, PRINTLS}},
+      {0x51, {EOR, INDIRECT_INDEXED, PRINTLS}},
+      {0x41, {EOR, INDEXED_INDIRECT, PRINTLS}},
 
       /* JMP Instructions*/
       {0x4C, {JMP, ABSOLUTE, PRINT}},
@@ -141,8 +141,8 @@ InstructionFactory::InstructionFactory() {
       {0x0D, {ORA, ABSOLUTE, PRINTLS}},
       {0x1D, {ORA, INDEXED_ABSOLUTE_X, PRINTLS}},
       {0x19, {ORA, INDEXED_ABSOLUTE_Y, PRINTLS}},
-      {0x01, {ORA, INDIRECT_INDEXED, PRINTLS}},
-      {0x11, {ORA, INDEXED_INDIRECT, PRINTLS}},
+      {0x11, {ORA, INDIRECT_INDEXED, PRINTLS}},
+      {0x01, {ORA, INDEXED_INDIRECT, PRINTLS}},
 
       /* PHA Instructions*/
       {0x48, {PHA, IMPLIED, PRINTLS}},
@@ -170,8 +170,8 @@ InstructionFactory::InstructionFactory() {
       {0xAD, {LDA, ABSOLUTE, PRINTLS}},
       {0xBD, {LDA, INDEXED_ABSOLUTE_X, PRINTLS}},
       {0xB9, {LDA, INDEXED_ABSOLUTE_Y, PRINTLS}},
-      {0xA1, {LDA, INDIRECT_INDEXED, PRINTLS}},
-      {0xB1, {LDA, INDEXED_INDIRECT, PRINTLS}},
+      {0xB1, {LDA, INDIRECT_INDEXED, PRINTLS}},
+      {0xA1, {LDA, INDEXED_INDIRECT, PRINTLS}},
 
       /* LDX Instructions*/
       {0xA2, {LDX, IMMEDIATE, PRINT}},
@@ -193,8 +193,8 @@ InstructionFactory::InstructionFactory() {
       {0x8D, {STA, ABSOLUTE, PRINTLS}},
       {0X9D, {STA, INDEXED_ABSOLUTE_X, PRINTLS}},
       {0X99, {STA, INDEXED_ABSOLUTE_Y, PRINTLS}},
-      {0X81, {STA, INDIRECT_INDEXED, PRINTLS}},
-      {0X91, {STA, INDEXED_INDIRECT, PRINTLS}},
+      {0X91, {STA, INDIRECT_INDEXED, PRINTLS}},
+      {0X81, {STA, INDEXED_INDIRECT, PRINTLS}},
 
       /*STX Instructions*/
       {0x86, {STX, ZERO_PAGE, PRINTLS}},
