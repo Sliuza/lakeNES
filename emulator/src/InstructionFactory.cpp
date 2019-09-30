@@ -46,7 +46,7 @@ InstructionFactory::InstructionFactory() {
       {0x31, {AND, INDEXED_INDIRECT, PRINTLS}},
 
       /* ASL Instruction */
-      {0x0A, {ASL, IMMEDIATE, PRINT}},
+      {0x0A, {ASL, ACCUMULATOR, PRINT}},
       {0x06, {ASL, ZERO_PAGE, PRINTLS}},
       {0x16, {ASL, INDEXED_ZERO_PAGE_X, PRINTLS}},
       {0x0E, {ASL, ABSOLUTE, PRINTLS}},

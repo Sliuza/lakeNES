@@ -33,7 +33,7 @@ void ADCInstruction::execute(Cpu *cpu, uint16_t address) {
     uint16_t carry = (cpu->getF_carry() ? 1 : 0);
     uint16_t value = cpu->read_mem(address);
     uint8_t a_regValue = cpu->getA_reg();
-    uint16_t aux = cpu->getA_reg() + value + carry;
+    uint16_t aux = (uint16_t)cpu->getA_reg() + value + carry;
 
     (aux > 255) ? cpu->setF_carry(true) : cpu->setF_carry(false);
     (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
@@ -53,8 +53,8 @@ void ANDInstruction::execute(Cpu *cpu, uint16_t address) {
     uint8_t value = cpu->read_mem(address);
     uint8_t a_regValue = cpu->getA_reg() & value;
     cpu->setA_reg(a_regValue);
-    (a_regValue & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
-    a_regValue & 0x80 ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    (a_regValue == 0) ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (a_regValue & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
   }
 }
 
@@ -65,14 +65,14 @@ ASLInstruction::ASLInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void ASLInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[ASLInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
-    if (ASLInstruction::getAddressingMode() == IMPLIED) {
-      uint8_t a_regValue = cpu->getA_reg() << 1;
+    if (ASLInstruction::getAddressingMode() == ACCUMULATOR) {
+      uint16_t a_regValue = cpu->getA_reg() << 1;
       (a_regValue & 0xFF00) > 0 ? cpu->setF_carry(true) : cpu->setF_carry(false);
       (a_regValue & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
       (a_regValue & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
       cpu->setA_reg(a_regValue & 0x00FF);
     } else {
-      uint8_t value = cpu->read_mem(address) << 1;
+      uint16_t value = cpu->read_mem(address) << 1;
       (value & 0xFF00) > 0 ? cpu->setF_carry(true) : cpu->setF_carry(false);
       (value & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
       (value & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
@@ -345,12 +345,16 @@ void LSRInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[LSRInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t value = cpu->read_mem(address);
+    if (LSRInstruction::getAddressingMode() == ACCUMULATOR){ 
+      value = cpu->getA_reg();
+    }
     (value & 0x0001) ? cpu->setF_carry(true) : cpu->setF_carry(false);
-
-    uint8_t aux = value >> 1;
+  
+    uint16_t aux = value >> 1;
+    
     (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
-    (aux & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
-    if (LSRInstruction::getAddressingMode() == IMPLIED) {
+    (aux & 0x0080) ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    if (LSRInstruction::getAddressingMode() == ACCUMULATOR) {
       cpu->setA_reg(aux & 0x00FF);
     } else {
       cpu->write_mem(address, aux & 0x00FF);
@@ -724,36 +728,22 @@ RORInstruction::RORInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void RORInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t aux;
   uint8_t op;
-  if (getAddressingMode() == 4) {
-    aux = cpu->getA_reg();
-    op = 0b00000001 & aux;
-    aux = aux >> 1;
-    if (cpu->getF_carry())
-      aux = +0b10000000;
-    cpu->setA_reg(aux);
-  } else {
-    aux = cpu->read_mem(address);
-    op = 0b00000001 & aux;
-    aux = aux >> 1;
-    if (cpu->getF_carry())
-      aux = +0b10000000;
-    cpu->write_mem(aux, address);
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t value = cpu->read_mem(address);
+    if (RORInstruction::getAddressingMode() == ACCUMULATOR){ 
+      value = cpu->getA_reg();
+    }
+   
+    uint16_t aux = (uint16_t) (cpu->getF_carry() << 7) | value >> 1;
+    (value & 0x0001) ? cpu->setF_carry(true) : cpu->setF_carry(false);
+    (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (aux & 0x0080) ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    if (RORInstruction::getAddressingMode() == ACCUMULATOR) {
+      cpu->setA_reg(aux & 0x00FF);
+    } else {
+      cpu->write_mem(address, aux & 0x00FF);
+    }
   }
-
-  if (op == 0)
-    cpu->setF_carry(0);
-  else
-    cpu->setF_carry(1);
-
-  if ((0b10000000 & op) == 128)
-    cpu->setF_negative(true);
-  else
-    cpu->setF_negative(false);
-
-  if (aux == 0)
-    cpu->setF_zero(true);
-  else
-    cpu->setF_zero(false);
 }
 
 ROLInstruction::ROLInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
@@ -761,36 +751,20 @@ ROLInstruction::ROLInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 }
 
 void ROLInstruction::execute(Cpu *cpu, uint16_t address) {
-  uint8_t aux;
-  uint8_t op;
-  if (getAddressingMode() == 4) {
-    aux = cpu->getA_reg();
-    op = 0b10000000 & aux;
-    aux = aux << 1;
-    if (cpu->getF_carry())
-      aux = aux + 0b00000001;
-    cpu->setA_reg(aux);
-  } else {
-    aux = cpu->read_mem(address);
-    op = 0b10000000 & aux;
-    aux = aux << 1;
-    if (cpu->getF_carry())
-      aux = aux + 0b00000001;
-    cpu->write_mem(aux, address);
+  if (address >= 0x0000 && address <= 0xFFFF) {
+    uint8_t value = cpu->read_mem(address);
+    if (ROLInstruction::getAddressingMode() == ACCUMULATOR){ 
+      value = cpu->getA_reg();
+    }
+   
+    uint16_t aux = (uint16_t)value << 1 | cpu->getF_carry();
+    (aux & 0xFF00) ? cpu->setF_carry(true) : cpu->setF_carry(false);
+    (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
+    (aux & 0x0080) ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    if (ROLInstruction::getAddressingMode() == ACCUMULATOR) {
+      cpu->setA_reg(aux & 0x00FF);
+    } else {
+      cpu->write_mem(address, aux & 0x00FF);
+    }
   }
-
-  if (op == 0)
-    cpu->setF_carry(0);
-  else
-    cpu->setF_carry(1);
-
-  if ((0b10000000 & op) == 128)
-    cpu->setF_negative(true);
-  else
-    cpu->setF_negative(false);
-
-  if (aux == 0)
-    cpu->setF_zero(true);
-  else
-    cpu->setF_zero(false);
 }
