@@ -236,11 +236,11 @@ InstructionFactory::InstructionFactory() {
       {0xE1, {SBC, INDEXED_INDIRECT, PRINTLS}},
 
       /*ROR instructions*/
-      {0x6A, {ROR, ACCUMULATOR}},
-      {0X66, {ROR, ZERO_PAGE}},
-      {0X76, {ROR, INDEXED_ZERO_PAGE_X}},
-      {0X6E, {ROR, ABSOLUTE}},
-      {0X7E, {ROR, INDEXED_ABSOLUTE_X}},
+      {0x6A, {ROR, ACCUMULATOR, PRINT}},
+      {0X66, {ROR, ZERO_PAGE, PRINTLS}},
+      {0X76, {ROR, INDEXED_ZERO_PAGE_X, PRINTLS}},
+      {0X6E, {ROR, ABSOLUTE, PRINTLS}},
+      {0X7E, {ROR, INDEXED_ABSOLUTE_X, PRINTLS}},
 
       /*ROL instructions*/
       {0x2A, {ROL, ACCUMULATOR, PRINT}},
