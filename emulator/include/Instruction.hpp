@@ -228,6 +228,18 @@ class SECInstruction : public BaseInstruction {
   SECInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode);
   void execute(Cpu *cpu, uint16_t address = 0);
 };
+class SEDInstruction : public BaseInstruction {
+  public:
+  SEDInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
+class SEIInstruction : public BaseInstruction {
+  public:
+  SEIInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode);
+  void execute(Cpu *cpu, uint16_t address = 0);
+};
+
 
 class LDAInstruction : public BaseInstruction {
   public:

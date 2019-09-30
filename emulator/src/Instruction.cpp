@@ -238,6 +238,21 @@ void CLIInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_interrupt(false);
 }
 
+SEIInstruction::SEIInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
+    : BaseInstruction(addressingMode, instructionSize, printMode) {
+}
+void SEIInstruction::execute(Cpu *cpu, uint16_t address) {
+  //cout << "[CLIInstruction] -  execute()\n";
+  cpu->setF_interrupt(true);
+}
+SEDInstruction::SEDInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
+    : BaseInstruction(addressingMode, instructionSize, printMode) {
+}
+void SEDInstruction::execute(Cpu *cpu, uint16_t address) {
+  //cout << "[CLIInstruction] -  execute()\n";
+  cpu->setF_decimal(true);
+}
+
 CLVInstruction::CLVInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
     : BaseInstruction(addressingMode, instructionSize, printMode) {
 }

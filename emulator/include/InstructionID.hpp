@@ -56,6 +56,8 @@ enum InstructionID {
   TXS,
   TYA,
   SEC,
+  SEI,
+  SED,
   ROL,
   ROR
   /*TODO: Fill it up with the others IDs.*/

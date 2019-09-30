@@ -82,6 +82,9 @@ InstructionFactory::InstructionFactory() {
       /* CLI Instruction */
       {0x58, {CLI, IMPLIED, PRINT}},
 
+      /* SEI Instruction */
+      {0x78, {SEI, IMPLIED, PRINT}},
+
       /* CLV Instruction */
 
       {0xB8, {CLV, IMPLIED, PRINT}},
@@ -157,6 +160,8 @@ InstructionFactory::InstructionFactory() {
 
       /* SEC Instructions*/
       {0x38, {SEC, IMPLIED, PRINT}},
+      /* SED Instructions*/
+      {0xF8, {SED, IMPLIED, PRINT}},
 
       /* LDA Instructions*/
       {0xA9, {LDA, IMMEDIATE, PRINT}},
@@ -458,6 +463,14 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
     }
     case SBC: {
       return new SBCInstruction(addressingMode, instructionSize, printMode);
+      break;
+    }
+    case SED: {
+      return new SEDInstruction(addressingMode, instructionSize, printMode);
+      break;
+    }
+    case SEI: {
+      return new SEIInstruction(addressingMode, instructionSize, printMode);
       break;
     }
     case TAX: {
