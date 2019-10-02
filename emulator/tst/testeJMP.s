@@ -49,8 +49,12 @@ Reset:
    STA $f0
    LDA #$cc
    STA $f1
-   JMP ($00f0) ;dereferences to $cc01
+   JMP routine ;dereferences to $cc01
    brk ; Abort execution
+
+routine:
+   nop
+   brk
 
 NMI:
    ;NOTE: NMI code goes here

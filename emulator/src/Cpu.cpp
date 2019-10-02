@@ -20,7 +20,7 @@ Cpu::Cpu() {
 
 void Cpu::startCpu() {
   // Initiate ram with 0xFF
-  init_array(this->ram, (uint8_t)0xFF);
+  init_array(this->ram, (uint8_t)0x0000);
   this->reset();
 };
 void Cpu::reset() {
@@ -123,13 +123,14 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
       break;
     }
     case INDIRECT_INDEXED: {
-      //cout << "addressing mode = INDIRECT_INDEXED\n";
+      // cout << "addressing mode = INDIRECT_INDEXED\n";
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
-      address = this->get16BitsAddressInMemory(baseAddress) + uint16_t(this->getY_reg());
+      address = (this->get16BitsAddressInMemory(baseAddress) + uint16_t(this->getY_reg()));
+      // cout << "Address = " << hex << (unsigned)((this->get16BitsAddressInMemory(baseAddress) + uint16_t(1)))  << endl;
       break;
     }
     case INDEXED_INDIRECT: {
-      //cout << "addressing mode = INDEXED_INDIRECT\n";
+      // cout << "addressing mode = INDEXED_INDIRECT\n";
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = this->get16BitsAddressInMemory(baseAddress) + uint16_t(this->getX_reg());
       break;
@@ -148,7 +149,7 @@ uint16_t Cpu::getAddressBasedOnAddressingMode(uint8_t addressingMode) {
       break;
     }
     case INDEXED_ZERO_PAGE_X: {
-      //cout << "addressing mode = INDEXED_ZERO_PAGE_X\n";
+      // cout << "addressing mode = INDEXED_ZERO_PAGE_X\n";
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = (baseAddress + uint16_t(this->getX_reg())) & 0xFF;
       break;

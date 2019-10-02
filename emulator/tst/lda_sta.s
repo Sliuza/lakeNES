@@ -49,8 +49,29 @@ Reset:
    LDA #$05
    STA $0101
    LDA #$06
+   STA $78
    LDA $0101
    STA $0202
+   LDA $78
+   LDX $60
+   STA $c0, X
+   LDA $c0, X
+   LDX #$01
+   STA $0100, X
+   LDA #$08
+   LDA $0100, X
+   LDY #$02
+   STA $0198, Y
+   LDA #$08
+   LDA $0198, Y
+   LDY #$02
+   LDA #$CD
+   STA (#$FF), Y
+   LDA (#$FF), Y
+   LDA #$12
+   STA (#$10,X)
+   LDA #$00
+   LDA (#$10,X)
    brk ; Abort execution
 
 NMI:
