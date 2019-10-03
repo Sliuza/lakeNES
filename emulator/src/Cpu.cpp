@@ -184,6 +184,7 @@ uint16_t Cpu::get16BitsAddressInMemory(uint16_t address) {
   uint16_t lo = this->read_mem(address);
   uint16_t hiAddress = (address & 0xFF00) | ((address + 1) & 0xFF);
   uint16_t hi = (this->read_mem(hiAddress)) << 8;
+
   return hi | lo;
 }
 
