@@ -47,17 +47,17 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 
 
 Reset:
-  lda #$ff
-  adc #01
+  lda #$01
+  and #$01
   lda #$02
-  sta $0102
-  adc $0102
-  lda $0102
+  sta $0100
+  lda #$01
+  and $0100
+  lda #$03
+  sta $35
   ldx #$03
-  adc ($99,x)
-  sta $98
-  ldy #$fe
-  adc ($98), y
+  lda #$07
+  and $32, x
   brk ; Abort execution
 
 NMI:
