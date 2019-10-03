@@ -186,9 +186,9 @@ void BRKInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_interrupt(true);
   uint8_t stack = cpu->getSp_reg();
   uint16_t pc = cpu->getPc_reg();
-  cpu->write_mem(0x0100 + stack, (pc >> 8) & 0x00FF);
+  cpu->write_mem((pc >> 8) & 0x00FF, 0x0100 + stack);
   stack--;
-  cpu->write_mem(0x0100 + stack, pc & 0x00FF);
+  cpu->write_mem(pc & 0x00FF, 0x0100 + stack);
   stack--;
 
   cpu->setSp_reg(stack);
@@ -352,9 +352,9 @@ void JSRInstruction::execute(Cpu *cpu, uint16_t address) {
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t stack = cpu->getSp_reg();
     uint16_t pc = cpu->getPc_reg();
-    cpu->write_mem(0x0100 + stack, (pc >> 8) & 0x00FF);
+    cpu->write_mem((pc >> 8) & 0x00FF,0x0100 + stack);
     stack--;
-    cpu->write_mem(0x0100 + stack, pc & 0x00FF);
+    cpu->write_mem(pc & 0x00FF,0x0100 + stack);
     stack--;
 
     cpu->setSp_reg(stack);
@@ -439,7 +439,7 @@ void PHAInstruction::execute(Cpu *cpu, uint16_t address) {
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t stack = cpu->getSp_reg();
     uint8_t a_regValue = cpu->getA_reg();
-    cpu->write_mem(0x0100 + stack, a_regValue);
+    cpu->write_mem(a_regValue, 0x0100 + stack);
     stack--;
     cpu->setSp_reg(stack);
   }
@@ -453,7 +453,7 @@ void PHPInstruction::execute(Cpu *cpu, uint16_t address) {
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t stack = cpu->getSp_reg();
     uint8_t status = cpu->getA_reg();
-    cpu->write_mem(0x0100 + stack, status);
+    cpu->write_mem(status, 0x0100 + stack);
     stack--;
     cpu->setSp_reg(stack);
   }
