@@ -452,9 +452,11 @@ void PHPInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[PHPInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t stack = cpu->getSp_reg();
-    uint8_t status = cpu->getA_reg();
+    uint8_t status = cpu->getP_reg();
+    status = status | (1 << 4) | (1 << 5);
     cpu->write_mem(status, 0x0100 + stack);
     stack--;
+    cpu->set_flags(false);
     cpu->setSp_reg(stack);
   }
 }

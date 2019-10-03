@@ -47,11 +47,15 @@ void Cpu::run() {
   while (br) {
 
     uint8_t opcode = read_mem(this->pc_reg);
+    
     if (opcode == 0x00)
       br = false;
     else {
       instruction = factory.createInstruction(opcode);
       address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
+      if(opcode == 0x48 || opcode == 0x08 || opcode == 0x68 || opcode == 0x28){//PHA //PHP //PLA //PLP
+        address = 0x0100 + getSp_reg();
+      } 
       instruction->execute(this, address);
       if(opcode == 0x004c || opcode == 0x006c || opcode == 0x20){ 
         // this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
@@ -299,4 +303,7 @@ void Cpu::setF_overflow(uint8_t overflow) {
 }
 void Cpu::setF_negative(uint8_t negative) {
   this->f_negative = negative;
+}
+void Cpu::set_flags(uint8_t f_lags) {
+  this->flags = f_lags;
 }

@@ -28,9 +28,9 @@ class Cpu {
   uint8_t f_zero = 0;      // Bit 1
   uint8_t f_interrupt = 0; // Bit 2
   uint8_t f_decimal = 0;   // Bit 3
-  uint8_t flags = 0;       // Bit 4
-  uint8_t f_overflow = 0;  // Bit 5
-  uint8_t f_negative = 0;  // Bit 6
+  uint8_t flags = 0;       // Bit 4 e 5
+  uint8_t f_overflow = 0;  // Bit 6
+  uint8_t f_negative = 0;  // Bit 7
   Rom rom;
   uint8_t ram[0xFFFF];
 
@@ -80,6 +80,7 @@ class Cpu {
   void setF_decimal(uint8_t decimal);     // decimal flag
   void setF_overflow(uint8_t overflow);   // overflow flag
   void setF_negative(uint8_t negative);   // negative flag
+  void set_flags(uint8_t f_lags);          // unused flags
 };
 
 uint8_t make_P(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint8_t t6);
