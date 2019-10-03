@@ -378,10 +378,11 @@ void LSRInstruction::execute(Cpu *cpu, uint16_t address) {
     
     (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
     (aux & 0x0080) ? cpu->setF_negative(true) : cpu->setF_negative(false);
+    
     if (LSRInstruction::getAddressingMode() == ACCUMULATOR) {
       cpu->setA_reg(aux & 0x00FF);
     } else {
-      cpu->write_mem(address, aux & 0x00FF);
+      cpu->write_mem(aux & 0x00FF,address);
     }
   }
 }
@@ -765,7 +766,7 @@ void RORInstruction::execute(Cpu *cpu, uint16_t address) {
     if (RORInstruction::getAddressingMode() == ACCUMULATOR) {
       cpu->setA_reg(aux & 0x00FF);
     } else {
-      cpu->write_mem(address, aux & 0x00FF);
+      cpu->write_mem(aux & 0x00FF, address);
     }
   }
 }
@@ -788,7 +789,7 @@ void ROLInstruction::execute(Cpu *cpu, uint16_t address) {
     if (ROLInstruction::getAddressingMode() == ACCUMULATOR) {
       cpu->setA_reg(aux & 0x00FF);
     } else {
-      cpu->write_mem(address, aux & 0x00FF);
+      cpu->write_mem(aux & 0x00FF, address);
     }
   }
 }
