@@ -14,10 +14,12 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 
    ;NOTE: declare variables using the DSB and DSW directives, like this:
 
+   tst_var .dsb 0
+
    ;MyVariable0 .dsb 1
    ;MyVariable1 .dsb 3
 
-   .ende
+ .ende
 
    ;NOTE: you can also split the variable declarations into individual pages, like this:
 
@@ -45,29 +47,25 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 
 
 Reset:
-   LDA #$09
-   STA $f0
-   LDA #$c0
-   STA $f1
-   JMP ($00f0) ;dereferences to $cc01
-   LDA #$01
-   brk ; Abort execution
-
-routine:
-   LDA #$03
-   brk
+  lda #$ff
+  adc #01
+  lda #$02
+  sta $0102
+  adc $0102
+  lda $0102
+  ldx #$02
+  adc ($100),x
+  sta $0098
+  ldy #$fe
+  adc ($0098), y
+  brk ; Abort execution
 
 NMI:
-   ;NOTE: NMI code goes here
 
-
+  ;NOTE: NMI code goes here
 
 IRQ:
-
-   ;NOTE: IRQ code goes here
-
-loop:
-
+  ;NOTE: IRQ code goes here
 
 ;----------------------------------------------------------------
 ; interrupt vectors

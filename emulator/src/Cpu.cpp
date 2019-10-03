@@ -53,8 +53,14 @@ void Cpu::run() {
       instruction = factory.createInstruction(opcode);
       address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
       instruction->execute(this, address);
-      this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
-      this->printOutput(instruction->getPrintMode(), address);
+      if(opcode == 0x004c || opcode == 0x006c){ 
+        // this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
+        this->printOutput(instruction->getPrintMode(), address);
+      }
+      else{
+        this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
+        this->printOutput(instruction->getPrintMode(), address);
+      }
     }
   }
 }

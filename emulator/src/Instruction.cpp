@@ -329,7 +329,7 @@ JMPInstruction::JMPInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void JMPInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[JMPInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
-    cout << "Address = 0x" << hex << (unsigned)address << endl;
+    // cout << "Address = 0x" << hex << (unsigned)address << endl;
     cpu->setPc_reg(address);
   }
 }
