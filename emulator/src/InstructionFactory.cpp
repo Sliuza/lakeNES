@@ -357,6 +357,10 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
       return new CMPInstruction(addressingMode, instructionSize, printMode);
       break;
     }
+    case CPX: {
+      return new CPXInstruction(addressingMode, instructionSize, printMode);
+      break;
+    }
     case CPY: {
       return new CPYInstruction(addressingMode, instructionSize, printMode);
       break;
@@ -486,15 +490,15 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
       break;
     }
     case TXA: {
-      return new TSXInstruction(addressingMode, instructionSize, printMode);
+      return new TXAInstruction(addressingMode, instructionSize, printMode);
       break;
     }
     case TXS: {
-      return new TSXInstruction(addressingMode, instructionSize, printMode);
+      return new TXSInstruction(addressingMode, instructionSize, printMode);
       break;
     }
     case TYA: {
-      return new TSXInstruction(addressingMode, instructionSize, printMode);
+      return new TYAInstruction(addressingMode, instructionSize, printMode);
       break;
     }
 

@@ -88,8 +88,9 @@ BCCInstruction::BCCInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void BCCInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BCCInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
-    if (!cpu->getF_carry())
+    if (!cpu->getF_carry()){
       cpu->setPc_reg(address);
+    }
   }
 }
 
@@ -100,8 +101,9 @@ BCSInstruction::BCSInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void BCSInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BCSInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
-    if (cpu->getF_carry())
+    if (cpu->getF_carry()){
       cpu->setPc_reg(address);
+    }
   }
 }
 
@@ -112,8 +114,9 @@ BEQInstruction::BEQInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void BEQInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BEQInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
-    if (cpu->getF_zero())
+    if (cpu->getF_zero()){
       cpu->setPc_reg(address);
+    }
   }
 }
 
@@ -140,8 +143,9 @@ BMIInstruction::BMIInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void BMIInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BMIInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
-    if (cpu->getF_negative())
+    if (cpu->getF_negative()){
       cpu->setPc_reg(address);
+    }
   }
 }
 
@@ -152,8 +156,9 @@ BNEInstruction::BNEInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void BNEInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BNEInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
-    if (!cpu->getF_zero())
+    if (!cpu->getF_zero())   {
       cpu->setPc_reg(address);
+    }
   }
 }
 
@@ -164,8 +169,9 @@ BPLInstruction::BPLInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void BPLInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BPLInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
-    if (!cpu->getF_negative())
+    if (!cpu->getF_negative()){
       cpu->setPc_reg(address);
+    }
   }
 }
 
@@ -197,8 +203,9 @@ BVCInstruction::BVCInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void BVCInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BVCInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
-    if (!cpu->getF_overflow())
+    if (!cpu->getF_overflow()){
       cpu->setPc_reg(address);
+    }
   }
 }
 
@@ -209,8 +216,9 @@ BVSInstruction::BVSInstruction(uint8_t addressingMode, uint8_t instructionSize, 
 void BVSInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BVSInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
-    if (cpu->getF_overflow())
+    if (cpu->getF_overflow()){
       cpu->setPc_reg(address);
+    }
   }
 }
 
