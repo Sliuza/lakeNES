@@ -58,6 +58,8 @@ Reset:
   ldx #$03
   lda #$07
   and $32, x
+  sta $0104
+  and $0101, x
   brk ; Abort execution
 
 NMI:
