@@ -176,7 +176,7 @@ InstructionFactory::InstructionFactory() {
       /* LDX Instructions*/
       {0xA2, {LDX, IMMEDIATE, PRINT}},
       {0xA6, {LDX, ZERO_PAGE, PRINTLS}},
-      {0xB6, {LDX, INDEXED_ZERO_PAGE_Y, PRINT}},
+      {0xB6, {LDX, INDEXED_ZERO_PAGE_Y, PRINTLS}},
       {0xAE, {LDX, ABSOLUTE, PRINTLS}},
       {0xBE, {LDX, INDEXED_ABSOLUTE_Y, PRINTLS}},
 
@@ -519,3 +519,4 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
 
   return NULL;
 };
+
