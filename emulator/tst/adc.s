@@ -58,6 +58,22 @@ Reset:
   sta $98
   ldy #$fe
   adc ($98), y
+  ldx #$05
+  stx $0011
+  lda #$04
+  adc $0011
+  LDY #$20
+  STY $15
+  lda #$10
+  ldx #$05
+  ADC $10, X
+  LDY #$20
+  STY $0105
+  lda #$50
+  ldx #$05
+  ADC $0100, X
+  LDY #$04
+  ADC $0101, Y
   brk ; Abort execution
 
 NMI:
