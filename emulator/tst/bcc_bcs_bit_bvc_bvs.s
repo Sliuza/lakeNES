@@ -69,11 +69,11 @@ pulo:
    bit $80
    bvs end
    lda #$00
-   rts
 
 end:
    lda #$01
    brk
+   
 NMI:
    ;NOTE: NMI code goes here
 

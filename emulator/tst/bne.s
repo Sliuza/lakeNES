@@ -50,7 +50,7 @@ Reset:
 
 salto:
    lda #$fd
-   rts
+   brk
    
 NMI:
    ;NOTE: NMI code goes here

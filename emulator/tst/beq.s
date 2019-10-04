@@ -46,12 +46,12 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 Reset:
    lda #$08
    cmp #$08
-   bmi salto
+   beq salto
    brk ; Abort execution
 
 salto:
    lda #$fc
-   rts
+   brk
 NMI:
    ;NOTE: NMI code goes here
 
