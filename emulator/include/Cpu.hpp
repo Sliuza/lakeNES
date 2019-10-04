@@ -81,6 +81,7 @@ class Cpu {
   void setF_overflow(uint8_t overflow);   // overflow flag
   void setF_negative(uint8_t negative);   // negative flag
   void set_flags(uint8_t f_lags);          // unused flags
+  void setP_reg(uint8_t _p_reg);
 };
 
 uint8_t make_P(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint8_t t6);
