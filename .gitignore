@@ -52,3 +52,5 @@ main
 # End of https://www.gitignore.io/api/c++,visualstudiocode
 
 emulator/bin/
+
+emulator/log/
