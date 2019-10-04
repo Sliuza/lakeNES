@@ -147,11 +147,11 @@ InstructionFactory::InstructionFactory() {
       /* PHA Instructions*/
       {0x48, {PHA, IMPLIED, PRINTLS}},
       /* PHP Instructions*/
-      {0x09, {PHP, IMPLIED, PRINTLS}},
+      {0x08, {PHP, IMPLIED, PRINTLS}},
       /* PLA Instructions*/
-      {0x69, {PLA, IMPLIED, PRINTLS}},
+      {0x68, {PLA, IMPLIED, PRINTLS}},
       /* PLP Instructions*/
-      {0x29, {PLP, IMPLIED, PRINTLS}},
+      {0x28, {PLP, IMPLIED, PRINTLS}},
 
       /* RTI Instructions*/
       {0x40, {RTI, IMPLIED, PRINT}},
