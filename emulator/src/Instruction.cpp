@@ -425,8 +425,8 @@ void PLPInstruction::execute(Cpu *cpu, uint16_t address) {
     stack++;
     cpu->setSp_reg(stack);
 
-    uint8_t a_regValue = cpu->getA_reg();
     uint8_t aux = cpu->read_mem(0x0100 + stack);
+    cpu->setP_reg(aux);
   }
 }
 
@@ -456,7 +456,6 @@ void PHPInstruction::execute(Cpu *cpu, uint16_t address) {
     status = status | (1 << 4) | (1 << 5);
     cpu->write_mem(status, 0x0100 + stack);
     stack--;
-    cpu->set_flags(false);
     cpu->setSp_reg(stack);
   }
 }

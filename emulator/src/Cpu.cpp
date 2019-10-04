@@ -287,6 +287,19 @@ void Cpu::setY_reg(uint8_t _y_reg) {
 void Cpu::setA_reg(uint8_t _a_reg) {
   this->a_reg = _a_reg;
 }
+void Cpu::setP_reg(uint8_t _p_reg) {
+  
+  setF_negative(_p_reg & uint8_t(1) << 7);
+  setF_overflow(_p_reg & uint8_t(1) << 6);
+  set_flags(_p_reg & uint8_t(1) << 5);
+  set_flags(_p_reg & uint8_t(1) << 4);
+  setF_decimal(_p_reg & uint8_t(1) << 3);
+  setF_interrupt(_p_reg & uint8_t(1) << 2);
+  setF_zero(_p_reg & uint8_t(1) << 1);
+  setF_carry(_p_reg & uint8_t(1) << 0);
+  
+  
+}
 void Cpu::setF_carry(uint8_t carry) {
   this->f_carry = carry;
 }
