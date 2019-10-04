@@ -261,13 +261,13 @@ InstructionFactory::InstructionFactory() {
       {0xA8, {TAY, IMPLIED, PRINT}},
 
       /*TSX instructions*/
-      {0xA8, {TSX, IMPLIED, PRINT}},
+      {0xBA, {TSX, IMPLIED, PRINT}},
 
       /*TXA instructions*/
       {0x8A, {TXA, IMPLIED, PRINT}},
 
       /*TXS instructions*/
-      {0x9A, {TXA, IMPLIED, PRINT}},
+      {0x9A, {TXS, IMPLIED, PRINT}},
 
       /*TYA instructions*/
       {0x98, {TYA, IMPLIED, PRINT}},
