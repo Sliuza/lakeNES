@@ -198,7 +198,7 @@ InstructionFactory::InstructionFactory() {
 
       /*STX Instructions*/
       {0x86, {STX, ZERO_PAGE, PRINTLS}},
-      {0X96, {STX, INDEXED_ZERO_PAGE_Y, PRINT}},
+      {0X96, {STX, INDEXED_ZERO_PAGE_Y, PRINTLS}},
       {0x8E, {STX, ABSOLUTE, PRINTLS}},
 
       /*STY Instructions*/
