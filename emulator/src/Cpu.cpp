@@ -47,25 +47,24 @@ void Cpu::run() {
   while (br) {
 
     uint8_t opcode = read_mem(this->pc_reg);
-    
-    if (opcode == 0x00)
+
+    if (opcode == 0x00) {
       br = false;
-    else {
+    } else {
       instruction = factory.createInstruction(opcode);
       address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
-      if(opcode == 0x48 || opcode == 0x08 || opcode == 0x68 || opcode == 0x28){//PHA //PHP //PLA //PLP
+      if (opcode == 0x48 || opcode == 0x08 || opcode == 0x68 || opcode == 0x28) { //PHA //PHP //PLA //PLP
         address = 0x0100 + getSp_reg();
-      } 
-      instruction->execute(this, address);
-      if(opcode == 0x004c || opcode == 0x006c || opcode == 0x20){ 
-        // this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
-        this->printOutput(instruction->getPrintMode(), address);
       }
-      else{
+      instruction->execute(this, address);
+      if (opcode == 0x004c || opcode == 0x006c || opcode == 0x20) {
+        this->printOutput(instruction->getPrintMode(), address);
+      } else {
         this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
         this->printOutput(instruction->getPrintMode(), address);
       }
     }
+    free(instruction);
   }
 }
 uint8_t Cpu::read_mem(uint16_t addr) {
@@ -200,7 +199,7 @@ void Cpu::print() {
        << " | a = 0x" << hex << setw(2) << (unsigned)this->getA_reg()
        << " | x = 0x" << hex << setw(2) << (unsigned)this->getX_reg()
        << " | y = 0x" << hex << setw(2) << (unsigned)this->getY_reg()
-       << " | sp = 0x" << hex << setw(4) << (unsigned)( 0x0100 + this->getSp_reg())
+       << " | sp = 0x" << hex << setw(4) << (unsigned)(0x0100 + this->getSp_reg())
        << " | p[NV-BDIZC] = " << bitset<8>(p) << " |" << endl;
 }
 
@@ -213,7 +212,7 @@ void Cpu::printls(uint16_t address) {
        << " | a = 0x" << hex << setw(2) << (unsigned)this->getA_reg()
        << " | x = 0x" << hex << setw(2) << (unsigned)this->getX_reg()
        << " | y = 0x" << hex << setw(2) << (unsigned)this->getY_reg()
-       << " | sp = 0x" << hex << setw(4) << (unsigned)( 0x0100 + this->getSp_reg())
+       << " | sp = 0x" << hex << setw(4) << (unsigned)(0x0100 + this->getSp_reg())
        << " | p[NV-BDIZC] = " << bitset<8>(p)
        << " | MEM[0x" << hex << setw(4) << address
        << "] = 0x" << hex << setw(2) << (unsigned)data << " |" << endl;
@@ -288,7 +287,7 @@ void Cpu::setA_reg(uint8_t _a_reg) {
   this->a_reg = _a_reg;
 }
 void Cpu::setP_reg(uint8_t _p_reg) {
-  
+
   setF_negative(_p_reg & uint8_t(1) << 7);
   setF_overflow(_p_reg & uint8_t(1) << 6);
   set_flags(_p_reg & uint8_t(1) << 5);
@@ -297,8 +296,6 @@ void Cpu::setP_reg(uint8_t _p_reg) {
   setF_interrupt(_p_reg & uint8_t(1) << 2);
   setF_zero(_p_reg & uint8_t(1) << 1);
   setF_carry(_p_reg & uint8_t(1) << 0);
-  
-  
 }
 void Cpu::setF_carry(uint8_t carry) {
   this->f_carry = carry;
