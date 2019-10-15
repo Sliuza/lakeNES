@@ -36,10 +36,6 @@ void BaseInstruction::setPrintMode(uint8_t printMode) {
   this->_printMode = printMode;
 };
 
-// ADCInstruction::ADCInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void ADCInstruction::execute(Cpu *cpu, uint16_t address) {
   //TODO: Set Flags
 
@@ -57,10 +53,6 @@ void ADCInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// ANDInstruction::ANDInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void ANDInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[ANDInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -71,9 +63,6 @@ void ANDInstruction::execute(Cpu *cpu, uint16_t address) {
     (a_regValue & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
   }
 }
-
-// ASLInstruction::ASLInstruction() : BaseInstruction() {
-// }
 
 void ASLInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[ASLInstruction] -  execute()\n";
@@ -94,10 +83,6 @@ void ASLInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// BCCInstruction::BCCInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void BCCInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BCCInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -106,10 +91,6 @@ void BCCInstruction::execute(Cpu *cpu, uint16_t address) {
     }
   }
 }
-
-// BCSInstruction::BCSInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void BCSInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BCSInstruction] -  execute()\n";
@@ -120,10 +101,6 @@ void BCSInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// BEQInstruction::BEQInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void BEQInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BEQInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -132,10 +109,6 @@ void BEQInstruction::execute(Cpu *cpu, uint16_t address) {
     }
   }
 }
-
-// BITInstruction::BITInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void BITInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BITInstruction] -  execute()\n";
@@ -149,10 +122,6 @@ void BITInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// BMIInstruction::BMIInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void BMIInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BMIInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -161,10 +130,6 @@ void BMIInstruction::execute(Cpu *cpu, uint16_t address) {
     }
   }
 }
-
-// BNEInstruction::BNEInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void BNEInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BNEInstruction] -  execute()\n";
@@ -175,10 +140,6 @@ void BNEInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// BPLInstruction::BPLInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void BPLInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BPLInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -187,10 +148,6 @@ void BPLInstruction::execute(Cpu *cpu, uint16_t address) {
     }
   }
 }
-
-// BRKInstruction::BRKInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void BRKInstruction::execute(Cpu *cpu, uint16_t address) {
   //TODO: Entender o BRK
@@ -209,10 +166,6 @@ void BRKInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setPc_reg(pc);
 }
 
-// BVCInstruction::BVCInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void BVCInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BVCInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -221,10 +174,6 @@ void BVCInstruction::execute(Cpu *cpu, uint16_t address) {
     }
   }
 }
-
-// BVSInstruction::BVSInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void BVSInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BVSInstruction] -  execute()\n";
@@ -235,59 +184,35 @@ void BVSInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// CLCInstruction::CLCInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void CLCInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[CLCInstruction] -  execute()\n";
   cpu->setF_carry(false);
 }
-
-// CLDInstruction::CLDInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void CLDInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[CLDInstruction] -  execute()\n";
   cpu->setF_decimal(false);
 }
 
-// CLIInstruction::CLIInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 void CLIInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[CLIInstruction] -  execute()\n";
   cpu->setF_interrupt(false);
 }
 
-// SEIInstruction::SEIInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 void SEIInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[CLIInstruction] -  execute()\n";
   cpu->setF_interrupt(true);
 }
 
-// SEDInstruction::SEDInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 void SEDInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[CLIInstruction] -  execute()\n";
   cpu->setF_decimal(true);
 }
 
-// CLVInstruction::CLVInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 void CLVInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[CLVInstruction] -  execute()\n";
   cpu->setF_overflow(false);
 }
-
-// CMPInstruction::CMPInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void CMPInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[CMPInstruction] -  execute()\n";
@@ -301,10 +226,6 @@ void CMPInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// CPXInstruction::CPXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void CPXInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[CPXInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -316,10 +237,6 @@ void CPXInstruction::execute(Cpu *cpu, uint16_t address) {
     (x_regValue >= value) ? cpu->setF_carry(true) : cpu->setF_carry(false);
   }
 }
-
-// CPYInstruction::CPYInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void CPYInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[CPYInstruction] -  execute()\n";
@@ -333,9 +250,6 @@ void CPYInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// EORInstruction::EORInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 void EORInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[EORInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -348,9 +262,6 @@ void EORInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// JMPInstruction::JMPInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 void JMPInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[JMPInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -358,10 +269,6 @@ void JMPInstruction::execute(Cpu *cpu, uint16_t address) {
     cpu->setPc_reg(address);
   }
 }
-
-// JSRInstruction::JSRInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void JSRInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[JSRInstruction] -  execute()\n";
@@ -378,10 +285,6 @@ void JSRInstruction::execute(Cpu *cpu, uint16_t address) {
     cpu->setPc_reg(address);
   }
 }
-
-// LSRInstruction::LSRInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void LSRInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[LSRInstruction] -  execute()\n";
@@ -405,18 +308,10 @@ void LSRInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// NOPInstruction::NOPInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void NOPInstruction::execute(Cpu *cpu, uint16_t address) {
-
   //cout << "[NOPInstruction]\n";
 }
 
-// PLAInstruction::PLAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 void PLAInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[PLAInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -433,9 +328,6 @@ void PLAInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// PLPInstruction::PLPInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 void PLPInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[PLPInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -448,10 +340,6 @@ void PLPInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// PHAInstruction::PHAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void PHAInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[PHAInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -462,10 +350,6 @@ void PHAInstruction::execute(Cpu *cpu, uint16_t address) {
     cpu->setSp_reg(stack);
   }
 }
-
-// PHPInstruction::PHPInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void PHPInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[PHPInstruction] -  execute()\n";
@@ -479,9 +363,6 @@ void PHPInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// RTIInstruction::RTIInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 void RTIInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[RTIInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -499,9 +380,6 @@ void RTIInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// RTSInstruction::RTSInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 void RTSInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[RTSInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -517,17 +395,11 @@ void RTSInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// SECInstruction::SECInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 void SECInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[SECInstruction] -  execute()\n";
   cpu->setF_carry(true);
 }
 
-// ORAInstruction::ORAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 void ORAInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[ORAInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -539,10 +411,6 @@ void ORAInstruction::execute(Cpu *cpu, uint16_t address) {
     cpu->setA_reg(aux);
   }
 }
-
-// LDAInstruction::LDAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void LDAInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[LDAInstruction]\n";
@@ -557,37 +425,21 @@ void LDAInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// STAInstruction::STAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void STAInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[STAInstruction] -  execute()\n";
   // cout << "STAaddress = " << hex << (unsigned)address << endl;
   cpu->write_mem(cpu->getA_reg(), address);
 }
 
-// STXInstruction::STXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void STXInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[STXInstruction] -  execute()\n";
   cpu->write_mem(cpu->getX_reg(), address);
 }
 
-// STYInstruction::STYInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void STYInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[STYInstruction] -  execute()\n";
   cpu->write_mem(cpu->getY_reg(), address);
 }
-
-// LDXInstruction::LDXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void LDXInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[LDXInstruction] -  execute()\n";
@@ -599,10 +451,6 @@ void LDXInstruction::execute(Cpu *cpu, uint16_t address) {
   }
 }
 
-// LDYInstruction::LDYInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void LDYInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[LDYInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
@@ -612,9 +460,6 @@ void LDYInstruction::execute(Cpu *cpu, uint16_t address) {
     (value & 0x80) ? cpu->setF_negative(true) : cpu->setF_negative(false);
   }
 }
-// DECInstruction::DECInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void DECInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->read_mem(address);
@@ -624,10 +469,6 @@ void DECInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->write_mem(value, address);
 }
 
-// DEXInstruction::DEXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void DEXInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->getX_reg();
   value -= 1;
@@ -635,10 +476,6 @@ void DEXInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_negative(value & 0x80);
   cpu->setX_reg(value);
 }
-
-// DEYInstruction::DEYInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void DEYInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->getY_reg();
@@ -648,10 +485,6 @@ void DEYInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setY_reg(value);
 }
 
-// INCInstruction::INCInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void INCInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->read_mem(address);
   value += 1;
@@ -659,10 +492,6 @@ void INCInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_negative(value & 0x80);
   cpu->write_mem(value, address);
 }
-
-// INXInstruction::INXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void INXInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->getX_reg();
@@ -672,10 +501,6 @@ void INXInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setX_reg(value);
 }
 
-// INYInstruction::INYInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void INYInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->getY_reg();
   value += 1;
@@ -683,10 +508,6 @@ void INYInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_negative(value & 0x80);
   cpu->setY_reg(value);
 }
-
-// SBCInstruction::SBCInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void SBCInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->read_mem(address);
@@ -700,20 +521,12 @@ void SBCInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setA_reg(diff & 0x00FF);
 }
 
-// TAXInstruction::TAXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void TAXInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->getA_reg();
   cpu->setX_reg(value);
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
 }
-
-// TAYInstruction::TAYInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void TAYInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->getA_reg();
@@ -722,20 +535,12 @@ void TAYInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_negative(value & 0x80);
 }
 
-// TSXInstruction::TSXInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void TSXInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->getSp_reg();
   cpu->setX_reg(value);
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
 }
-
-// TXAInstruction::TXAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void TXAInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->getX_reg();
@@ -744,10 +549,6 @@ void TXAInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_negative(value & 0x80);
 }
 
-// TXSInstruction::TXSInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void TXSInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->getX_reg();
   cpu->setSp_reg(value);
@@ -755,20 +556,12 @@ void TXSInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setF_negative(value & 0x80);
 }
 
-// TYAInstruction::TYAInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
-
 void TYAInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t value = cpu->getY_reg();
   cpu->setA_reg(value);
   cpu->setF_zero(!value);
   cpu->setF_negative(value & 0x80);
 }
-
-// RORInstruction::RORInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void RORInstruction::execute(Cpu *cpu, uint16_t address) {
   uint8_t aux;
@@ -790,10 +583,6 @@ void RORInstruction::execute(Cpu *cpu, uint16_t address) {
     }
   }
 }
-
-// ROLInstruction::ROLInstruction(uint8_t addressingMode, uint8_t instructionSize, uint8_t printMode)
-//     : BaseInstruction(addressingMode, instructionSize, printMode) {
-// }
 
 void ROLInstruction::execute(Cpu *cpu, uint16_t address) {
   if (address >= 0x0000 && address <= 0xFFFF) {
