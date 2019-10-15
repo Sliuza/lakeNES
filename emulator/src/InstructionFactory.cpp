@@ -21,6 +21,64 @@ InstructionFactory::InstructionFactory() {
       {INDEXED_ZERO_PAGE_X, 2},
       {INDEXED_ZERO_PAGE_Y, 2}};
 
+  this->instances = {
+      {ADC, new ADCInstruction()},
+      {AND, new ANDInstruction()},
+      {ASL, new ASLInstruction()},
+      {BCC, new BCCInstruction()},
+      {BCS, new BCSInstruction()},
+      {BEQ, new BEQInstruction()},
+      {BIT, new BITInstruction()},
+      {BMI, new BMIInstruction()},
+      {BNE, new BNEInstruction()},
+      {BPL, new BPLInstruction()},
+      {BRK, new BRKInstruction()},
+      {BVC, new BVCInstruction()},
+      {BVS, new BVSInstruction()},
+      {CLC, new CLCInstruction()},
+      {CLD, new CLDInstruction()},
+      {CLI, new CLIInstruction()},
+      {CLV, new CLVInstruction()},
+      {CMP, new CMPInstruction()},
+      {CPX, new CPXInstruction()},
+      {CPY, new CPYInstruction()},
+      {EOR, new EORInstruction()},
+      {JMP, new JMPInstruction()},
+      {JSR, new JSRInstruction()},
+      {LDA, new LDAInstruction()},
+      {LDX, new LDXInstruction()},
+      {LDY, new LDYInstruction()},
+      {LSR, new LSRInstruction()},
+      {NOP, new NOPInstruction()},
+      {ORA, new ORAInstruction()},
+      {PHA, new PHAInstruction()},
+      {PHP, new PHPInstruction()},
+      {PLA, new PLAInstruction()},
+      {PLP, new PLPInstruction()},
+      {RTI, new RTIInstruction()},
+      {RTS, new RTSInstruction()},
+      {STA, new STAInstruction()},
+      {STX, new STXInstruction()},
+      {STY, new STYInstruction()},
+      {DEC, new DECInstruction()},
+      {DEX, new DEXInstruction()},
+      {DEY, new DEYInstruction()},
+      {INC, new INCInstruction()},
+      {INX, new INXInstruction()},
+      {INY, new INYInstruction()},
+      {SBC, new SBCInstruction()},
+      {TAX, new TAXInstruction()},
+      {TAY, new TAYInstruction()},
+      {TSX, new TSXInstruction()},
+      {TXA, new TXAInstruction()},
+      {TXS, new TXSInstruction()},
+      {TYA, new TYAInstruction()},
+      {SEC, new SECInstruction()},
+      {SEI, new SEIInstruction()},
+      {SED, new SEDInstruction()},
+      {ROL, new ROLInstruction()},
+      {ROR, new RORInstruction()}};
+
   this->instructions = {
 
       /* https://www.masswerk.at/6502/6502_instruction_set.html#ADC */
@@ -285,238 +343,16 @@ uint8_t InstructionFactory::getInstructionSize(uint8_t opCode) {
   return this->addressingModeSize.at(attributes.addressingMode);
 };
 
+Instruction *InstructionFactory::getInstanceById(uint8_t instructionID) {
+  return this->instances.at(instructionID);
+};
+
 Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
   OperationAttributes attributes = this->getOperationAttributes(opCode);
   uint8_t instructionSize = this->getInstructionSize(opCode);
-  uint8_t instructionID = attributes.id;
-  uint8_t addressingMode = attributes.addressingMode;
-  uint8_t printMode = attributes.printMode;
-
-  switch (instructionID) {
-    case ASL: {
-      return new ASLInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case BCC: {
-      return new BCCInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case BEQ: {
-      return new BEQInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case BIT: {
-      return new BITInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case BCS: {
-      return new BCSInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case BMI: {
-      return new BMIInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case BNE: {
-      return new BNEInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case BRK: {
-      return new BRKInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case BVC: {
-      return new BVCInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case ADC: {
-      return new ADCInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case BVS: {
-      return new BVSInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case CLC: {
-      return new CLCInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case CLD: {
-      return new CLDInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case CLI: {
-      return new CLIInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case CLV: {
-      return new CLVInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case CMP: {
-      return new CMPInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case CPX: {
-      return new CPXInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case CPY: {
-      return new CPYInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case EOR: {
-      return new EORInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case JSR: {
-      return new JSRInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case JMP: {
-      return new JMPInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case LSR: {
-      return new LSRInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case ORA: {
-      return new ORAInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case PHA: {
-      return new PHAInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case PHP: {
-      return new PHPInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case PLA: {
-      return new PLAInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case PLP: {
-      return new PLPInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case RTI: {
-      return new RTIInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case RTS: {
-      return new RTSInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case SEC: {
-      return new SECInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case AND: {
-      return new ANDInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case LDA: {
-      return new LDAInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case LDX: {
-      return new LDXInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case LDY: {
-      return new LDYInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case STA: {
-      return new STAInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case STX: {
-      return new STXInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case STY: {
-      return new STYInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case DEC: {
-      return new DECInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case DEX: {
-      return new DEXInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case DEY: {
-      return new DEYInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case INC: {
-      return new INCInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case INX: {
-      return new INXInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case INY: {
-      return new INYInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case SBC: {
-      return new SBCInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case SED: {
-      return new SEDInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case SEI: {
-      return new SEIInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case TAX: {
-      return new TAXInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case TAY: {
-      return new TAYInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case TSX: {
-      return new TSXInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case TXA: {
-      return new TXAInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case TXS: {
-      return new TXSInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case TYA: {
-      return new TYAInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-
-    case ROR: {
-      return new RORInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case ROL: {
-      return new ROLInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    case NOP: {
-      return new NOPInstruction(addressingMode, instructionSize, printMode);
-      break;
-    }
-    default: { break; }
-  }
-
-  return NULL;
+  Instruction *instruction = this->getInstanceById(attributes.id);
+  instruction->setAddressingMode(attributes.addressingMode);
+  instruction->setInstructionSize(instructionSize);
+  instruction->setPrintMode(attributes.printMode);
+  return instruction;
 };
-

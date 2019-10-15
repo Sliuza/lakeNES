@@ -16,6 +16,7 @@ class InstructionFactory {
   private:
   map<uint8_t, OperationAttributes> instructions;
   map<uint8_t, uint8_t> addressingModeSize;
+  map<uint8_t, Instruction *> instances;
 
   public:
   InstructionFactory();
@@ -24,6 +25,7 @@ class InstructionFactory {
   OperationAttributes getOperationAttributes(uint8_t opCode);
   uint8_t getInstructionSize(uint8_t opCode);
   Instruction *createInstruction(uint8_t opCode);
+  Instruction *getInstanceById(uint8_t instructionID);
 };
 
 #endif

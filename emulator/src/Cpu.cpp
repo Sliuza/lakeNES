@@ -64,7 +64,6 @@ void Cpu::run() {
         this->printOutput(instruction->getPrintMode(), address);
       }
     }
-    free(instruction);
   }
 }
 uint8_t Cpu::read_mem(uint16_t addr) {
