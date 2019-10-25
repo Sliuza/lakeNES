@@ -31,8 +31,10 @@ void Rom::load(string path) {
 std::uint8_t Rom::readPgr(uint16_t adress){
     if (num_prg_banks != 1)
         return this->getPgr()[adress - 0x8000];
-    else
+    else{
+        // cout << "getPrg()[address - 0x8000] = 0x" << hex << (unsigned)((adress - 0x8000) & 0x3fff) << endl;
         return this->getPgr()[(adress - 0x8000) & 0x3fff];
+    }
 }
 
 // getter
