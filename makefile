@@ -74,8 +74,8 @@ clean:
 
 build: main clear
 
-main: main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o
-	$(CC) $(CFLAGS) -o main main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o
+main: main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o
+	$(CC) $(CFLAGS) -o main main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o
 
 main.o: emulator/src/main.cpp
 	$(CC) $(CFLAGS) -c emulator/src/main.cpp
@@ -85,6 +85,12 @@ Nes.o: emulator/src/Nes.cpp emulator/include/Nes.hpp
 
 Cpu.o: emulator/src/Cpu.cpp emulator/include/Cpu.hpp
 	$(CC) $(CFLAGS) -c emulator/src/Cpu.cpp
+
+Ppu.o: emulator/src/Ppu.cpp emulator/include/Ppu.hpp
+	$(CC) $(CFLAGS) -c emulator/src/Ppu.cpp
+
+Background.o: emulator/src/Ppu.cpp emulator/include/Background.hpp
+	$(CC) $(CFLAGS) -c emulator/src/Background.cpp
 
 Rom.o: emulator/src/Rom.cpp emulator/include/Rom.hpp
 	$(CC) $(CFLAGS) -c emulator/src/Rom.cpp
