@@ -1,5 +1,6 @@
 #include "../include/Ppu.hpp"
 #include "Utils.cpp"
+#include <SDL2/SDL.h>
 #include <iomanip>
 
 void Ppu::startPpu() {
@@ -13,11 +14,15 @@ void Ppu::startPpu() {
 	this->setPpu_Scroll(0);
 	this->setPpu_Addr(0);
 	this->setPpu_Data(0);
-};
+} ;
+
 
 void Ppu::reset() {
 	
+}
 
+void Ppu::step(){
+	
 }
 
 bitset<8> Ppu::getPpu_Ctrl(){

@@ -10,6 +10,8 @@
 #include <stdint.h>
 #include <vector>
 #include <bitset>
+#include <SDL2/SDL.h>
+#include <cstdint>
 
 using namespace std;
 
@@ -36,7 +38,7 @@ public:
 
 	void startPpu();
 	void reset();
-
+	void step();
 
 	//Setters
 	void setPpu_Ctrl(bitset<8> value);
@@ -49,7 +51,6 @@ public:
 	void setPpu_Data(uint8_t value);
 	void setLatch(bool state); //indicates if it's possible to modify registers registers $2005/$200 - if NMI is setted
 
-
 	//Getters
 	bitset<8> getPpu_Ctrl();
 	bitset<8> getPpu_Mask();
@@ -60,6 +61,8 @@ public:
 	uint8_t getPpu_Addr();
 	uint8_t getPpu_Data();
 	bool getLatch();
+
+	
 };
 
 #endif
