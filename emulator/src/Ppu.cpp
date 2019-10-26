@@ -62,6 +62,15 @@ void Ppu::mask(bitset<8> ctrl) {
     show_sprites = ctrl[4] & 1;
 }
 
+uint8_t Ppu::get_status(){
+    uint8_t status = sprite_zero_hit << 6 | vblank << 7;
+                    
+    //m_dataAddress = 0;
+    vblank = false;
+    sprite_zero_hit = true;
+    return status;
+}
+
 void Ppu::write_mem(uint8_t val, uint16_t addr){
     switch(val){
         case 0x0000: //control  

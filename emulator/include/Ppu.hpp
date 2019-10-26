@@ -38,6 +38,8 @@ private:
 	bool sprites_left_most;
 	bool show_background;
 	bool show_sprites;
+    bool vblank;
+    bool sprite_zero_hit;
 	enum state
 	{
 		pre_render,
@@ -59,7 +61,7 @@ public:
 	void startPpu();
 	void reset();
 	void step();
-    void Ppu::mask(bitset<8> ctrl);
+    void mask(bitset<8> ctrl);
 	void control(bitset<8> ctrl);
     void write_mem(uint8_t val, uint16_t addr);
 
@@ -83,6 +85,7 @@ public:
 	uint8_t getPpu_Scroll();
 	uint8_t getPpu_Addr();
 	uint8_t getPpu_Data();
+    uint8_t get_status();
 	bool getLatch();
     
 
