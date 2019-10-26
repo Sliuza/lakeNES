@@ -18,31 +18,48 @@ void Ppu::startPpu() {
 
 
 void Ppu::reset() {
-	
+	pipeline_state = pre_render;
 }
 
-void Ppu::step(){
-	
+void Ppu::step() {
+  switch (pipeline_state) {
+    case pre_render:
+      break;
+    case render:
+      break;
+    case post_render:
+      break;
+    case vertical_blank:
+      break;
+  }
 }
 void Ppu::control(bitset<8> ctrl) {
-  generateInterrupt = ctrl[0] & 1;
-  master_slave = ctrl[1] & 1;
-  sprite_size = ctrl[2] & 1;
-  background_pattern = ctrl[3] & 1;
-  sprite_pattern = ctrl[4] & 1;
-  vram_increment = ctrl[5] & 1;
-  if(!ctrl[6] && !ctrl[7]){
+  if(!ctrl[0] && !ctrl[1]){
 	base_nametable_address = 0x2000;
   }
-  else if(!ctrl[6] && ctrl[7]){
+  else if(!ctrl[0] && ctrl[1]){
 	base_nametable_address = 0x2400;
   }
-  else if(ctrl[6] && !ctrl[7]){
+  else if(ctrl[0] && !ctrl[1]){
 	base_nametable_address = 0x2800;
   }
   else{
 	base_nametable_address = 0x2C00;
   }
+  vram_increment = ctrl[2] & 1;
+  sprite_pattern = ctrl[3] & 1;
+  background_pattern = ctrl[4] & 1;
+  sprite_size = ctrl[5] & 1;
+  master_slave = ctrl[6] & 1;
+  generateInterrupt = ctrl[7] & 1;
+  
+}
+void Ppu::mask(bitset<8> ctrl) {
+    grey_scale_mode = ctrl[0] & 1;
+    background_left_most = ctrl[1] & 1;
+    sprites_left_most = ctrl[2] & 1;
+    show_background = ctrl[3] & 1;
+    show_sprites = ctrl[4] & 1;
 }
 
 void Ppu::write_mem(uint8_t val, uint16_t addr){

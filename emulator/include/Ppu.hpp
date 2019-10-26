@@ -33,6 +33,19 @@ private:
 	bool background_pattern;
 	bool sprite_pattern;
 	bool vram_increment;
+	bool grey_scale_mode;
+	bool background_left_most;
+	bool sprites_left_most;
+	bool show_background;
+	bool show_sprites;
+	enum state
+	{
+		pre_render,
+		render,
+		post_render,
+		vertical_blank
+	} pipeline_state;
+
 	u_int16_t base_nametable_address;
 
 	Rom chr_Rom;
@@ -46,7 +59,8 @@ public:
 	void startPpu();
 	void reset();
 	void step();
-    
+    void Ppu::mask(bitset<8> ctrl);
+	void control(bitset<8> ctrl);
     void write_mem(uint8_t val, uint16_t addr);
 
 	//Setters
@@ -70,7 +84,7 @@ public:
 	uint8_t getPpu_Addr();
 	uint8_t getPpu_Data();
 	bool getLatch();
-	void control(bitset<8> ctrl);
+    
 
 	
 };
