@@ -27,6 +27,13 @@ private:
 	uint8_t Ppu_Addr;
 	uint8_t Ppu_Data;
 	bool latch;
+	bool generateInterrupt;
+	bool master_slave;
+	bool sprite_size;
+	bool background_pattern;
+	bool sprite_pattern;
+	bool vram_increment;
+	u_int16_t base_nametable_address;
 
 	Rom chr_Rom;
 	
@@ -63,6 +70,7 @@ public:
 	uint8_t getPpu_Addr();
 	uint8_t getPpu_Data();
 	bool getLatch();
+	void control(bitset<8> ctrl);
 
 	
 };

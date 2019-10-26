@@ -24,6 +24,26 @@ void Ppu::reset() {
 void Ppu::step(){
 	
 }
+void Ppu::control(bitset<8> ctrl) {
+  generateInterrupt = ctrl[0] & 1;
+  master_slave = ctrl[1] & 1;
+  sprite_size = ctrl[2] & 1;
+  background_pattern = ctrl[3] & 1;
+  sprite_pattern = ctrl[4] & 1;
+  vram_increment = ctrl[5] & 1;
+  if(!ctrl[6] && !ctrl[7]){
+	base_nametable_address = 0x2000;
+  }
+  else if(!ctrl[6] && ctrl[7]){
+	base_nametable_address = 0x2400;
+  }
+  else if(ctrl[6] && !ctrl[7]){
+	base_nametable_address = 0x2800;
+  }
+  else{
+	base_nametable_address = 0x2C00;
+  }
+}
 
 void Ppu::write_mem(uint8_t val, uint16_t addr){
     switch(val){
