@@ -25,6 +25,29 @@ void Ppu::step(){
 	
 }
 
+void Ppu::write_mem(uint8_t val, uint16_t addr){
+    switch(val){
+        case 0x0000: //control  
+            this->setPpu_Ctrl(val);
+            break;
+        case 0x0001: // Mask
+            this->setPpu_Mask(val);
+            break;
+        case 0x0002: // Status
+            break;
+        case 0x0003: // OAM Address
+            break;
+        case 0x0004: // OAM Data
+            break;
+        case 0x0005: // Scroll
+            break;
+        case 0x0006: //PPU address 
+            break;
+        case 0x0007: //PPU data
+            break;
+    }
+}
+
 bitset<8> Ppu::getPpu_Ctrl(){
 	return this->Ppu_Ctrl;
 }

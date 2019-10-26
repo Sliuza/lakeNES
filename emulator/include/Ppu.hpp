@@ -39,6 +39,8 @@ public:
 	void startPpu();
 	void reset();
 	void step();
+    
+    void write_mem(uint8_t val, uint16_t addr);
 
 	//Setters
 	void setPpu_Ctrl(bitset<8> value);

@@ -1,4 +1,5 @@
 #include "../include/Cpu.hpp"
+#include "../include/Ppu.hpp"
 #include "../include/Instruction.hpp"
 #include "../include/InstructionFactory.hpp"
 #include "Utils.cpp"
@@ -83,6 +84,10 @@ void Cpu::write_mem(uint8_t val, uint16_t addr) {
   switch (addr) {
     case 0x0000 ... 0x1FFF:
       this->ram[addr & 0x7FF] = val;
+      break;
+    case 0x2000 ... 0x3FFF:
+      Ppu ppu;
+      ppu.write_mem(val,addr & 0x0007);
       break;
   }
 }
