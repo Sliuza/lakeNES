@@ -2,8 +2,12 @@
 # Parameters to control Makefile operation
 
 CC=g++
+
+SDL_LIB = -L/usr/local/lib -lSDL2 -Wl,-rpath=/usr/local/lib
+SDL_INCLUDE = -I/usr/local/include
 # CCFLAGS=-std=gnu++11 -O3
-CFLAGS = -std=c++11 -ggdb
+CFLAGS = -std=c++11 -ggdb $(SDL_INCLUDE)
+LDFLAGS = $(SDL_LIB)
 
 # CCFLAGS = -std=c++11 -lncurses //TODO: Fix warnings when compiling with this option.
 
@@ -13,13 +17,24 @@ BIN=./emulator/bin
 LOG=./emulator/log
 EXT=./emulator/ext
 NES=./main
+OBJS=emulator/src/Sdl.cpp
+
+#COMPILER_FLAGS specifies the additional compilation options we're using
+# -w suppresses all warnings
+COMPILER_FLAGS= -w
+
+#LINKER_FLAGS specifies the libraries we're linking against
+LINKER_FLAGS= -lSDL2
+
+#OBJ_NAME specifies the name of our exectuable
+OBJ_NAME= a
 
 TESTS=$(addprefix ${BIN}/, $(notdir $(patsubst %.s,%,$(sort $(wildcard ${TST}/*.s)))))
 CROSS_AS=${EXT}/asm6/asm6
 
 # ****************************************************
 
-all: ${BIN} ${LOG} ${NES}
+all: ${BIN} ${LOG} ${NES} ${OBJS}
 
 ${NES}:
 	${CC} ${CCFLAGS} emulator/src/main.cpp -o ${NES}
@@ -32,6 +47,9 @@ ${BIN}/%: ${TST}/%.s
 
 ${LOG}:
 	@mkdir -p ${LOG}
+
+$(OBJS):
+	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
 
 test: ${BIN} ${LOG} ${NES} ${TESTS} clear
 	@{  echo "************************* Tests ******************************"; \
@@ -74,7 +92,8 @@ clean:
 
 build: main clear
 
-main: main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o
+main: main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o Sdl.o execute
+
 	$(CC) $(CFLAGS) -o main main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o
 
 main.o: emulator/src/main.cpp
@@ -101,5 +120,10 @@ Instruction.o: emulator/src/Instruction.cpp emulator/include/Instruction.hpp
 InstructionFactory.o: emulator/src/InstructionFactory.cpp emulator/include/InstructionFactory.hpp
 	$(CC) $(CFLAGS) -c emulator/src/InstructionFactory.cpp
 
+Sdl.o: emulator/src/Sdl.cpp
+	g++ emulator/src/Sdl.cpp -w -lSDL2 -o a
+
+execute:
+	./a
 clear: 
 	$(RM) *.o *~
