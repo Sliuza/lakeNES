@@ -15,68 +15,67 @@ void Ppu::startPpu() {
 
 
 void Ppu::reset() {
-	pipeline_state = pre_render;
+	this->pipeline_state = pre_render;
 }
 
 void Ppu::step() {
-  switch (pipeline_state) {
-    case pre_render:
+  switch (this->pipeline_state) {
+    case this->pre_render:
       break;
-    case render:
+    case this->render:
       break;
-    case post_render:
+    case this->post_render:
       break;
-    case vertical_blank:
+    case this->vertical_blank:
       break;
   }
 }
 void Ppu::control(bitset<8> ctrl) {
   if(!ctrl[0] && !ctrl[1]){
-	base_nametable_address = 0x2000;
+	this->base_nametable_address = 0x2000;
   }
   else if(!ctrl[0] && ctrl[1]){
-	base_nametable_address = 0x2400;
+	this->base_nametable_address = 0x2400;
   }
   else if(ctrl[0] && !ctrl[1]){
-	base_nametable_address = 0x2800;
+	this->base_nametable_address = 0x2800;
   }
   else{
-	base_nametable_address = 0x2C00;
+	this->base_nametable_address = 0x2C00;
   }
-  vram_increment = ctrl[2] & 1;
-  sprite_pattern = ctrl[3] & 1;
-  background_pattern = ctrl[4] & 1;
-  sprite_size = ctrl[5] & 1;
-  master_slave = ctrl[6] & 1;
-  generateInterrupt = ctrl[7] & 1;
+  this->vram_increment = ctrl[2] & 1;
+  this->sprite_pattern = ctrl[3] & 1;
+  this->background_pattern = ctrl[4] & 1;
+  this->sprite_size = ctrl[5] & 1;
+  this->master_slave = ctrl[6] & 1;
+  this->generateInterrupt = ctrl[7] & 1;
   
 }
 void Ppu::mask(bitset<8> ctrl) {
-    grey_scale_mode = ctrl[0] & 1;
-    background_left_most = ctrl[1] & 1;
-    sprites_left_most = ctrl[2] & 1;
-    show_background = ctrl[3] & 1;
-    show_sprites = ctrl[4] & 1;
+    this->grey_scale_mode = ctrl[0] & 1;
+    this->sprites_left_most = ctrl[2] & 1;
+    this->background_left_most = ctrl[1] & 1;
+    this->show_background = ctrl[3] & 1;
+    this->show_sprites = ctrl[4] & 1;
 }
 
 uint8_t Ppu::get_status(){
     uint8_t status = sprite_zero_hit << 6 | vblank << 7;
-    vblank = false;
-    sprite_zero_hit = true;
+    this->vblank = false;
+    this->sprite_zero_hit = true;
     return status;
 }
 
 void Ppu::write_mem(uint8_t val, uint16_t addr){
-    switch(val){
-        case 0x0000: //control  
+    switch(addr){
+        case 0x2000: //control  
             this->control(val);
             break;
-        case 0x0001: // Mask
+        case 0x2001: // Mask
             this->mask(val);
             break;
-        case 0x0002: // Status
-            break;
-        case 0x0003: // OAM Address
+        case 0x2003: // OAM Address
+            this->setOam_Addr(addr);
             break;
         case 0x0004: // OAM Data
             break;
@@ -119,7 +118,7 @@ void Ppu::setOam_Addr(uint8_t value){
 }
 
 void Ppu::setOam_Data(uint8_t value){
-	this->Oam_Data = value;
+	this->oam_address = value;
 } 
 
 void Ppu::setPpu_Scroll(uint8_t value){

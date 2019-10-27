@@ -37,6 +37,7 @@ private:
 	bool show_sprites;
     bool vblank;
     bool sprite_zero_hit;
+    uint16_t oam_address;
 	enum state
 	{
 		pre_render,
@@ -72,6 +73,7 @@ public:
 	void setPpu_Addr(uint8_t value);	
 	void setPpu_Data(uint8_t value);
 	void setLatch(bool state); //indicates if it's possible to modify registers registers $2005/$200 - if NMI is setted
+    void setOAM_Address(uint8_t addr);
 
 	//Getters
 	bitset<8> getPpu_Ctrl();
