@@ -2,8 +2,13 @@
 #include "../include/Ppu.hpp"
 #include "../include/Instruction.hpp"
 #include "../include/InstructionFactory.hpp"
+#include "../include/Ppu.hpp"
 #include "Utils.cpp"
 #include <iomanip>
+
+
+
+Ppu ppu;
 
 uint8_t make_P(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint8_t t6) {
   uint8_t b = t1 + t2 * 2 + t3 * 4 + t4 * 8 + t5 * 64 + t6 * 128;
@@ -11,6 +16,7 @@ uint8_t make_P(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint8
 }
 
 Cpu::Cpu() {
+
   this->pc_reg = 0xfffc;
   this->sp_reg = 0xfd;
   this->x_reg = 0;
@@ -18,6 +24,14 @@ Cpu::Cpu() {
   this->a_reg = 0;
   this->rom = Rom();
 };
+
+void Cpu::runPpu(){
+  ppu.startPpu();
+}
+
+void Cpu::shutPpu(){
+  ppu.endPpu();
+}
 
 void Cpu::startCpu() {
   // Initiate ram with 0xFF
@@ -41,6 +55,7 @@ uint8_t Cpu::pull() {
 }
 void Cpu::run() {
   this->startCpu();
+  this->runPpu();
   Instruction *instruction;
   InstructionFactory factory;
   uint16_t address = 0;
@@ -66,7 +81,9 @@ void Cpu::run() {
       }
     }
   }
+  this->shutPpu();
 }
+
 uint8_t Cpu::read_mem(uint16_t addr) {
   uint8_t res;
 

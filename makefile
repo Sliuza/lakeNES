@@ -3,12 +3,12 @@
 
 CC=g++
 
-SDL_LIB = -L/usr/local/lib -lSDL2 -Wl,-rpath=/usr/local/lib
+# SDL_LIB = -L/usr/local/lib -lSDL2 -Wl,-rpath=/usr/local/lib
 SDL_INCLUDE = -I/usr/local/include
-# CCFLAGS=-std=gnu++11 -O3
-CFLAGS = -std=c++11 -ggdb $(SDL_INCLUDE)
-LDFLAGS = $(SDL_LIB)
-
+# # CCFLAGS=-std=gnu++11 -O3
+CFLAGS = $(SDL_INCLUDE)
+# LDFLAGS = $(SDL_LIB)
+LIBS= -lSDL2
 # CCFLAGS = -std=c++11 -lncurses //TODO: Fix warnings when compiling with this option.
 
 TST=./emulator/tst
@@ -21,10 +21,8 @@ OBJS=emulator/src/Sdl.cpp
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
-COMPILER_FLAGS= -w
 
-#LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS= -lSDL2
+OTHER_FLAGS= `sdl-config --cflags --libs` -ggdb3 -w -lSDL2  -lX11 -pthread
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME= a
@@ -92,38 +90,35 @@ clean:
 
 build: main clear
 
-main: main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o Sdl.o execute
+main: main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o Screen.o
 
-	$(CC) $(CFLAGS) -o main main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o
+	$(CC) main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o Screen.o $(CFLAGS) $(OTHER_FLAGS) -o main 
 
 main.o: emulator/src/main.cpp
-	$(CC) $(CFLAGS) -c emulator/src/main.cpp
+	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/main.cpp
 
 Nes.o: emulator/src/Nes.cpp emulator/include/Nes.hpp
-	$(CC) $(CFLAGS) -c emulator/src/Nes.cpp
+	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/Nes.cpp
 
 Cpu.o: emulator/src/Cpu.cpp emulator/include/Cpu.hpp
-	$(CC) $(CFLAGS) -c emulator/src/Cpu.cpp
+	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/Cpu.cpp
 
-Ppu.o: emulator/src/Ppu.cpp emulator/include/Ppu.hpp
-	$(CC) $(CFLAGS) -c emulator/src/Ppu.cpp
+Ppu.o: emulator/src/Ppu.cpp emulator/include/Ppu.hpp Screen.o
+	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/Ppu.cpp
 
-Background.o: emulator/src/Ppu.cpp emulator/include/Background.hpp
-	$(CC) $(CFLAGS) -c emulator/src/Background.cpp
-
+Background.o: emulator/src/Background.cpp emulator/include/Background.hpp
+	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/Background.cpp
 Rom.o: emulator/src/Rom.cpp emulator/include/Rom.hpp
-	$(CC) $(CFLAGS) -c emulator/src/Rom.cpp
+	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/Rom.cpp
 
 Instruction.o: emulator/src/Instruction.cpp emulator/include/Instruction.hpp
-	$(CC) $(CFLAGS) -c emulator/src/Instruction.cpp
+	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/Instruction.cpp
 
 InstructionFactory.o: emulator/src/InstructionFactory.cpp emulator/include/InstructionFactory.hpp
-	$(CC) $(CFLAGS) -c emulator/src/InstructionFactory.cpp
+	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/InstructionFactory.cpp
 
-Sdl.o: emulator/src/Sdl.cpp
-	g++ emulator/src/Sdl.cpp -w -lSDL2 -o a
+Screen.o: emulator/src/Screen.cpp emulator/include/Screen.hpp
+	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/Screen.cpp
 
-execute:
-	./a
 clear: 
 	$(RM) *.o *~

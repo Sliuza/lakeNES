@@ -4,13 +4,13 @@
 #define Ppu_hpp
 
 #include "Rom.hpp"
+#include "Screen.hpp"
 #include <bitset>
 #include <fstream>
 #include <iostream>
 #include <stdint.h>
 #include <vector>
 #include <bitset>
-#include <SDL2/SDL.h>
 #include <cstdint>
 
 using namespace std;
@@ -18,6 +18,7 @@ using namespace std;
 class Ppu{
 private:
 	//PPU Registers
+
 	uint8_t Ppu_Scroll;
 	uint8_t Ppu_Addr;
 	uint8_t Ppu_Data;
@@ -49,6 +50,7 @@ private:
 
 	u_int16_t base_nametable_address;
 
+
 	Rom chr_Rom;
 	
 	uint8_t palleteRam[0x1F];
@@ -62,6 +64,7 @@ public:
 	void step();
     void mask(bitset<8> ctrl);
 	void control(bitset<8> ctrl);
+	void endPpu();
     void write_mem(uint8_t val, uint16_t addr);
     void setPpuAddress(uint8_t addr);
 

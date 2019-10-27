@@ -1,7 +1,8 @@
 #include "../include/Ppu.hpp"
 #include "Utils.cpp"
-#include <SDL2/SDL.h>
 #include <iomanip>
+
+Screen s;
 
 void Ppu::startPpu() {
 	// Initiate ram with 0xFF
@@ -10,24 +11,15 @@ void Ppu::startPpu() {
 	this->setPpu_Scroll(0);
 	this->setPpu_Addr(0);
 	this->setPpu_Data(0);
+	s.start();
 } ;
+
+void Ppu::endPpu(){
+	s.end();
+}
 
 
 void Ppu::reset() {
-	this->pipeline_state = pre_render;
-}
-
-void Ppu::step() {
-  switch (this->pipeline_state) {
-    case this->pre_render:
-      break;
-    case this->render:
-      break;
-    case this->post_render:
-      break;
-    case this->vertical_blank:
-      break;
-  }
 }
 void Ppu::control(bitset<8> ctrl) {
   if(!ctrl[0] && !ctrl[1]){

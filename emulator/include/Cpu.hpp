@@ -51,6 +51,8 @@ class Cpu {
   void printOutput(uint16_t printFuncion, uint16_t address);
   void print();
   void printls(uint16_t address);
+  void runPpu();
+  void shutPpu();
 
   //GETTERS
   uint16_t
