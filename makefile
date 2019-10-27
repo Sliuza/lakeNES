@@ -22,7 +22,7 @@ OBJS=emulator/src/Sdl.cpp
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
 
-OTHER_FLAGS= `sdl-config --cflags --libs` -ggdb3 -w -lSDL2  -lX11 -pthread
+OTHER_FLAGS= -ggdb3 -w -lSDL2  -lX11 -pthread
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME= a
