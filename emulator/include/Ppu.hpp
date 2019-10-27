@@ -18,8 +18,6 @@ using namespace std;
 class Ppu{
 private:
 	//PPU Registers
-	uint8_t Oam_Addr;
-	uint8_t Oam_Data;
 	uint8_t Ppu_Scroll;
 	uint8_t Ppu_Addr;
 	uint8_t Ppu_Data;
@@ -37,7 +35,10 @@ private:
 	bool show_sprites;
     bool vblank;
     bool sprite_zero_hit;
+    std::vector<int8_t> oam_data;
+    bool first_write;
     uint16_t oam_address;
+    uint16_t ppu_address;
 	enum state
 	{
 		pre_render,
@@ -62,13 +63,14 @@ public:
     void mask(bitset<8> ctrl);
 	void control(bitset<8> ctrl);
     void write_mem(uint8_t val, uint16_t addr);
+    void setPpuAddress(uint8_t addr);
 
 	//Setters
 	void setPpu_Ctrl(bitset<8> value);
 	void setPpu_Mask(bitset<8> value);
 	void setPpu_Status(bitset<8> value);
 	void setOam_Addr(uint8_t value);
-	void setOam_Data(uint8_t value);
+	void setOam_Data(uint8_t address, uint8_t value);
 	void setPpu_Scroll(uint8_t value);
 	void setPpu_Addr(uint8_t value);	
 	void setPpu_Data(uint8_t value);
@@ -80,7 +82,7 @@ public:
 	bitset<8> getPpu_Mask();
 	bitset<8> getPpu_Status();	
 	uint8_t getOam_Addr();
-	uint8_t getOam_Data();
+	uint8_t getOam_Data(uint8_t addr);
 	uint8_t getPpu_Scroll();
 	uint8_t getPpu_Addr();
 	uint8_t getPpu_Data();

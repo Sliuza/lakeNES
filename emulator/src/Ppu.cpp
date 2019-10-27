@@ -7,7 +7,6 @@ void Ppu::startPpu() {
 	// Initiate ram with 0xFF
 	init_array(this->palleteRam, (uint8_t)0x0000);
 	this->setOam_Addr(0);
-	this->setOam_Data(0);
 	this->setPpu_Scroll(0);
 	this->setPpu_Addr(0);
 	this->setPpu_Data(0);
@@ -62,8 +61,22 @@ void Ppu::mask(bitset<8> ctrl) {
 uint8_t Ppu::get_status(){
     uint8_t status = sprite_zero_hit << 6 | vblank << 7;
     this->vblank = false;
-    this->sprite_zero_hit = true;
+    this->first_write = true;
     return status;
+}
+
+void Ppu::setPpuAddress(uint8_t addr){
+    if (first_write){
+        this->ppu_address &= ~0xff00;
+        this->ppu_address |= (addr & 0x3f) << 8;
+        this->first_write = false;
+    }
+    else{
+        this->ppu_address &= ~0xff;
+        this->ppu_address |= addr;
+        this->oam_address = ppu_address;
+        this->first_write = true;
+    }
 }
 
 void Ppu::write_mem(uint8_t val, uint16_t addr){
@@ -77,11 +90,13 @@ void Ppu::write_mem(uint8_t val, uint16_t addr){
         case 0x2003: // OAM Address
             this->setOam_Addr(addr);
             break;
-        case 0x0004: // OAM Data
+        case 0x2004: // OAM Data
+            this->setOam_Addr(val);
             break;
         case 0x0005: // Scroll
             break;
         case 0x0006: //PPU address 
+            this->setPpu_Addr(val);
             break;
         case 0x0007: //PPU data
             break;
@@ -89,12 +104,8 @@ void Ppu::write_mem(uint8_t val, uint16_t addr){
 }
 
 
-uint8_t Ppu::getOam_Addr(){
-	return this->Oam_Addr;
-}
-
-uint8_t Ppu::getOam_Data(){
-	return this->Oam_Data;
+uint8_t Ppu::getOam_Data(uint8_t addr){
+	return this->oam_data[addr];
 }
 
 uint8_t Ppu::getPpu_Scroll(){
@@ -114,11 +125,11 @@ bool Ppu::getLatch(){
 }
 
 void Ppu::setOam_Addr(uint8_t value){
-	this->Oam_Addr = value;
+	this->oam_address = value;
 }
 
-void Ppu::setOam_Data(uint8_t value){
-	this->oam_address = value;
+void Ppu::setOam_Data(uint8_t addr, uint8_t value){
+	this->oam_data[addr] = value;
 } 
 
 void Ppu::setPpu_Scroll(uint8_t value){
