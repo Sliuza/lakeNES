@@ -18,9 +18,6 @@ using namespace std;
 class Ppu{
 private:
 	//PPU Registers
-	bitset<8> Ppu_Ctrl;
-	bitset<8> Ppu_Mask;
-	bitset<8> Ppu_Status;
 	uint8_t Oam_Addr;
 	uint8_t Oam_Data;
 	uint8_t Ppu_Scroll;

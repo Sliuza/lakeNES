@@ -6,9 +6,6 @@
 void Ppu::startPpu() {
 	// Initiate ram with 0xFF
 	init_array(this->palleteRam, (uint8_t)0x0000);
-	this->setPpu_Ctrl(bitset<8>(0));
-	this->setPpu_Mask(bitset<8>(0));
-	this->setPpu_Status(bitset<8>(0));
 	this->setOam_Addr(0);
 	this->setOam_Data(0);
 	this->setPpu_Scroll(0);
@@ -64,8 +61,6 @@ void Ppu::mask(bitset<8> ctrl) {
 
 uint8_t Ppu::get_status(){
     uint8_t status = sprite_zero_hit << 6 | vblank << 7;
-                    
-    //m_dataAddress = 0;
     vblank = false;
     sprite_zero_hit = true;
     return status;
@@ -74,10 +69,10 @@ uint8_t Ppu::get_status(){
 void Ppu::write_mem(uint8_t val, uint16_t addr){
     switch(val){
         case 0x0000: //control  
-            this->setPpu_Ctrl(val);
+            this->control(val);
             break;
         case 0x0001: // Mask
-            this->setPpu_Mask(val);
+            this->mask(val);
             break;
         case 0x0002: // Status
             break;
@@ -94,17 +89,6 @@ void Ppu::write_mem(uint8_t val, uint16_t addr){
     }
 }
 
-bitset<8> Ppu::getPpu_Ctrl(){
-	return this->Ppu_Ctrl;
-}
-
-bitset<8> Ppu::getPpu_Mask(){
-	return this->Ppu_Mask;
-}
-
-bitset<8> Ppu::getPpu_Status(){
-	return this->Ppu_Status;
-}
 
 uint8_t Ppu::getOam_Addr(){
 	return this->Oam_Addr;
@@ -128,18 +112,6 @@ uint8_t Ppu::getPpu_Data(){
 
 bool Ppu::getLatch(){
 	return this->latch;
-}
-
-void Ppu::setPpu_Ctrl(bitset<8> value){
-	this->Ppu_Ctrl = value;
-}
-
-void Ppu::setPpu_Mask(bitset<8> value){
-	this->Ppu_Mask = value;
-} 
-
-void Ppu::setPpu_Status(bitset<8> value){
-	this->Ppu_Status = value;
 }
 
 void Ppu::setOam_Addr(uint8_t value){
