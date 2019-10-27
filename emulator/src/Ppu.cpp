@@ -11,11 +11,15 @@ void Ppu::startPpu() {
 	this->setPpu_Scroll(0);
 	this->setPpu_Addr(0);
 	this->setPpu_Data(0);
-	s.start();
+	s.startDisplay();
 } ;
 
+void Ppu::renderize(){
+  s.sendToDisplay();
+}
+
 void Ppu::endPpu(){
-	s.end();
+	s.endDisplay();
 }
 
 

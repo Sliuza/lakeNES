@@ -61,6 +61,7 @@ public:
 
 	void startPpu();
 	void reset();
+	void renderize();
 	void step();
     void mask(bitset<8> ctrl);
 	void control(bitset<8> ctrl);
