@@ -8,7 +8,7 @@ SDL_INCLUDE = -I/usr/local/include
 # # CCFLAGS=-std=gnu++11 -O3
 CFLAGS = $(SDL_INCLUDE)
 # LDFLAGS = $(SDL_LIB)
-LIBS= -lSDL2
+LIBS= -lSDL2 -lSDL2_image	
 # CCFLAGS = -std=c++11 -lncurses //TODO: Fix warnings when compiling with this option.
 
 TST=./emulator/tst
