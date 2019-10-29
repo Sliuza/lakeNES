@@ -10,8 +10,10 @@
 #include <iostream>
 #include <stdint.h>
 #include <vector>
+#include <SDL2/SDL_image.h>
 #include <bitset>
 #include <cstdint>
+
 
 using namespace std;
 

@@ -9,13 +9,17 @@ void Ppu::startPpu() {
 	init_array(this->palleteRam, (uint8_t)0x0000);
 	this->setOam_Addr(0);
 	this->setPpu_Scroll(0);
-	this->setPpu_Addr(0);
+	this->setPpu_Addr(0);  
 	this->setPpu_Data(0);
 	s.startDisplay();
 } ;
 
 void Ppu::renderize(){
-  s.sendToDisplay();
+  // muda a cor da surface da tela
+  // s.sendToDisplay();
+
+  // brinca com os pixels da Screen, faz retas, pontos e retangulos
+  s.drawPixel();
 }
 
 void Ppu::endPpu(){
