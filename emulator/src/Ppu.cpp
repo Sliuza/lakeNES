@@ -11,6 +11,7 @@ void Ppu::startPpu() {
 	this->setPpu_Scroll(0);
 	this->setPpu_Addr(0);  
 	this->setPpu_Data(0);
+  this->show_background = 0;
 	s.startDisplay();
 } ;
 
@@ -20,6 +21,9 @@ void Ppu::renderize(){
 
   // brinca com os pixels da Screen, faz retas, pontos e retangulos
   s.drawPixel();
+
+  //chamada do sendToDispley com parametros
+  //s.sendToDisplay(this->tblPattern, this-> tblName);
 }
 
 void Ppu::endPpu(){
@@ -99,10 +103,80 @@ void Ppu::write_mem(uint8_t val, uint16_t addr){
             this->setPpu_Addr(val);
             break;
         case 0x0007: //PPU data
+            //write data passed on register $2007 into the right address
+            this->ppuWrite(val, this->ppu_address);
+            //increments ppu_address to write the Pattern and Name Tables
+            this->setPpuAddress(this->ppu_address + 1);
             break;
     }
 }
 
+//read data on the PatternTable or NameTable
+uint8_t Ppu::ppuRead(uint16_t addr){
+  uint8_t data = 0x00;
+  addr &= 0x3FFF;
+
+  if (addr >= 0x0000 && addr <= 0x1FFF){
+    // If the cartridge cant map the address, have
+    // a physical location ready here
+    data = this->tblPattern[(addr & 0x1000) >> 12][addr & 0x0FFF];
+  }
+  else if (addr >= 0x2000 && addr <= 0x3EFF){
+    addr &= 0x0FFF;
+      // Horizontal
+    if (addr >= 0x0000 && addr <= 0x03FF)
+      data = this->tblName[0][addr & 0x03FF];
+    if (addr >= 0x0400 && addr <= 0x07FF)
+      data = this->tblName[0][addr & 0x03FF];
+    if (addr >= 0x0800 && addr <= 0x0BFF)
+      data = this->tblName[1][addr & 0x03FF];
+    if (addr >= 0x0C00 && addr <= 0x0FFF)
+      data = this->tblName[1][addr & 0x03FF];
+  
+  }
+  // else if (addr >= 0x3F00 && addr <= 0x3FFF){
+  //   addr &= 0x001F;
+  //   if (addr == 0x0010) addr = 0x0000;
+  //   if (addr == 0x0014) addr = 0x0004;
+  //   if (addr == 0x0018) addr = 0x0008;
+  //   if (addr == 0x001C) addr = 0x000C;
+  //   data = tblPalette[addr] & (mask.grayscale ? 0x30 : 0x3F);
+  // }
+
+  return data;
+}
+
+//writes data on PatternTable or NameTable
+void Ppu::ppuWrite(uint8_t data, uint16_t addr){
+  addr &= 0x3FFF;
+
+  if (addr >= 0x0000 && addr <= 0x1FFF){
+    this->tblPattern[(addr & 0x1000) >> 12][addr & 0x0FFF] = data;
+  }
+  else if (addr >= 0x2000 && addr <= 0x3EFF){
+    addr &= 0x0FFF;
+    
+    // Horizontal
+    if (addr >= 0x0000 && addr <= 0x03FF)
+      this->tblName[0][addr & 0x03FF] = data;
+    if (addr >= 0x0400 && addr <= 0x07FF)
+      this->tblName[0][addr & 0x03FF] = data;
+    if (addr >= 0x0800 && addr <= 0x0BFF)
+      this->tblName[1][addr & 0x03FF] = data;
+    if (addr >= 0x0C00 && addr <= 0x0FFF)
+      this->tblName[1][addr & 0x03FF] = data;
+    
+  }
+  // else if (addr >= 0x3F00 && addr <= 0x3FFF)
+  // {
+  //   addr &= 0x001F;
+  //   if (addr == 0x0010) addr = 0x0000;
+  //   if (addr == 0x0014) addr = 0x0004;
+  //   if (addr == 0x0018) addr = 0x0008;
+  //   if (addr == 0x001C) addr = 0x000C;
+  //   tblPalette[addr] = data;
+  // }
+}
 
 uint8_t Ppu::getOam_Data(uint8_t addr){
 	return this->oam_data[addr];
@@ -122,6 +196,13 @@ uint8_t Ppu::getPpu_Data(){
 
 bool Ppu::getLatch(){
 	return this->latch;
+}
+
+//retorna o bit de mostrar o background.
+//Este bit que ira dizer se devemos ou nao exibir algo na tela
+//(do nosso jogo pelo menos)
+bool Ppu::getShowBackground(){
+  return this->show_background;
 }
 
 void Ppu::setOam_Addr(uint8_t value){

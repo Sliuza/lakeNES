@@ -10,7 +10,7 @@
 #include <iostream>
 #include <stdint.h>
 #include <vector>
-#include <SDL2/SDL_image.h>
+
 #include <bitset>
 #include <cstdint>
 
@@ -39,6 +39,10 @@ private:
     bool vblank;
     bool sprite_zero_hit;
     std::vector<int8_t> oam_data;
+
+    //aloca memoria para a PatternTabel e NameTable
+    uint8_t tblName[2][1024];
+	uint8_t tblPattern[2][4096];
     bool first_write;
     uint16_t oam_address;
     uint16_t ppu_address;
@@ -71,6 +75,10 @@ public:
     void write_mem(uint8_t val, uint16_t addr);
     void setPpuAddress(uint8_t addr);
 
+    //read and write tblPattern e tblName
+    uint8_t ppuRead(uint16_t addr);
+    void ppuWrite(uint8_t data, uint16_t addr);
+
 	//Setters
 	void setPpu_Ctrl(bitset<8> value);
 	void setPpu_Mask(bitset<8> value);
@@ -93,10 +101,8 @@ public:
 	uint8_t getPpu_Addr();
 	uint8_t getPpu_Data();
     uint8_t get_status();
+    bool getShowBackground();
 	bool getLatch();
-    
-
-	
 };
 
 #endif

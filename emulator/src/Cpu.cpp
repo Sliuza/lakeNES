@@ -79,7 +79,12 @@ void Cpu::run() {
         this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
         this->printOutput(instruction->getPrintMode(), address);
       }
-      ppu.renderize();
+      
+      //deveriamos ter uma condicao para a chamada da escrita na tela.
+      //if(ppu.getShowBackground()){
+        ppu.renderize();
+      //}
+      
     }
   }
   this->shutPpu();

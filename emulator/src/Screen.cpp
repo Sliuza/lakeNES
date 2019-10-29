@@ -3,6 +3,15 @@
 #include "Utils.cpp"
 #include <iomanip>
 #include <stdio.h>
+#include <bitset>
+#include <fstream>
+#include <iostream>
+#include <stdint.h>
+#include <vector>
+#include <bitset>
+#include <cstdint>
+
+
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -82,7 +91,37 @@ void Screen::sendToDisplay(){
 	SDL_Delay( 600 );
 }
 
+//TODO como eu acho que deveria ser um racunho do SendDisplay
+
+// void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]){
+// 	//translate
+// 	uint8_t background = tblName[0][0];
+
+// 	uint8_t sprite1[8];
+// 	uint8_t sprite2[8];
+// 	int i = 0, j = 0;
+// 	for(i = 0; i < 8; i++){
+// 		sprite1[i] = tblPattern[0][background + i];
+// 		sprite2[i] += tblPattern[0][background + 8];
+// 	}
+// 	int* pixels = (int*) screenSurface->pixels;
+// 	printf("%i *****************\n", background);
+	
+// 	SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
+// 	for(i = 0; i < 8; i++){
+// 		for(j=1; j <= 8; j++){
+// 			pixels[i*256 + j] = (int) 32*((sprite1[i] & 0x01) + (sprite2[i] & 0x01));
+// 			sprite1[i] >>= 1;
+// 			sprite2[i] >>= 1; 
+// 		}
+// 	}
+
+// 	SDL_UpdateWindowSurface(window);
+
+// }
+
 void Screen::startDisplay(){
+
 
 		if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
