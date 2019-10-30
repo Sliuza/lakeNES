@@ -2,6 +2,9 @@
 #include "Utils.cpp"
 #include <iomanip>
 
+Ppu::Ppu() {
+  this->startPpu();
+};
 
 bool Ppu::startPpu() {
 	// Initiate ram with 0xFF
@@ -13,7 +16,7 @@ bool Ppu::startPpu() {
 	 return screen.openWindow();
 } ;
 
-void Ppu::renderize(){
+void Ppu::renderize() {
   // muda a cor da surface da tela
   // s.sendToDisplay();
 
@@ -24,26 +27,22 @@ void Ppu::renderize(){
     screen.sendToDisplay(this->tblPattern, this->tblName);
 }
 
-void Ppu::endPpu(){
-	screen.endDisplay();
+void Ppu::endPpu() {
+  screen.endDisplay();
 }
-
 
 void Ppu::reset() {
     this->even_frame = true;
 }
 void Ppu::control(bitset<8> ctrl) {
-  if(!ctrl[0] && !ctrl[1]){
-	this->base_nametable_address = 0x2000;
-  }
-  else if(!ctrl[0] && ctrl[1]){
-	this->base_nametable_address = 0x2400;
-  }
-  else if(ctrl[0] && !ctrl[1]){
-	this->base_nametable_address = 0x2800;
-  }
-  else{
-	this->base_nametable_address = 0x2C00;
+  if (!ctrl[0] && !ctrl[1]) {
+    this->base_nametable_address = 0x2000;
+  } else if (!ctrl[0] && ctrl[1]) {
+    this->base_nametable_address = 0x2400;
+  } else if (ctrl[0] && !ctrl[1]) {
+    this->base_nametable_address = 0x2800;
+  } else {
+    this->base_nametable_address = 0x2C00;
   }
   this->vram_increment = ctrl[2] & 1;
   this->sprite_pattern = ctrl[3] & 1;
@@ -51,22 +50,20 @@ void Ppu::control(bitset<8> ctrl) {
   this->sprite_size = ctrl[5] & 1;
   this->master_slave = ctrl[6] & 1;
   this->generateInterrupt = ctrl[7] & 1;
-  
 }
 void Ppu::mask(bitset<8> ctrl) {
-    this->grey_scale_mode = ctrl[0] & 1;
-    this->sprites_left_most = ctrl[2] & 1;
-    this->background_left_most = ctrl[1] & 1;
-    this->show_background = ctrl[3] & 1;
-    this->show_sprites = ctrl[4] & 1;
+  this->grey_scale_mode = ctrl[0] & 1;
+  this->sprites_left_most = ctrl[2] & 1;
+  this->background_left_most = ctrl[1] & 1;
+  this->show_background = ctrl[3] & 1;
+  this->show_sprites = ctrl[4] & 1;
 }
 
-uint8_t Ppu::get_status(){
-    uint8_t status = sprite_zero_hit << 6 | vblank << 7;
-    this->vblank = false;
-    this->first_write = true;
-    // return status;
-    return true;
+uint8_t Ppu::get_status() {
+  uint8_t status = sprite_zero_hit << 6 | vblank << 7;
+  this->vblank = false;
+  this->first_write = true;
+  return status;
 }
 
 void Ppu::setPpuAddress(uint8_t addr){
@@ -136,18 +133,17 @@ u_int8_t Ppu::read_mem(uint16_t addr){
 }
 
 //read data on the PatternTable or NameTable
-uint8_t Ppu::ppuRead(uint16_t addr){
+uint8_t Ppu::ppuRead(uint16_t addr) {
   uint8_t data = 0x00;
   addr &= 0x3FFF;
 
-  if (addr >= 0x0000 && addr <= 0x1FFF){
+  if (addr >= 0x0000 && addr <= 0x1FFF) {
     // If the cartridge cant map the address, have
     // a physical location ready here
     data = this->tblPattern[(addr & 0x1000) >> 12][addr & 0x0FFF];
-  }
-  else if (addr >= 0x2000 && addr <= 0x3EFF){
+  } else if (addr >= 0x2000 && addr <= 0x3EFF) {
     addr &= 0x0FFF;
-      // Horizontal
+    // Horizontal
     if (addr >= 0x0000 && addr <= 0x03FF)
       data = this->tblName[0][addr & 0x03FF];
     if (addr >= 0x0400 && addr <= 0x07FF)
@@ -156,7 +152,6 @@ uint8_t Ppu::ppuRead(uint16_t addr){
       data = this->tblName[1][addr & 0x03FF];
     if (addr >= 0x0C00 && addr <= 0x0FFF)
       data = this->tblName[1][addr & 0x03FF];
-  
   }
   // else if (addr >= 0x3F00 && addr <= 0x3FFF){
   //   addr &= 0x001F;
@@ -171,16 +166,15 @@ uint8_t Ppu::ppuRead(uint16_t addr){
 }
 
 //writes data on PatternTable or NameTable
-void Ppu::ppuWrite(uint8_t data, uint16_t addr){
+void Ppu::ppuWrite(uint8_t data, uint16_t addr) {
   addr &= 0x3FFF;
 
   if (addr >= 0x0000 && addr <= 0x1FFF){
-    printf("DATA:   %d ---------- \n", data);
-    //this->tblPattern[(addr & 0x1000) >> 12][addr & 0x0FFF] = data;
+    this->tblPattern[(addr & 0x1000) >> 12][addr & 0x0FFF] = data;
   }
   else if (addr >= 0x2000 && addr <= 0x3EFF){
     addr &= 0x0FFF;
-    
+
     // Horizontal
     if (addr >= 0x0000 && addr <= 0x03FF)
       this->tblName[0][addr & 0x03FF] = data;
@@ -190,7 +184,6 @@ void Ppu::ppuWrite(uint8_t data, uint16_t addr){
       this->tblName[1][addr & 0x03FF] = data;
     if (addr >= 0x0C00 && addr <= 0x0FFF)
       this->tblName[1][addr & 0x03FF] = data;
-    
   }
   // else if (addr >= 0x3F00 && addr <= 0x3FFF)
   // {
@@ -213,15 +206,14 @@ uint8_t Ppu::getPpu_Data(){
     this->ppu_address++;
 }
 
-bool Ppu::getLatch(){
-	return this->latch;
+bool Ppu::getLatch() {
+  return this->latch;
 }
 
 //retorna o bit de mostrar o background.
 //Este bit que ira dizer se devemos ou nao exibir algo na tela
 //(do nosso jogo pelo menos)
-bool Ppu::getShowBackground(){
-  printf("SHOWBACKGROUND ----------  %d \n", this->show_background);
+bool Ppu::getShowBackground() {
   return this->show_background;
 }
 
@@ -233,9 +225,9 @@ void Ppu::setOam_Addr(uint8_t value){
 	this->oam_address = value;
 }
 
-void Ppu::setOam_Data(uint8_t addr, uint8_t value){
-	this->oam_data[addr] = value;
-} 
+void Ppu::setOam_Data(uint8_t addr, uint8_t value) {
+  this->oam_data[addr] = value;
+}
 
 
 
@@ -245,8 +237,8 @@ void Ppu::setPpu_Data(uint8_t value){
     this->ppu_address++;
 }
 
-void Ppu::setLatch(bool state){
-	this->latch = state;
+void Ppu::setLatch(bool state) {
+  this->latch = state;
 }
 
 void Ppu::setOAMDMA(uint8_t value){

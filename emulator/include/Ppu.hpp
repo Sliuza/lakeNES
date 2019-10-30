@@ -14,12 +14,11 @@
 #include <bitset>
 #include <cstdint>
 
-
 using namespace std;
 
-class Ppu{
-private:
-	//PPU Registers
+class Ppu {
+  private:
+  //PPU Registers
 
 	uint8_t Ppu_Data;
 	bool latch;
@@ -56,16 +55,33 @@ private:
 		vertical_blank
 	} pipeline_state;
 
-	u_int16_t base_nametable_address;
+  bool show_sprites;
+  bool vblank;
+  bool sprite_zero_hit;
+  std::vector<int8_t> oam_data;
+  Screen screen;
+  //aloca memoria para a PatternTabel e NameTable
+  uint8_t tblName[2][1024];
+  uint8_t tblPattern[2][4096];
+  bool first_write;
+  uint16_t oam_address;
+  uint16_t ppu_address;
+  enum state {
+    pre_render,
+    render,
+    post_render,
+    vertical_blank
+  } pipeline_state;
 
+  u_int16_t base_nametable_address;
 
 	vector<uint8_t> chr_Rom;
 	
 	uint8_t palleteRam[0x1F];
 
-	int ppuClockCycles;
+  uint8_t palleteRam[0x1F];
 
-public:
+  int ppuClockCycles;
 
 	bool startPpu();
 	void reset();

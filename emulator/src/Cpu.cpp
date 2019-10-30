@@ -6,8 +6,6 @@
 #include "Utils.cpp"
 #include <iomanip>
 
-
-
 Ppu ppu;
 bool windowIsOpen;
 
@@ -32,7 +30,7 @@ void Cpu::runPpu(){
   windowIsOpen = ppu.startPpu();
 }
 
-void Cpu::shutPpu(){
+void Cpu::shutPpu() {
   ppu.endPpu();
 }
 
@@ -49,6 +47,7 @@ void Cpu::reset() {
   this->pc_reg = this->read_mem(0xfffc) | this->read_mem(0xfffc + 1) << 8;
   this->sp_reg = 0xfd;
   ppu.setFirstWrite(true);
+  this->foundBrk = false;
 }
 void Cpu::push(uint8_t val) {
   this->ram[0x100 + this->sp_reg--] = val;
@@ -57,21 +56,20 @@ void Cpu::push(uint8_t val) {
 uint8_t Cpu::pull() {
   return this->ram[0x100 + ++sp_reg];
 }
-void Cpu::run() {
+void Cpu::run_frame() {
   this->startCpu();
-  this->runPpu();
+  // this->runPpu();
   Instruction *instruction;
   InstructionFactory factory;
   uint16_t address = 0;
-  bool br = true;
-  while (br && !ppu.getShowBackground()) {
+  while (!this->getFoundBrk()) {
 
     uint8_t opcode = read_mem(this->pc_reg);
     ppu.step();
     ppu.step();
     ppu.step();
     if (opcode == 0x00) {
-      br = false;
+      this->setFoundBrk(true);
     } else {
       instruction = factory.createInstruction(opcode);
       address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
@@ -85,7 +83,7 @@ void Cpu::run() {
         this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
         //this->printOutput(instruction->getPrintMode(), address);
       }
-      
+
       //deveriamos ter uma condicao para a chamada da escrita na tela.
       
       
@@ -363,4 +361,12 @@ void Cpu::setF_negative(uint8_t negative) {
 }
 void Cpu::set_flags(uint8_t f_lags) {
   this->flags = f_lags;
+}
+
+bool Cpu::getFoundBrk() {
+  return this->foundBrk;
+}
+
+void Cpu::setFoundBrk(bool _foundBrk) {
+  this->foundBrk = _foundBrk;
 }

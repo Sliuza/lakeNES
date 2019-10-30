@@ -33,6 +33,7 @@ class Cpu {
   uint8_t f_negative = 0;  // Bit 7
   Rom rom;
   uint8_t ram[0xFFFF];
+  bool foundBrk;
 
   public:
   Cpu();
@@ -43,7 +44,7 @@ class Cpu {
   void write_mem(uint8_t val, uint16_t addr);
   void push(uint8_t val);
   uint8_t pull();
-  void run();
+  void run_frame();
   void reset();
   uint16_t getAddressBasedOnAddressingMode(uint8_t addressingMode);
   uint16_t get16BitsAddress(uint16_t address);
@@ -82,8 +83,11 @@ class Cpu {
   void setF_decimal(uint8_t decimal);     // decimal flag
   void setF_overflow(uint8_t overflow);   // overflow flag
   void setF_negative(uint8_t negative);   // negative flag
-  void set_flags(uint8_t f_lags);          // unused flags
+  void set_flags(uint8_t f_lags);         // unused flags
   void setP_reg(uint8_t _p_reg);
+
+  bool getFoundBrk();
+  void setFoundBrk(bool _foundBrk);
 };
 
 uint8_t make_P(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint8_t t6);
