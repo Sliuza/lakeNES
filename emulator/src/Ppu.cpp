@@ -2,7 +2,6 @@
 #include "Utils.cpp"
 #include <iomanip>
 
-Screen s;
 
 void Ppu::startPpu() {
 	// Initiate ram with 0xFF
@@ -11,8 +10,8 @@ void Ppu::startPpu() {
 	this->setPpu_Scroll(0);
 	this->setPpu_Addr(0);  
 	this->setPpu_Data(0);
-  this->show_background = 0;
-	s.startDisplay();
+    this->show_background = 0;
+	// screen.startDisplay();
 } ;
 
 void Ppu::renderize(){
@@ -20,14 +19,14 @@ void Ppu::renderize(){
   // s.sendToDisplay();
 
   // brinca com os pixels da Screen, faz retas, pontos e retangulos
-  s.drawPixel();
+    screen.drawPixel();
 
   //chamada do sendToDispley com parametros
-  //s.sendToDisplay(this->tblPattern, this-> tblName);
+    screen.sendToDisplay(this->tblPattern, this-> tblName);
 }
 
 void Ppu::endPpu(){
-	s.endDisplay();
+	screen.endDisplay();
 }
 
 

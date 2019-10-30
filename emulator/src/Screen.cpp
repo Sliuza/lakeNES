@@ -65,60 +65,61 @@ void Screen::drawPixel(){
     SDL_RenderPresent(renderer);
 
     //atrasa o tick da do frame (os fps) - medida em ms
-    SDL_Delay( 600 );
+    // SDL_Delay( 600 );
 }
 
 
-void Screen::sendToDisplay(){
-	int value = (rand() % 10) + 1;
+// void Screen::sendToDisplay(){
+// 	int value = (rand() % 10) + 1;
 
-	// screenSurface captura a surface atual de window
-	screenSurface = SDL_GetWindowSurface( window );
+// 	// screenSurface captura a surface atual de window
+// 	screenSurface = SDL_GetWindowSurface( window );
 
-	// de acordo com o valor gerado gera um fundo de uma cor diferente - se value < 5 = laranja, caso contrario, preto
-	if(value < 5)
-		SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xff, 0xa5, 0 ) );
-	else 
-		SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0, 0, 0 ) );
+// 	// de acordo com o valor gerado gera um fundo de uma cor diferente - se value < 5 = laranja, caso contrario, preto
+// 	if(value < 5)
+// 		SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xff, 0xa5, 0 ) );
+// 	else 
+// 		SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0, 0, 0 ) );
 
 	
-	// screenSurface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, amask);
+// 	// screenSurface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, amask);
 	
-	//Update the surface - efetivamente reproduz a surface de window atualiuzada
-	SDL_UpdateWindowSurface( window );
+// 	//Update the surface - efetivamente reproduz a surface de window atualiuzada
+// 	SDL_UpdateWindowSurface( window );
 
-	//Wait 600 ms
-	SDL_Delay( 600 );
-}
+// 	//Wait 600 ms
+// 	SDL_Delay( 600 );
+// }
 
 //TODO como eu acho que deveria ser um racunho do SendDisplay
 
-// void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]){
-// 	//translate
-// 	uint8_t background = tblName[0][0];
+void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]){
+	//translate
+	uint8_t background = tblName[0][0];
 
-// 	uint8_t sprite1[8];
-// 	uint8_t sprite2[8];
-// 	int i = 0, j = 0;
-// 	for(i = 0; i < 8; i++){
-// 		sprite1[i] = tblPattern[0][background + i];
-// 		sprite2[i] += tblPattern[0][background + 8];
-// 	}
-// 	int* pixels = (int*) screenSurface->pixels;
-// 	printf("%i *****************\n", background);
+    //sprite1  --> linha + coluna
+	uint8_t sprite1[8];
+	uint8_t sprite2[8];
+	int i = 0, j = 0;
+	for(i = 0; i < 8; i++){
+		sprite1[i] = tblPattern[0][(background *2) + ((background/16)*224) + (i*32)];
+		sprite2[i] = tblPattern[0][(background *2) + ((background/16)*224) + (i*32) + 1];
+	}
+	int* pixels = (int*) screenSurface->pixels;
+	printf("%i *****************\n", background);
 	
-// 	SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
-// 	for(i = 0; i < 8; i++){
-// 		for(j=1; j <= 8; j++){
-// 			pixels[i*256 + j] = (int) 32*((sprite1[i] & 0x01) + (sprite2[i] & 0x01));
-// 			sprite1[i] >>= 1;
-// 			sprite2[i] >>= 1; 
-// 		}
-// 	}
+	SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
+	for(i = 0; i < 8; i++){
+		for(j=7; j >= 0; j--){
+			pixels[i*256 + j] = (int) 32*((sprite1[i] & 0x01) + (sprite2[i] & 0x01));
+			sprite1[i] >>= 1;
+			sprite2[i] >>= 1; 
+		}
+	}
 
-// 	SDL_UpdateWindowSurface(window);
+	SDL_UpdateWindowSurface(window);
 
-// }
+}
 
 void Screen::startDisplay(){
 
@@ -151,7 +152,7 @@ void Screen::startDisplay(){
 			SDL_UpdateWindowSurface( window );
 
 			//Wait 600 ms
-			SDL_Delay( 600 );
+			SDL_Delay( 2 );
 		}
 	}
 		

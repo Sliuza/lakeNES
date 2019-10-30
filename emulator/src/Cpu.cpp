@@ -82,7 +82,7 @@ void Cpu::run() {
       
       //deveriamos ter uma condicao para a chamada da escrita na tela.
       //if(ppu.getShowBackground()){
-        ppu.renderize();
+        // ppu.renderize();
       //}
       
     }

@@ -39,7 +39,7 @@ private:
     bool vblank;
     bool sprite_zero_hit;
     std::vector<int8_t> oam_data;
-
+    Screen screen;
     //aloca memoria para a PatternTabel e NameTable
     uint8_t tblName[2][1024];
 	uint8_t tblPattern[2][4096];
