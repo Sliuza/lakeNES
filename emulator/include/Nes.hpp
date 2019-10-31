@@ -15,6 +15,7 @@ class Nes {
   Nes(string pathToRom);
   void load();
   void run();
+  void runCycle();
 };
 
 #endif

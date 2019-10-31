@@ -354,5 +354,6 @@ Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
   instruction->setAddressingMode(attributes.addressingMode);
   instruction->setInstructionSize(instructionSize);
   instruction->setPrintMode(attributes.printMode);
+  instruction->setCycles(attributes.cycles);
   return instruction;
 };

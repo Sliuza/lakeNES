@@ -22,6 +22,7 @@ Cpu::Cpu() {
   this->y_reg = 0;
   this->a_reg = 0;
   this->rom = Rom();
+  this->remainingCycles = 0;
 };
 
 void Cpu::runPpu(){
@@ -31,7 +32,7 @@ void Cpu::runPpu(){
 }
 
 void Cpu::shutPpu() {
-  ppu.endPpu();
+  // ppu.endPpu();
 }
 
 void Cpu::startCpu() {
@@ -48,6 +49,7 @@ void Cpu::reset() {
   this->sp_reg = 0xfd;
   ppu.setFirstWrite(true);
   this->foundBrk = false;
+  this->remainingCycles = 0;
 }
 void Cpu::push(uint8_t val) {
   this->ram[0x100 + this->sp_reg--] = val;
@@ -56,13 +58,14 @@ void Cpu::push(uint8_t val) {
 uint8_t Cpu::pull() {
   return this->ram[0x100 + ++sp_reg];
 }
-void Cpu::run_frame() {
-  this->startCpu();
+void Cpu::runCycle() {
+  // this->startCpu();
   // this->runPpu();
   Instruction *instruction;
   InstructionFactory factory;
   uint16_t address = 0;
-  while (!this->getFoundBrk()) {
+
+  if (!this->isStall()) {
 
     uint8_t opcode = read_mem(this->pc_reg);
     ppu.step();
@@ -84,16 +87,19 @@ void Cpu::run_frame() {
         //this->printOutput(instruction->getPrintMode(), address);
       }
 
+      this->remainingCycles = instruction->getCycles();
       //deveriamos ter uma condicao para a chamada da escrita na tela.
       
       
     }
   }
-
-  ppu.renderize();
-      
-  //this->shutPpu();
+  this->remainingCycles--;
+  // this->shutPpu();
 }
+
+bool Cpu::isStall() {
+  return this->remainingCycles > 0;
+};
 
 uint8_t Cpu::read_mem(uint16_t addr) {
   uint8_t res;
