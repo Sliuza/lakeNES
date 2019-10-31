@@ -128,17 +128,16 @@ if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 			uint8_t sprite2[8];
 			int i = 0, j = 0;
 			for(i = 0; i < 8; i++){
-				sprite1[i] = tblPattern[0][(background *2) + ((background/16)*224) + (i*32)];
-				sprite2[i] = tblPattern[0][(background *2) + ((background/16)*224) + (i*32) + 8];
+				sprite1[i] = tblPattern[0][(background /16)*256 + ((background %16)*16) + (i)];
+				sprite2[i] = tblPattern[0][(background /16)*256 + ((background %16)*16) + (i) + 8];
 			}
 			int* pixels = (int*) screenSurface->pixels;
 			
-			
-			
-			
+			int color = 0;
 			for(i = 0; i < 8; i++){
 				for(j= 7; j >= 0 ; j--){
-					int color = (int) ((sprite1[i] & 0x01) + (sprite2[i] & 0x01)*2);
+					
+					color = (int) ((sprite1[i] & 0x01) + (sprite2[i] & 0x01)*2);
 					
 					//nossa paleta de cores em hex
 					switch(color){
@@ -155,10 +154,6 @@ if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 							color = 0xE40058;
 							break;
 					}
-
-					//por enquanto, nao conseguimos mapear nossa patternTable, nao escrevemos ela na matriz AINDA...
-					//color = 0xE40058;
-					printf("%d *****************\n", color);
 
 					// offset para o pixel -> i, j e b. 
 					// (b / 32) --> nos da a LINHA do TILE.   
