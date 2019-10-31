@@ -63,7 +63,9 @@ void Cpu::run() {
   while (br) {
 
     uint8_t opcode = read_mem(this->pc_reg);
-
+    ppu.step();
+    ppu.step();
+    ppu.step();
     if (opcode == 0x00) {
       br = false;
     } else {
@@ -97,12 +99,15 @@ uint8_t Cpu::read_mem(uint16_t addr) {
     case 0x0000 ... 0x1FFF:
       res = this->ram[addr & 0x7FF];
       break;
-    case 0x2000 ... 0x4020:
+    case 0x2000 ... 0x3FFF:
+        res = ppu.read_mem(addr & 0x2007);
+        break;
+    case 0x4014 ... 0x4017:
         res = ppu.read_mem(addr);
         break;
-    case 0x8000 ... 0xFFFF:
-      res = this->rom.readPgr(addr);
-      break;
+    default:
+        res = this->rom.readPgr(addr);
+        break;
   }
   return res;
 }
@@ -111,9 +116,14 @@ void Cpu::write_mem(uint8_t val, uint16_t addr) {
     case 0x0000 ... 0x1FFF:
       this->ram[addr & 0x7FF] = val;
       break;
-    case 0x2000 ... 0x4020:
-      ppu.write_mem(val, addr);
-      break; 
+    case 0x2000 ... 0x3FFF:
+        ppu.write_mem(val, addr & 0x2007);
+        break;
+    case 0x4014 ... 0x4017:
+        ppu.write_mem(val, addr);
+        break;
+    default:
+        break; 
   }
 }
 void Cpu::loadROM(string path) {

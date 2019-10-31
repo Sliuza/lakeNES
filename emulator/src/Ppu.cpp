@@ -65,7 +65,8 @@ uint8_t Ppu::get_status(){
     uint8_t status = sprite_zero_hit << 6 | vblank << 7;
     this->vblank = false;
     this->first_write = true;
-    return status;
+    // return status;
+    return true;
 }
 
 void Ppu::setPpuAddress(uint8_t addr){
@@ -97,6 +98,7 @@ void Ppu::write_mem(uint8_t val, uint16_t addr){
             this->setOam_Data(addr, val);
             break;
         case 0x2005: // Scroll
+            cout << "SCROLL BEING USED" << endl;
             break;
         case 0x2006: //PPU address 
             this->setPpu_Addr(val);
@@ -249,5 +251,29 @@ void Ppu::setLatch(bool state){
 }
 
 void Ppu::setOAMDMA(uint8_t value){
+
+}
+
+
+void Ppu::step(){
+    switch (this->pipeline_state){
+        {
+            case pre_render:
+                this->pipeline_state = render;
+                break;
+            case render:
+                this->pipeline_state = post_render;
+                this->sprite_zero_hit = true;
+                break;
+            case post_render:
+                this->pipeline_state = vertical_blank;
+                break;
+            case vertical_blank:
+                this->vblank = true;
+                this->pipeline_state = pre_render;
+            default:
+                break;
+        }
+    }
 
 }

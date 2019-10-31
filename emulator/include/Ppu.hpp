@@ -68,13 +68,12 @@ public:
 	void startPpu();
 	void reset();
 	void renderize();
-	void step();
     void mask(bitset<8> ctrl);
 	void control(bitset<8> ctrl);
 	void endPpu();
     void write_mem(uint8_t val, uint16_t addr);
     void setPpuAddress(uint8_t addr);
-
+    void step();
     //read and write tblPattern e tblName
     uint8_t ppuRead(uint16_t addr);
     void ppuWrite(uint8_t data, uint16_t addr);
