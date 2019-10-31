@@ -67,7 +67,7 @@ private:
 
 public:
 
-	void startPpu();
+	bool startPpu();
 	void reset();
 	void renderize();
     void mask(bitset<8> ctrl);

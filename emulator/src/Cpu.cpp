@@ -9,6 +9,7 @@
 
 
 Ppu ppu;
+bool windowIsOpen;
 
 uint8_t make_P(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint8_t t6) {
   uint8_t b = t1 + t2 * 2 + t3 * 4 + t4 * 8 + t5 * 64 + t6 * 128;
@@ -28,7 +29,7 @@ Cpu::Cpu() {
 void Cpu::runPpu(){
   ppu.setChr_Rom(this->rom.getChr());
   ppu.writeTblPattern();
-  ppu.startPpu();
+  windowIsOpen = ppu.startPpu();
 }
 
 void Cpu::shutPpu(){

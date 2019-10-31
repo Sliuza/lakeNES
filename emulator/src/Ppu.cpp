@@ -3,14 +3,14 @@
 #include <iomanip>
 
 
-void Ppu::startPpu() {
+bool Ppu::startPpu() {
 	// Initiate ram with 0xFF
 	init_array(this->palleteRam, (uint8_t)0x0000);
 	this->setOam_Addr(0);
 	//this->ppu_address = 0;  
 	this->setPpu_Data(0);
     this->show_background = 0;
-	 screen.startDisplay();
+	 return screen.openWindow();
 } ;
 
 void Ppu::renderize(){
