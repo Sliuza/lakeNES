@@ -94,18 +94,36 @@ void Ppu::write_mem(uint8_t val, uint16_t addr){
             this->setOam_Addr(addr);
             break;
         case 0x2004: // OAM Data
-            this->setOam_Addr(val);
+            this->setOam_Data(addr, val);
             break;
-        case 0x0005: // Scroll
+        case 0x2005: // Scroll
             break;
-        case 0x0006: //PPU address 
+        case 0x2006: //PPU address 
             this->setPpu_Addr(val);
             break;
-        case 0x0007: //PPU data
-            //write data passed on register $2007 into the right address
-            this->ppuWrite(val, this->ppu_address);
-            //increments ppu_address to write the Pattern and Name Tables
-            this->setPpuAddress(this->ppu_address + 1);
+        case 0x2007: //PPU data
+            this->setPpu_Data(val);
+            break;
+        case 0x4004: // OAMDMA
+            this->setOAMDMA(val);
+            break;
+        default:
+            cout << "WARNING: trying to write not allowed PPU memory" << endl;
+            break;
+
+    }
+}
+
+u_int8_t Ppu::read_mem(uint16_t addr){
+    switch(addr){
+        case 0x2002:
+            return this->get_status();
+        case 0x2004: // OAM Data
+            return this->getOam_Data(addr);
+        case 0x2007: //PPU data
+            return this->getPpu_Data();
+        default:
+            cout << "WARNING:Trying to read not allowed PPU memory" << endl;
             break;
     }
 }
@@ -177,7 +195,7 @@ void Ppu::ppuWrite(uint8_t data, uint16_t addr){
   // }
 }
 
-uint8_t Ppu::getOam_Data(uint8_t addr){
+uint8_t Ppu::getOam_Data(uint16_t addr){
 	return this->oam_data[addr];
 }
 
@@ -190,7 +208,8 @@ uint8_t Ppu::getPpu_Addr(){
 }
 
 uint8_t Ppu::getPpu_Data(){
-	return this->Ppu_Data;
+    auto data = this->ppuRead(this->ppu_address);
+    this->Ppu_Addr += this->vram_increment;
 }
 
 bool Ppu::getLatch(){
@@ -221,9 +240,14 @@ void Ppu::setPpu_Addr(uint8_t value){
 }
 
 void Ppu::setPpu_Data(uint8_t value){
-	this->Ppu_Data = value;
+	this->ppuWrite(this->Ppu_Addr, value);
+    this->ppu_address += this->vram_increment;
 }
 
 void Ppu::setLatch(bool state){
 	this->latch = state;
+}
+
+void Ppu::setOAMDMA(uint8_t value){
+
 }

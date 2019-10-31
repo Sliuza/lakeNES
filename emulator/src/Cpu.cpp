@@ -97,6 +97,9 @@ uint8_t Cpu::read_mem(uint16_t addr) {
     case 0x0000 ... 0x1FFF:
       res = this->ram[addr & 0x7FF];
       break;
+    case 0x2000 ... 0x4020:
+        res = ppu.read_mem(addr);
+        break;
     case 0x8000 ... 0xFFFF:
       res = this->rom.readPgr(addr);
       break;
@@ -108,10 +111,9 @@ void Cpu::write_mem(uint8_t val, uint16_t addr) {
     case 0x0000 ... 0x1FFF:
       this->ram[addr & 0x7FF] = val;
       break;
-    case 0x2000 ... 0x3FFF:
-      Ppu ppu;
-      ppu.write_mem(val,addr & 0x0007);
-      break;
+    case 0x2000 ... 0x4020:
+      ppu.write_mem(val, addr);
+      break; 
   }
 }
 void Cpu::loadROM(string path) {

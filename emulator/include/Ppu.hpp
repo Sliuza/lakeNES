@@ -90,19 +90,21 @@ public:
 	void setPpu_Data(uint8_t value);
 	void setLatch(bool state); //indicates if it's possible to modify registers registers $2005/$200 - if NMI is setted
     void setOAM_Address(uint8_t addr);
+    void setOAMDMA(uint8_t value);
 
 	//Getters
 	bitset<8> getPpu_Ctrl();
 	bitset<8> getPpu_Mask();
 	bitset<8> getPpu_Status();	
 	uint8_t getOam_Addr();
-	uint8_t getOam_Data(uint8_t addr);
+	uint8_t getOam_Data(uint16_t addr);
 	uint8_t getPpu_Scroll();
 	uint8_t getPpu_Addr();
 	uint8_t getPpu_Data();
     uint8_t get_status();
     bool getShowBackground();
 	bool getLatch();
+    u_int8_t read_mem(uint16_t addr);
 };
 
 #endif
