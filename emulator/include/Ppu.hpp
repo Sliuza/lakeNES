@@ -56,7 +56,7 @@ private:
 	u_int16_t base_nametable_address;
 
 
-	Rom chr_Rom;
+	vector<uint8_t> chr_Rom;
 	
 	uint8_t palleteRam[0x1F];
 
@@ -76,6 +76,9 @@ public:
     //read and write tblPattern e tblName
     uint8_t ppuRead(uint16_t addr);
     void ppuWrite(uint8_t data, uint16_t addr);
+
+    void setChr_Rom(vector<uint8_t> chr);
+    void writeTblPattern();
 
 	//Setters
 	void setPpu_Ctrl(bitset<8> value);

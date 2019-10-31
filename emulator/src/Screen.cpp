@@ -129,7 +129,7 @@ if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 			int i = 0, j = 0;
 			for(i = 0; i < 8; i++){
 				sprite1[i] = tblPattern[0][(background *2) + ((background/16)*224) + (i*32)];
-				sprite2[i] = tblPattern[0][(background *2) + ((background/16)*224) + (i*32) + 1];
+				sprite2[i] = tblPattern[0][(background *2) + ((background/16)*224) + (i*32) + 8];
 			}
 			int* pixels = (int*) screenSurface->pixels;
 			
@@ -140,24 +140,24 @@ if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 				for(j= 7; j >= 0 ; j--){
 					int color = (int) ((sprite1[i] & 0x01) + (sprite2[i] & 0x01)*2);
 					
-					// nossa paleta de cores em hex
-					// switch(color){
-					// 	case 0:
-					// 		color = 0x000001;
-					// 		break;
-					// 	case 1:
-					// 		color = 0xF8F8F8;
-					// 		break;
-					// 	case 2:
-					// 		color = 0xF85898;
-					// 		break;
-					// 	case 3:
-					// 		color = 0xE40058;
-					// 		break;
-					// }
+					//nossa paleta de cores em hex
+					switch(color){
+						case 0:
+							color = 0x000001;
+							break;
+						case 1:
+							color = 0xF8F8F8;
+							break;
+						case 2:
+							color = 0xF85898;
+							break;
+						case 3:
+							color = 0xE40058;
+							break;
+					}
 
 					//por enquanto, nao conseguimos mapear nossa patternTable, nao escrevemos ela na matriz AINDA...
-					color = 0xE40058;
+					//color = 0xE40058;
 					printf("%d *****************\n", color);
 
 					// offset para o pixel -> i, j e b. 

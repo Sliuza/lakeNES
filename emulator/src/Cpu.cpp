@@ -26,6 +26,8 @@ Cpu::Cpu() {
 };
 
 void Cpu::runPpu(){
+  ppu.setChr_Rom(this->rom.getChr());
+  ppu.writeTblPattern();
   ppu.startPpu();
 }
 
@@ -130,6 +132,8 @@ void Cpu::write_mem(uint8_t val, uint16_t addr) {
 }
 void Cpu::loadROM(string path) {
   this->rom.load(path);
+  // for(int i = 0; i < 4096; i++)
+  //   printf("%d *****************\n", this->rom.getChr()[i]);
 }
 
 void Cpu::printROM() {

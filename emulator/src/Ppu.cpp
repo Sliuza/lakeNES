@@ -176,7 +176,7 @@ void Ppu::ppuWrite(uint8_t data, uint16_t addr){
 
   if (addr >= 0x0000 && addr <= 0x1FFF){
     printf("DATA:   %d ---------- \n", data);
-    this->tblPattern[(addr & 0x1000) >> 12][addr & 0x0FFF] = data;
+    //this->tblPattern[(addr & 0x1000) >> 12][addr & 0x0FFF] = data;
   }
   else if (addr >= 0x2000 && addr <= 0x3EFF){
     addr &= 0x0FFF;
@@ -257,6 +257,18 @@ void Ppu::setLatch(bool state){
 
 void Ppu::setOAMDMA(uint8_t value){
 
+}
+
+void Ppu::setChr_Rom(vector<uint8_t> chr){
+  this->chr_Rom = chr;
+}
+
+void Ppu::writeTblPattern(){
+  int i=0;
+  for(i = 0; i < 4096; i++){
+    printf("%d *****************\n", this->chr_Rom[i]);
+    this->tblPattern[0][i] = this->chr_Rom[i];
+  }
 }
 
 
