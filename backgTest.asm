@@ -17,7 +17,7 @@ RESET:
   CLD          ; disable decimal mode
   LDX #$40
   STX $4017    ; disable APU frame IRQ
-  LDX #$FD
+  LDX #$FF
   TXS          ; Set up stack
   INX          ; now X = 0
   STX $2000    ; disable NMI
@@ -38,17 +38,11 @@ clrmem:        ; clear memory
   INX
   BNE clrmem
 
-  JSR LoadBackground
+  ;JSR LoadBackground
 ;   TODO problema aquiiiii!!!!
-  LDA #%10000000   ; Enable NMI, sprites and background on table 0
-  STA $2000
-  LDA #%00011110   ; Enable sprites, enable backgrounds
-  STA $2001
-  LDA #$00         ; No background scrolling
-  STA $2006
-  STA $2006
-  STA $2005
-  STA $2005
+  
+
+  ;JMP NMI
 
 LoadBackground:
   LDA $2002
@@ -76,8 +70,17 @@ LoadBackground:
   INX
   CPX #$04
   BNE .Loop
-  RTS
+  ;RTS
 
+  LDA #%10000000   ; Enable NMI, sprites and background on table 0
+  STA $2000
+  LDA #%00011110   ; Enable sprites, enable backgrounds
+  STA $2001
+  LDA #$00         ; No background scrolling
+  STA $2006
+  STA $2006
+  STA $2005
+  STA $2005
 
 
 

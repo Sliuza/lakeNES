@@ -22,7 +22,6 @@ private:
 	//PPU Registers
 
 	uint8_t Ppu_Scroll;
-	uint8_t Ppu_Addr;
 	uint8_t Ppu_Data;
 	bool latch;
 	bool generateInterrupt;
@@ -85,11 +84,11 @@ public:
 	void setOam_Addr(uint8_t value);
 	void setOam_Data(uint8_t address, uint8_t value);
 	void setPpu_Scroll(uint8_t value);
-	void setPpu_Addr(uint8_t value);	
 	void setPpu_Data(uint8_t value);
 	void setLatch(bool state); //indicates if it's possible to modify registers registers $2005/$200 - if NMI is setted
     void setOAM_Address(uint8_t addr);
     void setOAMDMA(uint8_t value);
+    void setFirstWrite(bool b);
 
 	//Getters
 	bitset<8> getPpu_Ctrl();
@@ -98,7 +97,6 @@ public:
 	uint8_t getOam_Addr();
 	uint8_t getOam_Data(uint16_t addr);
 	uint8_t getPpu_Scroll();
-	uint8_t getPpu_Addr();
 	uint8_t getPpu_Data();
     uint8_t get_status();
     bool getShowBackground();

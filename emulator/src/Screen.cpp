@@ -13,8 +13,8 @@
 
 
 
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 256;
+const int SCREEN_HEIGHT = 256;
 SDL_Window* window = nullptr;
 SDL_Renderer *renderer = nullptr;
 SDL_Surface* screenSurface = nullptr;
@@ -95,36 +95,9 @@ void Screen::drawPixel(){
 
 void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]){
 	//translate
-	uint8_t background = tblName[0][0];
 
-    //sprite1  --> linha + coluna
-	uint8_t sprite1[8];
-	uint8_t sprite2[8];
-	int i = 0, j = 0;
-	for(i = 0; i < 8; i++){
-		sprite1[i] = tblPattern[0][(background *2) + ((background/16)*224) + (i*32)];
-		sprite2[i] = tblPattern[0][(background *2) + ((background/16)*224) + (i*32) + 1];
-	}
-	int* pixels = (int*) screenSurface->pixels;
-	printf("%i *****************\n", background);
 	
-	SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
-	for(i = 0; i < 8; i++){
-		for(j=7; j >= 0; j--){
-			pixels[i*256 + j] = (int) 32*((sprite1[i] & 0x01) + (sprite2[i] & 0x01));
-			sprite1[i] >>= 1;
-			sprite2[i] >>= 1; 
-		}
-	}
-
-	SDL_UpdateWindowSurface(window);
-
-}
-
-void Screen::startDisplay(){
-
-
-		if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
 	}
@@ -136,27 +109,89 @@ void Screen::startDisplay(){
 		// SDL_CreateWindowAndRenderer(800, 600, 0, &window, &renderer);
 
 		//cria um render somente e o atribui a uma janela - a ultima flag sinaliza que ele acompanhara a velocidade do hardware
-		renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
+		
 
 		if( window == NULL )
 		{
 			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
 		}
-		else{
+		
 				//Get window surface
-			screenSurface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, amask);
-			//Fill the surface white
-			SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 255, 0, 0 ) );
-			
-			//Update the surface
-			SDL_UpdateWindowSurface( window );
+		screenSurface = SDL_GetWindowSurface(window);
+		SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
+	
+		for(int b = 0; b < 1024; b++){
+			uint8_t background = tblName[0][b];
 
-			//Wait 600 ms
-			SDL_Delay( 2 );
+		    //sprite1  --> linha + coluna
+			uint8_t sprite1[8];
+			uint8_t sprite2[8];
+			int i = 0, j = 0;
+			for(i = 0; i < 8; i++){
+				sprite1[i] = tblPattern[0][(background *2) + ((background/16)*224) + (i*32)];
+				sprite2[i] = tblPattern[0][(background *2) + ((background/16)*224) + (i*32) + 1];
+			}
+			int* pixels = (int*) screenSurface->pixels;
+			
+			
+			
+			
+			for(i = 0; i < 8; i++){
+				for(j= 7; j >= 0 ; j--){
+					int color = (int) ((sprite1[i] & 0x01) + (sprite2[i] & 0x01)*2);
+					
+					// nossa paleta de cores em hex
+					// switch(color){
+					// 	case 0:
+					// 		color = 0x000001;
+					// 		break;
+					// 	case 1:
+					// 		color = 0xF8F8F8;
+					// 		break;
+					// 	case 2:
+					// 		color = 0xF85898;
+					// 		break;
+					// 	case 3:
+					// 		color = 0xE40058;
+					// 		break;
+					// }
+
+					//por enquanto, nao conseguimos mapear nossa patternTable, nao escrevemos ela na matriz AINDA...
+					color = 0xE40058;
+					printf("%d *****************\n", color);
+
+					// offset para o pixel -> i, j e b. 
+					// (b / 32) --> nos da a LINHA do TILE.   
+					// (b % 32) --> nos da a COLUNA do TILE.
+					pixels[(i*256 + j)+((b/32)*2048) + ((b%32)*8)] = color;
+					sprite1[i] >>= 1;
+					sprite2[i] >>= 1; 
+				}
+			}
+			
+			SDL_UpdateWindowSurface(window);
 		}
+
+		SDL_Delay( 200000 );
+	}
+}
+
+void Screen::startDisplay(){
+
+
+		
+			//Fill the surface white
+			// SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 255, 0, 0 ) );
+			
+			// //Update the surface
+			// SDL_UpdateWindowSurface( window );
+
+			// //Wait 600 ms
+			// //SDL_Delay( 2 );
+		
 	}
 		
-}
+
 
 void Screen::endDisplay(){
 	//Destroy window

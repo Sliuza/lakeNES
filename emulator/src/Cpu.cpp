@@ -45,6 +45,7 @@ void Cpu::reset() {
   this->f_negative = this->f_overflow = this->f_zero = this->f_carry = this->f_decimal = 0;
   this->pc_reg = this->read_mem(0xfffc) | this->read_mem(0xfffc + 1) << 8;
   this->sp_reg = 0xfd;
+  ppu.setFirstWrite(true);
 }
 void Cpu::push(uint8_t val) {
   this->ram[0x100 + this->sp_reg--] = val;
@@ -60,7 +61,7 @@ void Cpu::run() {
   InstructionFactory factory;
   uint16_t address = 0;
   bool br = true;
-  while (br) {
+  while (br && !ppu.getShowBackground()) {
 
     uint8_t opcode = read_mem(this->pc_reg);
     ppu.step();
@@ -79,17 +80,18 @@ void Cpu::run() {
         this->printOutput(instruction->getPrintMode(), address);
       } else {
         this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
-        this->printOutput(instruction->getPrintMode(), address);
+        //this->printOutput(instruction->getPrintMode(), address);
       }
       
       //deveriamos ter uma condicao para a chamada da escrita na tela.
-      //if(ppu.getShowBackground()){
-        // ppu.renderize();
-      //}
+      
       
     }
   }
-  this->shutPpu();
+
+  ppu.renderize();
+      
+  //this->shutPpu();
 }
 
 uint8_t Cpu::read_mem(uint16_t addr) {

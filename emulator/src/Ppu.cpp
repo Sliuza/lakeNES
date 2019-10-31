@@ -8,10 +8,10 @@ void Ppu::startPpu() {
 	init_array(this->palleteRam, (uint8_t)0x0000);
 	this->setOam_Addr(0);
 	this->setPpu_Scroll(0);
-	this->setPpu_Addr(0);  
+	//this->ppu_address = 0;  
 	this->setPpu_Data(0);
     this->show_background = 0;
-	// screen.startDisplay();
+	 screen.startDisplay();
 } ;
 
 void Ppu::renderize(){
@@ -19,10 +19,10 @@ void Ppu::renderize(){
   // s.sendToDisplay();
 
   // brinca com os pixels da Screen, faz retas, pontos e retangulos
-    screen.drawPixel();
+    //screen.drawPixel();
 
   //chamada do sendToDispley com parametros
-    screen.sendToDisplay(this->tblPattern, this-> tblName);
+    screen.sendToDisplay(this->tblPattern, this->tblName);
 }
 
 void Ppu::endPpu(){
@@ -74,12 +74,14 @@ void Ppu::setPpuAddress(uint8_t addr){
         this->ppu_address &= ~0xff00;
         this->ppu_address |= (addr & 0x3f) << 8;
         this->first_write = false;
+        printf("000000000 =================== PPUADDR:  %d  \n", this->ppu_address);
     }
     else{
         this->ppu_address &= ~0xff;
         this->ppu_address |= addr;
         this->oam_address = ppu_address;
         this->first_write = true;
+        printf("1111111111 =================== PPUADDR:  %d  \n", this->ppu_address);
     }
 }
 
@@ -89,6 +91,7 @@ void Ppu::write_mem(uint8_t val, uint16_t addr){
             this->control(val);
             break;
         case 0x2001: // Mask
+            printf("MASK SET --------------------- %d \n", val);
             this->mask(val);
             break;
         case 0x2003: // OAM Address
@@ -101,7 +104,9 @@ void Ppu::write_mem(uint8_t val, uint16_t addr){
             cout << "SCROLL BEING USED" << endl;
             break;
         case 0x2006: //PPU address 
-            this->setPpu_Addr(val);
+
+            this->setPpuAddress(val);
+            printf("PPU DATA =================== PPUADDR:  %d  \n", this->ppu_address);
             break;
         case 0x2007: //PPU data
             this->setPpu_Data(val);
@@ -170,6 +175,7 @@ void Ppu::ppuWrite(uint8_t data, uint16_t addr){
   addr &= 0x3FFF;
 
   if (addr >= 0x0000 && addr <= 0x1FFF){
+    printf("DATA:   %d ---------- \n", data);
     this->tblPattern[(addr & 0x1000) >> 12][addr & 0x0FFF] = data;
   }
   else if (addr >= 0x2000 && addr <= 0x3EFF){
@@ -205,13 +211,9 @@ uint8_t Ppu::getPpu_Scroll(){
 	return this->Ppu_Scroll;
 }
 
-uint8_t Ppu::getPpu_Addr(){
-	return this->Ppu_Addr;
-}
-
 uint8_t Ppu::getPpu_Data(){
     auto data = this->ppuRead(this->ppu_address);
-    this->Ppu_Addr += this->vram_increment;
+    this->ppu_address++;
 }
 
 bool Ppu::getLatch(){
@@ -222,7 +224,12 @@ bool Ppu::getLatch(){
 //Este bit que ira dizer se devemos ou nao exibir algo na tela
 //(do nosso jogo pelo menos)
 bool Ppu::getShowBackground(){
+  printf("SHOWBACKGROUND ----------  %d \n", this->show_background);
   return this->show_background;
+}
+
+void Ppu::setFirstWrite(bool b){
+  this->first_write = b;
 }
 
 void Ppu::setOam_Addr(uint8_t value){
@@ -237,13 +244,11 @@ void Ppu::setPpu_Scroll(uint8_t value){
 	this->Ppu_Scroll = value;
 }
 
-void Ppu::setPpu_Addr(uint8_t value){
-	this->Ppu_Addr = value;
-}
 
 void Ppu::setPpu_Data(uint8_t value){
-	this->ppuWrite(this->Ppu_Addr, value);
-    this->ppu_address += this->vram_increment;
+  
+	this->ppuWrite(value, this->ppu_address);
+    this->ppu_address++;
 }
 
 void Ppu::setLatch(bool state){

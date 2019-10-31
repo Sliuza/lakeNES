@@ -115,7 +115,7 @@ void BITInstruction::execute(Cpu *cpu, uint16_t address) {
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t value = cpu->read_mem(address);
     uint8_t aux = cpu->getA_reg() & value;
-    int i = (int)value;
+
     (aux & 0x00FF) == 0 ? cpu->setF_zero(true) : cpu->setF_zero(false);
     (value & (1 << 7)) ? cpu->setF_negative(true) : cpu->setF_negative(false);
     (value & (1 << 6)) ? cpu->setF_overflow(true) : cpu->setF_overflow(false);
