@@ -7,7 +7,6 @@ void Ppu::startPpu() {
 	// Initiate ram with 0xFF
 	init_array(this->palleteRam, (uint8_t)0x0000);
 	this->setOam_Addr(0);
-	this->setPpu_Scroll(0);
 	//this->ppu_address = 0;  
 	this->setPpu_Data(0);
     this->show_background = 0;
@@ -31,6 +30,7 @@ void Ppu::endPpu(){
 
 
 void Ppu::reset() {
+    this->even_frame = true;
 }
 void Ppu::control(bitset<8> ctrl) {
   if(!ctrl[0] && !ctrl[1]){
@@ -207,9 +207,6 @@ uint8_t Ppu::getOam_Data(uint16_t addr){
 	return this->oam_data[addr];
 }
 
-uint8_t Ppu::getPpu_Scroll(){
-	return this->Ppu_Scroll;
-}
 
 uint8_t Ppu::getPpu_Data(){
     auto data = this->ppuRead(this->ppu_address);
@@ -240,9 +237,6 @@ void Ppu::setOam_Data(uint8_t addr, uint8_t value){
 	this->oam_data[addr] = value;
 } 
 
-void Ppu::setPpu_Scroll(uint8_t value){
-	this->Ppu_Scroll = value;
-}
 
 
 void Ppu::setPpu_Data(uint8_t value){
@@ -271,26 +265,205 @@ void Ppu::writeTblPattern(){
   }
 }
 
-
-void Ppu::step(){
-    switch (this->pipeline_state){
-        {
-            case pre_render:
-                this->pipeline_state = render;
-                break;
-            case render:
-                this->pipeline_state = post_render;
-                this->sprite_zero_hit = true;
-                break;
-            case post_render:
-                this->pipeline_state = vertical_blank;
-                break;
-            case vertical_blank:
-                this->vblank = true;
-                this->pipeline_state = pre_render;
-            default:
-                break;
+void Ppu::step() {
+  switch (this->pipeline_state) {
+    {
+      case pre_render:
+        if (this->ppu_cycle == 1)
+          vblank = sprite_zero_hit = false;
+        else if (this->ppu_cycle == 256 + 2 && this->show_background && this->show_sprites) {
+          ppu_address &= ~0x41f;
+          ppu_address |= this->base_nametable_address & 0x41f;
+        } else if (this->ppu_cycle > 280 && this->ppu_cycle <= 304 && this->show_background && this->show_sprites) {
+          ppu_address &= ~0x7be0;
+          ppu_address |= this->base_nametable_address & 0x7be0;
         }
+        if (this->ppu_cycle >= 340 - (!this->even_frame && this->show_background && this->show_sprites)) {
+          pipeline_state = render;
+          this->ppu_cycle = scan_line = 0;
+        }
+        break;
+      case render:
+        if (this->ppu_cycle > 0 && this->ppu_cycle <= 256) {
+          uint8_t bgColor = 0, sprColor = 0;
+          bool bgOpaque = false, sprOpaque = true;
+          bool spriteForeground = false;
+
+          int x = this->ppu_cycle - 1;
+          int y = scan_line;
+
+          if (this->show_background) {
+            auto x_fine = (m_fineXScroll + x) % 8;
+            if (!sprites_left_most || x >= 8) {
+              auto addr = 0x2000 | (ppu_address & 0x0FFF);
+              uint8_t tile = ppuRead(addr);
+
+              addr = (tile * 16) + ((ppu_address >> 12) & 0x7);
+              addr |= m_bgPage << 12;
+              bgColor = (ppuRead(addr) >> (7 ^ x_fine)) & 1;
+              bgColor |= ((ppuRead(addr + 8) >> (7 ^ x_fine)) & 1) << 1;
+
+              bgOpaque = bgColor;
+
+              addr = 0x23C0 | (ppu_address & 0x0C00) | ((ppu_address >> 4) & 0x38) | ((ppu_address >> 2) & 0x07);
+              auto attribute = ppuRead(addr);
+              int shift = ((ppu_address >> 4) & 4) | (ppu_address & 2);
+              bgColor |= ((attribute >> shift) & 0x3) << 2;
+            }
+            if (x_fine == 7) {
+              if ((ppu_address & 0x001F) == 31) {
+                ppu_address &= ~0x001F;
+                ppu_address ^= 0x0400;
+              } else
+                ppu_address += 1;
+            }
+          }
+
+          if (this->show_sprites && (!this->sprites_left_most || x >= 8)) {
+            for (auto i : scan_lineSprites) {
+              uint8_t spr_x = this->oam_data[i * 4 + 3];
+
+              if (0 > x - spr_x || x - spr_x >= 8)
+                continue;
+
+              uint8_t spr_y = this->oam_data[i * 4 + 0] + 1,
+                      tile = this->oam_data[i * 4 + 1],
+                      attribute = this->oam_data[i * 4 + 2];
+
+              int length = (this->sprite_pattern) ? 16 : 8;
+
+              int x_shift = (x - spr_x) % 8, y_offset = (y - spr_y) % length;
+
+              if ((attribute & 0x40) == 0) //If NOT flipping horizontally
+                x_shift ^= 7;
+              if ((attribute & 0x80) != 0) //IF flipping vertically
+                y_offset ^= (length - 1);
+
+              uint16_t addr = 0;
+
+              if (!this->sprite_pattern) {
+                addr = tile * 16 + y_offset;
+                if (m_sprPage == High)
+                  addr += 0x1000;
+              } else {
+                y_offset = (y_offset & 7) | ((y_offset & 8) << 1);
+                addr = (tile >> 1) * 32 + y_offset;
+                addr |= (tile & 1) << 12;
+              }
+
+              sprColor |= (ppuRead(addr) >> (x_shift)) & 1;
+              sprColor |= ((ppuRead(addr + 8) >> (x_shift)) & 1) << 1;
+
+              if (!(sprOpaque = sprColor)) {
+                sprColor = 0;
+                continue;
+              }
+
+              sprColor |= 0x10;
+              sprColor |= (attribute & 0x3) << 2;
+
+              spriteForeground = !(attribute & 0x20);
+
+              if (!sprite_zero_hit && this->show_background && i == 0 && sprOpaque && bgOpaque) {
+                sprite_zero_hit = true;
+              }
+
+              break;
+            }
+          }
+
+          uint8_t paletteAddr = bgColor;
+          if ((!bgOpaque && sprOpaque) ||
+              (bgOpaque && sprOpaque && spriteForeground))
+            paletteAddr = sprColor;
+          else if (!bgOpaque && !sprOpaque)
+            paletteAddr = 0;
+          m_pictureBuffer[x][y] = sf::Color(colors[m_bus.readPalette(paletteAddr)]);
+        } else if (this->ppu_cycle == 256 + 1 && this->show_background) {
+          if ((ppu_address & 0x7000) != 0x7000)
+            ppu_address += 0x1000;
+          else {
+            ppu_address &= ~0x7000;
+            int y = (ppu_address & 0x03E0) >> 5;
+            if (y == 29) {
+              y = 0;
+              ppu_address ^= 0x0800;
+            } else if (y == 31)
+              y = 0;
+            else
+              y += 1;
+            ppu_address = (ppu_address & ~0x03E0) | (y << 5);
+          }
+        } else if (this->ppu_cycle == 256 + 2 && this->show_background && this->show_sprites) {
+          ppu_address &= ~0x41f;
+          ppu_address |= this->base_nametable_address & 0x41f;
+        }
+
+        if (this->ppu_cycle >= 340) {
+          scan_lineSprites.resize(0);
+
+          int range = 8;
+          if (this->sprite_pattern)
+            range = 16;
+
+          std::size_t j = 0;
+          for (std::size_t i = this->oam_address / 4; i < 64; ++i) {
+            auto diff = (scan_line - this->oam_data[i * 4]);
+            if (0 <= diff && diff < range) {
+              scan_lineSprites.push_back(i);
+              ++j;
+              if (j >= 8) {
+                break;
+              }
+            }
+          }
+
+          ++scan_line;
+          this->ppu_cycle = 0;
+        }
+
+        if (scan_line >= 240)
+          pipeline_state = post_render;
+
+        break;
+      case post_render:
+        if (this->ppu_cycle >= 340) {
+          ++scan_line;
+          this->ppu_cycle = 0;
+          pipeline_state = vertical_blank;
+
+        //   for (int x = 0; x < m_pictureBuffer.size(); ++x) {
+        //     for (int y = 0; y < m_pictureBuffer[0].size(); ++y) {
+        //       m_screen.setPixel(x, y, m_pictureBuffer[x][y]);
+        //     }
+        //   }
+        }
+
+        break;
+      case vertical_blank:
+        if (this->ppu_cycle == 1 && scan_line == 240 + 1) {
+          vblank = true;
+          if (this->generateInterrupt){
+            this->NMIInterrupt();
+          }
+        }
+
+        if (this->ppu_cycle >= 340) {
+          ++scan_line;
+          this->ppu_cycle = 0;
+        }
+
+        if (scan_line >= 261) {
+          this->pipeline_state = pre_render;
+          scan_line = 0;
+          this->even_frame = !this->even_frame;
+        }
+
+        break;
     }
 
+    ++this->ppu_cycle;
+  }
+}
+}
 }

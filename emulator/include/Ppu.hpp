@@ -21,7 +21,6 @@ class Ppu{
 private:
 	//PPU Registers
 
-	uint8_t Ppu_Scroll;
 	uint8_t Ppu_Data;
 	bool latch;
 	bool generateInterrupt;
@@ -37,11 +36,15 @@ private:
 	bool show_sprites;
     bool vblank;
     bool sprite_zero_hit;
+    bool even_frame;
+    int scan_line;
+    std::vector<int8_t> scan_lineSprites;
     std::vector<int8_t> oam_data;
     Screen screen;
     //aloca memoria para a PatternTabel e NameTable
     uint8_t tblName[2][1024];
 	uint8_t tblPattern[2][4096];
+    int ppu_cycle;
     bool first_write;
     uint16_t oam_address;
     uint16_t ppu_address;
@@ -86,7 +89,6 @@ public:
 	void setPpu_Status(bitset<8> value);
 	void setOam_Addr(uint8_t value);
 	void setOam_Data(uint8_t address, uint8_t value);
-	void setPpu_Scroll(uint8_t value);
 	void setPpu_Data(uint8_t value);
 	void setLatch(bool state); //indicates if it's possible to modify registers registers $2005/$200 - if NMI is setted
     void setOAM_Address(uint8_t addr);
@@ -99,7 +101,6 @@ public:
 	bitset<8> getPpu_Status();	
 	uint8_t getOam_Addr();
 	uint8_t getOam_Data(uint16_t addr);
-	uint8_t getPpu_Scroll();
 	uint8_t getPpu_Data();
     uint8_t get_status();
     bool getShowBackground();
