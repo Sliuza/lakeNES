@@ -108,7 +108,7 @@ void Ppu::write_mem(uint8_t val, uint16_t addr){
             this->setOAMDMA(val);
             break;
         default:
-            cout << "WARNING: trying to write not allowed PPU memory" << endl;
+            cout << "WARNING: trying to write not allowed PPU memory ADDR: " << addr << " VALUE: " << val << endl;
             break;
 
     }
@@ -123,7 +123,7 @@ u_int8_t Ppu::read_mem(uint16_t addr){
         case 0x2007: //PPU data
             return this->getPpu_Data();
         default:
-            cout << "WARNING:Trying to read not allowed PPU memory" << endl;
+            cout << "WARNING:Trying to read not allowed PPU memory ADDR: " << addr << endl;
             break;
     }
 }
