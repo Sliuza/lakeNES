@@ -8,7 +8,6 @@ using namespace std;
 class Nes {
   Cpu cpu;
   Ppu ppu;
-
   string pathToRom;
 
   public:

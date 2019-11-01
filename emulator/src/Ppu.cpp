@@ -9,11 +9,7 @@ Ppu::Ppu() {
 bool Ppu::startPpu() {
   // Initiate ram with 0xFF
   init_array(this->palleteRam, (uint8_t)0x0000);
-  this->setOam_Addr(0);
-  //this->ppu_address = 0;
-  this->setPpu_Data(0);
-  this->show_background = 0;
-  //return screen.openWindow();
+  this->reset();
   return true;
 };
 
@@ -308,7 +304,6 @@ void Ppu::writeTblPattern() {
 
 void Ppu::step() {
   switch (this->pipeline_state) {
-    {
       case pre_render:
         if (this->ppu_cycle == 1)
           vblank = sprite_zero_hit = false;
@@ -498,5 +493,4 @@ void Ppu::step() {
     }
 
     ++this->ppu_cycle;
-  }
 }

@@ -22,6 +22,18 @@ Cpu::Cpu() {
   this->remainingCycles = 0;
 };
 
+void Cpu::nmi_interruption(){
+    uint8_t flags = this->getF_negative() << 7 |
+                    this->getF_overflow() << 6 |
+                    1 << 5 |
+                    0 << 4 |
+                    this->getF_decimal() << 3 |
+                    this->getF_interrupt() << 2 |
+                    this->getF_zero() << 1 |
+                    this->getF_carry();
+    this->push(flags);
+}
+
 void Cpu::shutPpu() {
   // ppu.endPpu();
 }

@@ -1,5 +1,4 @@
 #include "../include/Nes.hpp"
-
 const int TOTAL_CYCLES = 29781;
 
 Nes::Nes(string pathToRom) {
@@ -14,6 +13,7 @@ void Nes::load() {
   ppu.writeTblPattern();
   cpu.setPpu(&ppu);
   ppu.setCpu(&cpu);
+  ppu.set_nmi_callback([&](){ cpu.nmi_interruption(); });
   cpu.startCpu();
 }
 

@@ -99,11 +99,6 @@ class BRKInstruction : public BaseInstruction {
   void execute(Cpu *cpu, uint16_t address = 0);
 };
 
-class NMIInstruction : public BaseInstruction {
-  public:
-  void execute(Cpu *cpu);
-};
-
 class BVCInstruction : public BaseInstruction {
   public:
   void execute(Cpu *cpu, uint16_t address = 0);

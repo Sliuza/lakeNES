@@ -263,7 +263,6 @@ if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 								color = 0xF8F8F8;
 								break;
 							case 2:
-								SDL_Delay( 200000 );
 								color = 0xF85898;
 								break;
 							case 3:
@@ -289,6 +288,7 @@ if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 			}
 		}
 
+        SDL_Delay( 7000 );
 		SDL_BlitSurface(oamSurface, NULL, screenSurface, NULL);
 		SDL_UpdateWindowSurface(window);
 

@@ -173,17 +173,6 @@ void BRKInstruction::execute(Cpu *cpu, uint16_t address) {
   cpu->setPc_reg(pc);
 }
 
-void NMIInstruction::execute(Cpu *cpu) {
-    uint8_t flags = cpu->getF_negative() << 7 |
-                    cpu->getF_overflow() << 6 |
-                    1 << 5 |
-                    0 << 4 |
-                    cpu->getF_decimal() << 3 |
-                    cpu->getF_interrupt() << 2 |
-                    cpu->getF_zero() << 1 |
-                    cpu->getF_carry();
-    cpu->push(flags);
-}
 
 void BVCInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[BVCInstruction] -  execute()\n";
