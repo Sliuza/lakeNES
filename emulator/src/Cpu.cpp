@@ -38,7 +38,7 @@ void Cpu::reset() {
   this->f_negative = this->f_overflow = this->f_zero = this->f_carry = this->f_decimal = 0;
   this->pc_reg = this->read_mem(0xfffc) | this->read_mem(0xfffc + 1) << 8;
   this->sp_reg = 0xfd;
-  ppu->.setFirstWrite(true);
+  ppu->setFirstWrite(true);
   this->foundBrk = false;
   this->remainingCycles = 0;
 }
@@ -92,10 +92,10 @@ uint8_t Cpu::read_mem(uint16_t addr) {
       res = this->ram[addr & 0x7FF];
       break;
     case 0x2000 ... 0x3FFF:
-      res = ppu.read_mem(addr & 0x2007);
+      res = ppu->read_mem(addr & 0x2007);
       break;
     case 0x4014 ... 0x4017:
-      res = ppu.read_mem(addr);
+      res = ppu->read_mem(addr);
       break;
     default:
       res = this->rom.readPgr(addr);
