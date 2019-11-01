@@ -2,14 +2,18 @@
 #include "Utils.cpp"
 #include <iomanip>
 
-void Ppu::startPpu() {
+Ppu::Ppu() {
+  this->startPpu();
+};
+
+bool Ppu::startPpu() {
   // Initiate ram with 0xFF
   init_array(this->palleteRam, (uint8_t)0x0000);
   this->setOam_Addr(0);
   //this->ppu_address = 0;
   this->setPpu_Data(0);
   this->show_background = 0;
-  screen.startDisplay();
+  return screen.openWindow();
 };
 
 void Ppu::renderize() {
@@ -78,8 +82,7 @@ uint8_t Ppu::get_status() {
   uint8_t status = sprite_zero_hit << 6 | vblank << 7;
   this->vblank = false;
   this->first_write = true;
-  // return status;
-  return true;
+  return status;
 }
 
 void Ppu::setPpuAddress(uint8_t addr) {
@@ -183,8 +186,7 @@ void Ppu::ppuWrite(uint8_t data, uint16_t addr) {
   addr &= 0x3FFF;
 
   if (addr >= 0x0000 && addr <= 0x1FFF) {
-    printf("DATA:   %d ---------- \n", data);
-    //this->tblPattern[(addr & 0x1000) >> 12][addr & 0x0FFF] = data;
+    this->tblPattern[(addr & 0x1000) >> 12][addr & 0x0FFF] = data;
   } else if (addr >= 0x2000 && addr <= 0x3EFF) {
     addr &= 0x0FFF;
 
@@ -226,7 +228,6 @@ bool Ppu::getLatch() {
 //Este bit que ira dizer se devemos ou nao exibir algo na tela
 //(do nosso jogo pelo menos)
 bool Ppu::getShowBackground() {
-  printf("SHOWBACKGROUND ----------  %d \n", this->show_background);
   return this->show_background;
 }
 
@@ -278,6 +279,10 @@ void Ppu::set_nmi_callback(std::function<void(void)> cb){
 void Ppu::cpu_nmi_interrupt(){
   this->nmi_interruption();
 }
+
+void Ppu::setCpu(Cpu *cpu) {
+  this->cpu = cpu;
+};
 
 void Ppu::writeTblPattern() {
   int i = 0;

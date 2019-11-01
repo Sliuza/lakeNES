@@ -25,6 +25,7 @@ public:
 	void sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]);
 	void endDisplay();
 	void drawPixel();
+	bool openWindow();
 };
 
 #endif

@@ -19,6 +19,7 @@ SDL_Window* window = nullptr;
 SDL_Renderer *renderer = nullptr;
 SDL_Surface* screenSurface = nullptr;
 SDL_Rect rect;
+SDL_Event Events;
 
 // Uint32 rmask, gmask, bmask, amask;
 
@@ -91,17 +92,48 @@ void Screen::drawPixel(){
 // 	SDL_Delay( 600 );
 // }
 
-//TODO como eu acho que deveria ser um racunho do SendDisplay
 
-void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]){
-	//translate
-
-	
-if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+bool Screen::openWindow(){
+	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
 	}
 	else{
+		//Create window
+		window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+
+		//cria a janela e um renderer ja associado a ela
+		// SDL_CreateWindowAndRenderer(800, 600, 0, &window, &renderer);
+
+		//cria um render somente e o atribui a uma janela - a ultima flag sinaliza que ele acompanhara a velocidade do hardware
+		
+
+		if( window == NULL )
+		{
+			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+		}
+	return true;
+	}
+	return false;
+}
+
+
+
+//TODO como eu acho que deveria ser um racunho do SendDisplay
+
+void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]){
+	//translate
+//   while (SDL_PollEvent(&Events))
+//     {
+//         if (Events.type == SDL_QUIT)
+
+//     }
+
+// if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+// 	{
+// 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+// 	}
+	// else{
 		//Create window
 		window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
 
@@ -167,8 +199,8 @@ if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 			SDL_UpdateWindowSurface(window);
 		}
 
-		SDL_Delay( 200000 );
-	}
+		SDL_Delay( 2000 );
+	// }
 }
 
 void Screen::startDisplay(){
