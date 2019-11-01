@@ -92,10 +92,10 @@ uint8_t Cpu::read_mem(uint16_t addr) {
       res = this->ram[addr & 0x7FF];
       break;
     case 0x2000 ... 0x3FFF:
-      res = ppu.read_mem(addr & 0x2007);
+      res = ppu->read_mem(addr & 0x2007);
       break;
     case 0x4014 ... 0x4017:
-      res = ppu.read_mem(addr);
+      res = ppu->read_mem(addr);
       break;
     default:
       res = this->rom.readPgr(addr);
