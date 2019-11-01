@@ -23,6 +23,8 @@ Cpu::Cpu() {
 };
 
 void Cpu::nmi_interruption(){
+    this->push(this->pc_reg >> 8);
+    this->push(this->pc_reg);
     uint8_t flags = this->getF_negative() << 7 |
                     this->getF_overflow() << 6 |
                     1 << 5 |
@@ -31,7 +33,13 @@ void Cpu::nmi_interruption(){
                     this->getF_interrupt() << 2 |
                     this->getF_zero() << 1 |
                     this->getF_carry();
+    
+
     this->push(flags);
+    uint16_t addr_abs = 0xFFFA;
+	uint16_t lo = this->read_mem(addr_abs + 0);
+	uint16_t hi = this->read_mem(addr_abs + 1);
+	this->pc_reg = (hi << 8) | lo;
 }
 
 void Cpu::shutPpu() {
