@@ -10,6 +10,7 @@
 #include <iostream>
 #include <stdint.h>
 #include <vector>
+#include <functional>
 
 #include <bitset>
 #include <cstdint>
@@ -20,7 +21,7 @@ using namespace std;
 class Ppu{
 private:
 	//PPU Registers
-
+    std::function<void(void)> nmi_interruption;
 	uint8_t Ppu_Data;
 	bool latch;
 	bool generateInterrupt;
@@ -38,6 +39,7 @@ private:
     bool sprite_zero_hit;
     bool even_frame;
     int scan_line;
+    uint8_t fine_x_scrool;
     std::vector<int8_t> scan_lineSprites;
     std::vector<int8_t> oam_data;
     Screen screen;
@@ -66,7 +68,6 @@ private:
 	int ppuClockCycles;
 
 public:
-
 	void startPpu();
 	void reset();
 	void renderize();
@@ -75,6 +76,8 @@ public:
 	void endPpu();
     void write_mem(uint8_t val, uint16_t addr);
     void setPpuAddress(uint8_t addr);
+    void cpu_nmi_interrupt();
+    void set_nmi_callback(std::function<void(void)> cb);
     void step();
     //read and write tblPattern e tblName
     uint8_t ppuRead(uint16_t addr);
@@ -90,6 +93,7 @@ public:
 	void setOam_Addr(uint8_t value);
 	void setOam_Data(uint8_t address, uint8_t value);
 	void setPpu_Data(uint8_t value);
+	void scrool(uint8_t value);
 	void setLatch(bool state); //indicates if it's possible to modify registers registers $2005/$200 - if NMI is setted
     void setOAM_Address(uint8_t addr);
     void setOAMDMA(uint8_t value);

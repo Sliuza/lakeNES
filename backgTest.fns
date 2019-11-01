@@ -1,0 +1,6 @@
+; backgTest.asm
+background                       = $E000
+clrmem                           = $C014
+RESET                            = $C000
+NMI                              = $C07C
+LoadBackground                   = $C04E
