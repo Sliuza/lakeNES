@@ -22,7 +22,7 @@ public:
 	void startDisplay();
 	// void sendToDisplay();
 	//cabecalho da funcao do sendToDisplay com Parametros
-	void sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]);
+	void sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024], uint8_t oam_table[64][4]);
 	void endDisplay();
 	void drawPixel();
 	bool openWindow();

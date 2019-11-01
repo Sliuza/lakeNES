@@ -109,11 +109,13 @@ void Cpu::write_mem(uint8_t val, uint16_t addr) {
       this->ram[addr & 0x7FF] = val;
       break;
     case 0x2000 ... 0x3FFF:
-      ppu->write_mem(val, addr & 0x2007);
-      break;
-    case 0x4014 ... 0x4017:
-      ppu->write_mem(val, addr);
-      break;
+        ppu->write_mem(val, addr & 0x2007);
+        break;
+    case 0x4014:
+        printf("%d ------------------------- 0000000000000000000 \n", val);
+        ppu->setOAMDMA(val);
+        ppu->setOam_Table(this->ram);
+        break;
     default:
       break;
   }

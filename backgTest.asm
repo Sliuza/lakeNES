@@ -72,6 +72,16 @@ LoadBackground:
   BNE .Loop
   ;RTS
 
+  LoadSprites:
+  LDX #$00
+.Loop:
+  LDA spritePlayer1, x    ;load palette byte
+  STA $0300, x      ;write to PPU
+  INX               ;set index to next byte
+  CPX #$A0
+  BNE .Loop         ;if x = $80, 128 in decimal, all done
+  ;RTS
+
   LDA #%10000000   ; Enable NMI, sprites and background on table 0
   STA $2000
   LDA #%00011110   ; Enable sprites, enable backgrounds
@@ -89,7 +99,7 @@ NMI:
   STA $2003                     ; set the low byte (00) of the RAM address
   LDA #$03
   STA $4014                     ; set the high byte (02) of the RAM address, start the transfer
-  
+  BRK
   RTI                           ; return from interrupt
 
 
@@ -100,6 +110,9 @@ NMI:
 
 background:
   .include "graphics/background.asm"
+
+sprites:
+  .include "graphics/sprites.asm"
 
   .org $FFFA
   .dw NMI

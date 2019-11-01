@@ -10,11 +10,11 @@ Nes::Nes(string pathToRom) {
 
 void Nes::load() {
   cpu.loadROM(this->pathToRom);
-  cpu.startCpu();
   ppu.setChr_Rom(this->cpu.getRom().getChr());
   ppu.writeTblPattern();
   cpu.setPpu(&ppu);
-//   ppu.setCpu(&cpu);
+  ppu.setCpu(&cpu);
+  cpu.startCpu();
 }
 
 void Nes::run() {
@@ -25,6 +25,7 @@ void Nes::run() {
     }
     //TODO: Integrate with the ppu.renderize();
   };
+  ppu.renderize();
 };
 
 void Nes::runCycle() {

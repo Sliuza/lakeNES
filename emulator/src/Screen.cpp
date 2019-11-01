@@ -93,8 +93,39 @@ void Screen::drawPixel(){
 // }
 
 
-bool Screen::openWindow(){
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+// void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024], uint8_t oam_table[64][4]){
+// 	//translate
+
+	
+// if( SDL_Init( SDL_INIT_VIDEO ) < 0 ){
+// 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+// }
+// 	else{
+// 		//Create window
+// 		window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+
+// 		//cria a janela e um renderer ja associado a ela
+// 		// SDL_CreateWindowAndRenderer(800, 600, 0, &window, &renderer);
+
+// 		//cria um render somente e o atribui a uma janela - a ultima flag sinaliza que ele acompanhara a velocidade do hardware
+		
+
+// 		if( window == NULL )
+// 		{
+// 			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+// 		}
+// 		return;
+// 	}
+// 	return;
+// }
+
+
+
+//TODO como eu acho que deveria ser um racunho do SendDisplay
+
+void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024], uint8_t oam_table[64][4]){
+
+if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
 	}
@@ -112,60 +143,29 @@ bool Screen::openWindow(){
 		{
 			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
 		}
-	return true;
-	}
-	return false;
-}
-
-
-
-//TODO como eu acho que deveria ser um racunho do SendDisplay
-
-void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]){
-	//translate
-//   while (SDL_PollEvent(&Events))
-//     {
-//         if (Events.type == SDL_QUIT)
-
-//     }
-
-// if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-// 	{
-// 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-// 	}
-	// else{
-		//Create window
-		window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-
-		//cria a janela e um renderer ja associado a ela
-		// SDL_CreateWindowAndRenderer(800, 600, 0, &window, &renderer);
-
-		//cria um render somente e o atribui a uma janela - a ultima flag sinaliza que ele acompanhara a velocidade do hardware
-		
-
-		if( window == NULL )
-		{
-			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-		}
 		
 				//Get window surface
 		screenSurface = SDL_GetWindowSurface(window);
 		SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
-	
+		
+		// DISPLAY BACKGROUND
+		uint8_t sprite1[8];
+		uint8_t sprite2[8];
+		int i = 0, j = 0;
+		int color = 0;
 		for(int b = 0; b < 1024; b++){
 			uint8_t background = tblName[0][b];
 
 		    //sprite1  --> linha + coluna
-			uint8_t sprite1[8];
-			uint8_t sprite2[8];
-			int i = 0, j = 0;
+			
+			
 			for(i = 0; i < 8; i++){
 				sprite1[i] = tblPattern[0][(background /16)*256 + ((background %16)*16) + (i)];
 				sprite2[i] = tblPattern[0][(background /16)*256 + ((background %16)*16) + (i) + 8];
 			}
 			int* pixels = (int*) screenSurface->pixels;
 			
-			int color = 0;
+			
 			for(i = 0; i < 8; i++){
 				for(j= 7; j >= 0 ; j--){
 					
@@ -199,9 +199,104 @@ void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]
 			SDL_UpdateWindowSurface(window);
 		}
 
-		SDL_Delay( 2000 );
-	// }
+		// DISPLAY OAM
+		SDL_Surface* oamSurface;
+		oamSurface = SDL_GetWindowSurface(window);
+		int k = 0, y_oam = 0, x_oam = 0;
+		for(k = 0; k < 64; k++){
+			//printf("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP %d \n ", oam_table[k][1]);
+
+			for(i = 0; i < 8; i++){
+				sprite1[i] = tblPattern[0][(oam_table[k][1] /16)*256 + ((oam_table[k][1] %16)*16) + (i)];
+				sprite2[i] = tblPattern[0][(oam_table[k][1] /16)*256 + ((oam_table[k][1] %16)*16) + (i) + 8];
+			}
+			int* pixels = (int*) oamSurface->pixels;
+			
+			int color = 0;
+			if(oam_table[k][2] & (0x01 << 7)){
+				
+				for(i = 0; i < 8; i++){
+					for(j= 7; j >= 0 ; j--){
+						int invert = 7-i;
+						color = (int) ((sprite1[invert] & 0x01) + (sprite2[invert] & 0x01)*2);
+						
+						//nossa paleta de cores em hex
+						switch(color){
+							case 0:
+								color = 0x000001;
+								break;
+							case 1:
+								color = 0xF8F8F8;
+								break;
+							case 2:
+								color = 0xF85898;
+								break;
+							case 3:
+								color = 0xE40058;
+								break;
+						}
+
+						// offset para o pixel
+						// y_oam --> nos da a LINHA do TILE.   
+						// x_oam --> nos da a COLUNA do TILE.
+						y_oam = oam_table[k][0];
+						x_oam = oam_table[k][3];
+						pixels[(i*256 + j)+(y_oam*256 + x_oam)] = color;
+						//pixels[(i*256 + j)+((b/32)*2048) + ((b%32)*8)] = color;
+						sprite1[invert] >>= 1;
+						sprite2[invert] >>= 1; 
+					}
+				}
+			}
+			else{
+				for(i = 0; i < 8; i++){
+					for(j= 7; j >= 0 ; j--){
+						
+						color = (int) ((sprite1[i] & 0x01) + (sprite2[i] & 0x01)*2);
+						
+						//nossa paleta de cores em hex
+						switch(color){
+							case 0:
+								color = 0x000001;
+								break;
+							case 1:
+								color = 0xF8F8F8;
+								break;
+							case 2:
+								SDL_Delay( 200000 );
+								color = 0xF85898;
+								break;
+							case 3:
+								color = 0xE40058;
+								break;
+						}
+
+						if(oam_table[k][2] & (0x03) == 0x03){
+							color = 0x000001;
+						}
+
+						// offset para o pixel
+						// y_oam --> nos da a LINHA do TILE.   
+						// x_oam --> nos da a COLUNA do TILE.
+						y_oam = oam_table[k][0];
+						x_oam = oam_table[k][3];
+						pixels[(i*256 + j)+(y_oam*256 + x_oam)] = color;
+						//pixels[(i*256 + j)+((b/32)*2048) + ((b%32)*8)] = color;
+						sprite1[i] >>= 1;
+						sprite2[i] >>= 1; 
+					}
+				}
+			}
+		}
+
+		SDL_BlitSurface(oamSurface, NULL, screenSurface, NULL);
+		SDL_UpdateWindowSurface(window);
+
+		
+	}
 }
+
+
 
 void Screen::startDisplay(){
 

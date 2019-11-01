@@ -45,11 +45,16 @@ class Ppu {
   int ppu_cycle;
   bool first_write;
 
-  std::vector<int8_t> oam_data;
+  std::vector<int8_t>oam_data;
+  
   Screen screen;
   //aloca memoria para a PatternTabel e NameTable
   uint8_t tblName[2][1024];
-  uint8_t tblPattern[2][4096];
+	uint8_t tblPattern[2][4096];
+
+	// OAM DATA : -cada linha representa um sprite,
+	//            -cada coluna representa um byte contendo info do sprite.
+	uint8_t oam_table[64][4];
   uint16_t oam_address;
   uint16_t ppu_address;
 
@@ -93,7 +98,6 @@ class Ppu {
   void setPpu_Ctrl(bitset<8> value);
   void setPpu_Mask(bitset<8> value);
   void setPpu_Status(bitset<8> value);
-  void setOam_Addr(uint8_t value);
   void setOam_Data(uint8_t address, uint8_t value);
   void setPpu_Data(uint8_t value);
   void scrool(uint8_t value);
@@ -102,6 +106,8 @@ class Ppu {
   void setOAMDMA(uint8_t value);
   void setFirstWrite(bool b);
   void setCpu(Cpu *cpu);
+  void setOam_Addr(uint16_t value);
+  void setOam_Table(uint8_t ram[0xFFFF]);
 
   //Getters
   bitset<8> getPpu_Ctrl();
