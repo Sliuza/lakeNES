@@ -11,10 +11,6 @@ CFLAGS = $(SDL_INCLUDE)  -std=gnu++11
 # LDFLAGS = $(SDL_LIB)
 # LIBS= -lSDL2 -lSDL2_image	
 
-XLIBS   = -lX11 -lXext -lXmu -lXext -lXmu -lXt -lXi -lSM -lICE
-LIBS    = -lglut -lGLU -lGL
-INCLS   = -I/usr/X11R6/include -I/usr/X11/include/GL
-LIBDIR  = -L/usr/X11/lib -L/usr/X11R6/lib
 
 # CCFLAGS = -std=c++11 -lncurses //TODO: Fix warnings when compiling with this option.
 
@@ -100,7 +96,7 @@ build: main clear
 
 main: main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o Screen.o
 
-	$(CC) main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o Screen.o $(CFLAGS) $(LIBDIR) $(LIBS) $(XLIBS) $(OTHER_FLAGS) -o main 
+	$(CC) main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o Screen.o $(CFLAGS) $(OTHER_FLAGS) -o main 
 
 main.o: emulator/src/main.cpp
 	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/main.cpp

@@ -5,7 +5,6 @@
 
 #include "Rom.hpp"
 #include "PrintFunction.hpp"
-#include "Ppu.hpp"
 #include <bitset>
 #include <fstream>
 #include <iostream>
@@ -14,6 +13,7 @@
 
 using namespace std;
 
+class Ppu;
 class Cpu {
   private:
   // counter registers: store a single byte

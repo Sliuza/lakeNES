@@ -5,7 +5,6 @@
 
 #include "Rom.hpp"
 #include "Screen.hpp"
-#include "Cpu.hpp"
 #include <bitset>
 #include <fstream>
 #include <iostream>
@@ -18,7 +17,7 @@
 
 using namespace std;
 
-
+class Cpu;
 class Ppu {
   private:
   //PPU Registers
@@ -36,27 +35,21 @@ class Ppu {
   bool sprites_left_most;
   bool show_background;
   bool show_sprites;
-  bool even_frame;
   int scan_line;
   bool vblank;
   bool sprite_zero_hit;
   bool even_frame;
-  int scan_line;
   uint8_t fine_x_scrool;
   std::vector<int8_t> scan_lineSprites;
   //aloca memoria para a PatternTabel e NameTable
   int ppu_cycle;
   bool first_write;
 
-  bool vblank;
-  bool sprite_zero_hit;
   std::vector<int8_t> oam_data;
   Screen screen;
   //aloca memoria para a PatternTabel e NameTable
   uint8_t tblName[2][1024];
   uint8_t tblPattern[2][4096];
-  int ppu_cycle;
-  bool first_write;
   uint16_t oam_address;
   uint16_t ppu_address;
 
@@ -77,6 +70,7 @@ class Ppu {
   int ppuClockCycles;
 
   public:
+  Ppu();
   void step();
   bool startPpu();
   void reset();

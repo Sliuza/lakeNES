@@ -14,7 +14,7 @@ void Nes::load() {
   ppu.setChr_Rom(this->cpu.getRom().getChr());
   ppu.writeTblPattern();
   cpu.setPpu(&ppu);
-  ppu.setCpu(&cpu);
+//   ppu.setCpu(&cpu);
 }
 
 void Nes::run() {
