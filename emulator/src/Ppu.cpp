@@ -442,18 +442,6 @@ void Ppu::step() {
           if (this->sprite_pattern)
             range = 16;
 
-          std::size_t j = 0;
-          for (std::size_t i = this->oam_address / 4; i < 64; ++i) {
-            auto diff = (scan_line - this->oam_data[i * 4]);
-            if (0 <= diff && diff < range) {
-              scan_lineSprites.push_back(i);
-              ++j;
-              if (j >= 8) {
-                break;
-              }
-            }
-          }
-
           ++scan_line;
           this->ppu_cycle = 0;
         }
