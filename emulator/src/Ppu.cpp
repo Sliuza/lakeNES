@@ -242,6 +242,10 @@ void Ppu::setChr_Rom(vector<uint8_t> chr) {
   this->chr_Rom = chr;
 }
 
+void Ppu::setCpu(Cpu *cpu) {
+  this->cpu = cpu;
+};
+
 void Ppu::writeTblPattern() {
   int i = 0;
   for (i = 0; i < 4096; i++) {

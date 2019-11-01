@@ -5,6 +5,7 @@
 
 #include "Rom.hpp"
 #include "Screen.hpp"
+#include "Cpu.hpp"
 #include <bitset>
 #include <fstream>
 #include <iostream>
@@ -49,6 +50,8 @@ class Ppu {
   uint8_t tblPattern[2][4096];
   uint16_t oam_address;
   uint16_t ppu_address;
+
+  Cpu *cpu;
   enum state {
     pre_render,
     render,
@@ -92,6 +95,7 @@ class Ppu {
   void setOAM_Address(uint8_t addr);
   void setOAMDMA(uint8_t value);
   void setFirstWrite(bool b);
+  void setCpu(Cpu *cpu);
 
   //Getters
   bitset<8> getPpu_Ctrl();

@@ -11,7 +11,10 @@ Nes::Nes(string pathToRom) {
 void Nes::load() {
   cpu.loadROM(this->pathToRom);
   cpu.startCpu();
-  // cpu.printROM();
+  ppu.setChr_Rom(this->cpu.getRom().getChr());
+  ppu.writeTblPattern();
+  cpu.setPpu(&ppu);
+  ppu.setCpu(&cpu);
 }
 
 void Nes::run() {

@@ -5,6 +5,7 @@
 
 #include "Rom.hpp"
 #include "PrintFunction.hpp"
+#include "Ppu.hpp"
 #include <bitset>
 #include <fstream>
 #include <iostream>
@@ -35,6 +36,7 @@ class Cpu {
   uint8_t ram[0xFFFF];
   bool foundBrk;
   int remainingCycles;
+  Ppu *ppu;
 
   public:
   Cpu();
@@ -90,6 +92,7 @@ class Cpu {
   bool getFoundBrk();
   void setFoundBrk(bool _foundBrk);
   bool isStall();
+  void setPpu(Ppu *ppu);
 };
 
 uint8_t make_P(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint8_t t6);
