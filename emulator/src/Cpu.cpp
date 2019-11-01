@@ -25,7 +25,7 @@ Cpu::Cpu() {
   this->remainingCycles = 0;
 };
 
-void Cpu::runPpu(){
+void Cpu::runPpu() {
   ppu.setChr_Rom(this->rom.getChr());
   ppu.writeTblPattern();
   windowIsOpen = ppu.startPpu();
@@ -68,9 +68,6 @@ void Cpu::runCycle() {
   if (!this->isStall()) {
 
     uint8_t opcode = read_mem(this->pc_reg);
-    ppu.step();
-    ppu.step();
-    ppu.step();
     if (opcode == 0x00) {
       this->setFoundBrk(true);
     } else {
@@ -89,12 +86,9 @@ void Cpu::runCycle() {
 
       this->remainingCycles = instruction->getCycles();
       //deveriamos ter uma condicao para a chamada da escrita na tela.
-      
-      
     }
   }
   this->remainingCycles--;
-  // this->shutPpu();
 }
 
 bool Cpu::isStall() {
@@ -109,14 +103,14 @@ uint8_t Cpu::read_mem(uint16_t addr) {
       res = this->ram[addr & 0x7FF];
       break;
     case 0x2000 ... 0x3FFF:
-        res = ppu.read_mem(addr & 0x2007);
-        break;
+      res = ppu.read_mem(addr & 0x2007);
+      break;
     case 0x4014 ... 0x4017:
-        res = ppu.read_mem(addr);
-        break;
+      res = ppu.read_mem(addr);
+      break;
     default:
-        res = this->rom.readPgr(addr);
-        break;
+      res = this->rom.readPgr(addr);
+      break;
   }
   return res;
 }
@@ -126,13 +120,13 @@ void Cpu::write_mem(uint8_t val, uint16_t addr) {
       this->ram[addr & 0x7FF] = val;
       break;
     case 0x2000 ... 0x3FFF:
-        ppu.write_mem(val, addr & 0x2007);
-        break;
+      ppu.write_mem(val, addr & 0x2007);
+      break;
     case 0x4014 ... 0x4017:
-        ppu.write_mem(val, addr);
-        break;
+      ppu.write_mem(val, addr);
+      break;
     default:
-        break; 
+      break;
   }
 }
 void Cpu::loadROM(string path) {

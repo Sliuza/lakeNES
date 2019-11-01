@@ -26,8 +26,7 @@ void Nes::run() {
 
 void Nes::runCycle() {
   cpu.runCycle();
-  //TODO: Integrate with the ppu.runCycle();
-  // ppu.runCycle();
-  // ppu.runCycle();
-  // ppu.runCycle();
+  ppu.step();
+  ppu.step();
+  ppu.step();
 }
