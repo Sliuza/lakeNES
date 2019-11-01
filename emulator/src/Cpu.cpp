@@ -6,8 +6,6 @@
 #include "Utils.cpp"
 #include <iomanip>
 
-
-
 Ppu ppu;
 bool windowIsOpen;
 
@@ -24,16 +22,17 @@ Cpu::Cpu() {
   this->y_reg = 0;
   this->a_reg = 0;
   this->rom = Rom();
+  this->remainingCycles = 0;
 };
 
-void Cpu::runPpu(){
+void Cpu::runPpu() {
   ppu.setChr_Rom(this->rom.getChr());
   ppu.writeTblPattern();
   windowIsOpen = ppu.startPpu();
 }
 
-void Cpu::shutPpu(){
-  ppu.endPpu();
+void Cpu::shutPpu() {
+  // ppu.endPpu();
 }
 
 void Cpu::startCpu() {
@@ -49,6 +48,8 @@ void Cpu::reset() {
   this->pc_reg = this->read_mem(0xfffc) | this->read_mem(0xfffc + 1) << 8;
   this->sp_reg = 0xfd;
   ppu.setFirstWrite(true);
+  this->foundBrk = false;
+  this->remainingCycles = 0;
 }
 void Cpu::push(uint8_t val) {
   this->ram[0x100 + this->sp_reg--] = val;
@@ -57,21 +58,18 @@ void Cpu::push(uint8_t val) {
 uint8_t Cpu::pull() {
   return this->ram[0x100 + ++sp_reg];
 }
-void Cpu::run() {
-  this->startCpu();
-  this->runPpu();
+void Cpu::runCycle() {
+  // this->startCpu();
+  // this->runPpu();
   Instruction *instruction;
   InstructionFactory factory;
   uint16_t address = 0;
-  bool br = true;
-  while (br && !ppu.getShowBackground()) {
+
+  if (!this->isStall()) {
 
     uint8_t opcode = read_mem(this->pc_reg);
-    ppu.step();
-    ppu.step();
-    ppu.step();
     if (opcode == 0x00) {
-      br = false;
+      this->setFoundBrk(true);
     } else {
       instruction = factory.createInstruction(opcode);
       address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
@@ -85,17 +83,17 @@ void Cpu::run() {
         this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
         //this->printOutput(instruction->getPrintMode(), address);
       }
-      
+
+      this->remainingCycles = instruction->getCycles();
       //deveriamos ter uma condicao para a chamada da escrita na tela.
-      
-      
     }
   }
-
-  ppu.renderize();
-      
-  //this->shutPpu();
+  this->remainingCycles--;
 }
+
+bool Cpu::isStall() {
+  return this->remainingCycles > 0;
+};
 
 uint8_t Cpu::read_mem(uint16_t addr) {
   uint8_t res;
@@ -105,14 +103,14 @@ uint8_t Cpu::read_mem(uint16_t addr) {
       res = this->ram[addr & 0x7FF];
       break;
     case 0x2000 ... 0x3FFF:
-        res = ppu.read_mem(addr & 0x2007);
-        break;
+      res = ppu.read_mem(addr & 0x2007);
+      break;
     case 0x4014 ... 0x4017:
-        res = ppu.read_mem(addr);
-        break;
+      res = ppu.read_mem(addr);
+      break;
     default:
-        res = this->rom.readPgr(addr);
-        break;
+      res = this->rom.readPgr(addr);
+      break;
   }
   return res;
 }
@@ -122,13 +120,13 @@ void Cpu::write_mem(uint8_t val, uint16_t addr) {
       this->ram[addr & 0x7FF] = val;
       break;
     case 0x2000 ... 0x3FFF:
-        ppu.write_mem(val, addr & 0x2007);
-        break;
+      ppu.write_mem(val, addr & 0x2007);
+      break;
     case 0x4014 ... 0x4017:
-        ppu.write_mem(val, addr);
-        break;
+      ppu.write_mem(val, addr);
+      break;
     default:
-        break; 
+      break;
   }
 }
 void Cpu::loadROM(string path) {
@@ -363,4 +361,12 @@ void Cpu::setF_negative(uint8_t negative) {
 }
 void Cpu::set_flags(uint8_t f_lags) {
   this->flags = f_lags;
+}
+
+bool Cpu::getFoundBrk() {
+  return this->foundBrk;
+}
+
+void Cpu::setFoundBrk(bool _foundBrk) {
+  this->foundBrk = _foundBrk;
 }

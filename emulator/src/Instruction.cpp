@@ -23,6 +23,9 @@ uint8_t BaseInstruction::getInstructionSize() {
 uint8_t BaseInstruction::getPrintMode() {
   return this->_printMode;
 };
+uint8_t BaseInstruction::getCycles() {
+  return this->_cycles;
+}
 
 void BaseInstruction::setInstructionSize(uint8_t instructionSize) {
   this->_instructionSize = instructionSize;
@@ -34,6 +37,10 @@ void BaseInstruction::setAddressingMode(uint8_t addressingMode) {
 
 void BaseInstruction::setPrintMode(uint8_t printMode) {
   this->_printMode = printMode;
+};
+
+void BaseInstruction::setCycles(uint8_t cycles) {
+  this->_cycles = cycles;
 };
 
 void ADCInstruction::execute(Cpu *cpu, uint16_t address) {
