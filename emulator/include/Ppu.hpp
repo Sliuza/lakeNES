@@ -40,7 +40,6 @@ class Ppu {
   bool sprite_zero_hit;
   bool even_frame;
   uint8_t fine_x_scrool;
-  std::vector<int8_t> scan_lineSprites;
   //aloca memoria para a PatternTabel e NameTable
   int ppu_cycle;
   bool first_write;
