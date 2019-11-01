@@ -21,7 +21,6 @@ void Ppu::renderize() {
   //screen.drawPixel();
 
   //chamada do sendToDispley com parametros
-    screen.sendToDisplay(this->tblPattern, this->tblName, this->oam_table);
 }
 
 void Ppu::endPpu() {
@@ -356,65 +355,13 @@ void Ppu::step() {
           }
 
           if (this->show_sprites && (!this->sprites_left_most || x >= 8)) {
-            for (auto i : scan_lineSprites) {
-              uint8_t spr_x = this->oam_data[i * 4 + 3];
-
-              if (0 > x - spr_x || x - spr_x >= 8)
-                continue;
-
-              uint8_t spr_y = this->oam_data[i * 4 + 0] + 1,
-                      tile = this->oam_data[i * 4 + 1],
-                      attribute = this->oam_data[i * 4 + 2];
-
-              int length = (this->sprite_pattern) ? 16 : 8;
-
-              int x_shift = (x - spr_x) % 8, y_offset = (y - spr_y) % length;
-
-              if ((attribute & 0x40) == 0)
-                x_shift ^= 7;
-              if ((attribute & 0x80) != 0)
-                y_offset ^= (length - 1);
-
-              uint16_t addr = 0;
-
-              if (!this->sprite_pattern) {
-                addr = tile * 16 + y_offset;
-                if (this->sprite_pattern == 1)
-                  addr += 0x1000;
-              } else {
-                y_offset = (y_offset & 7) | ((y_offset & 8) << 1);
-                addr = (tile >> 1) * 32 + y_offset;
-                addr |= (tile & 1) << 12;
-              }
-
-              sprColor |= (ppuRead(addr) >> (x_shift)) & 1;
-              sprColor |= ((ppuRead(addr + 8) >> (x_shift)) & 1) << 1;
-
-              if (!(sprOpaque = sprColor)) {
-                sprColor = 0;
-                continue;
-              }
-
-              sprColor |= 0x10;
-              sprColor |= (attribute & 0x3) << 2;
-
-              spriteForeground = !(attribute & 0x20);
-
-              if (!sprite_zero_hit && this->show_background && i == 0 && sprOpaque && bgOpaque) {
-                sprite_zero_hit = true;
-              }
-
-              break;
+            if (!sprite_zero_hit && this->show_background && sprOpaque && bgOpaque) {
+            sprite_zero_hit = true;
             }
+
+            break;
           }
 
-          uint8_t paletteAddr = bgColor;
-          if ((!bgOpaque && sprOpaque) ||
-              (bgOpaque && sprOpaque && spriteForeground))
-            paletteAddr = sprColor;
-          else if (!bgOpaque && !sprOpaque)
-            paletteAddr = 0;
-          //   Lê as paletas aquiiii
         } else if (this->ppu_cycle == 256 + 1 && this->show_background) {
           if ((ppu_address & 0x7000) != 0x7000)
             ppu_address += 0x1000;
@@ -455,7 +402,7 @@ void Ppu::step() {
           ++scan_line;
           this->ppu_cycle = 0;
           pipeline_state = vertical_blank;
-          // printa os pixels aquiii
+          screen.sendToDisplay(this->tblPattern, this->tblName, this->oam_table);
         }
         break;
       case vertical_blank:
