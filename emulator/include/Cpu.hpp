@@ -36,6 +36,7 @@ class Cpu {
   uint8_t ram[0xFFFF];
   bool foundBrk;
   int remainingCycles;
+  int cyclesCounter;
   Ppu *ppu;
 
   public:
@@ -52,15 +53,14 @@ class Cpu {
   uint16_t getAddressBasedOnAddressingMode(uint8_t addressingMode);
   uint16_t get16BitsAddress(uint16_t address);
   uint16_t get16BitsAddressInMemory(uint16_t address);
-  void printOutput(uint16_t printFuncion, uint16_t address);
-  void print();
+  void printOutput(uint16_t printFuncion,uint8_t opcode, uint8_t addressMode, uint16_t address);
+  void print(uint8_t opcode, uint8_t addressMode,  uint16_t address);
   void printls(uint16_t address);
   void runPpu();
   void shutPpu();
 
   //GETTERS
-  uint16_t
-  getPc_reg();              // program counter, 2 byte
+  uint16_t getPc_reg();              // program counter, 2 byte
   uint8_t getSp_reg();      // stack pointer
   uint8_t getX_reg();       // x register
   uint8_t getY_reg();       // y register
@@ -72,6 +72,7 @@ class Cpu {
   uint8_t getF_overflow();  // overflow flag
   uint8_t getF_negative();  // negative flag
   uint8_t getP_reg();
+  int getCyclesCounter();
 
   Rom getRom();
   //SETTERS
@@ -88,6 +89,7 @@ class Cpu {
   void setF_negative(uint8_t negative);   // negative flag
   void set_flags(uint8_t f_lags);         // unused flags
   void setP_reg(uint8_t _p_reg);
+  void setCyclesCounter(int cyclesCounter);
 
   bool getFoundBrk();
   void setFoundBrk(bool _foundBrk);

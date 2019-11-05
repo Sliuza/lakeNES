@@ -56,9 +56,11 @@ void Cpu::reset() {
   this->f_interrupt = 1;
   this->flags = 1;
   this->f_negative = this->f_overflow = this->f_zero = this->f_carry = this->f_decimal = 0;
-  this->pc_reg = this->read_mem(0xfffc) | this->read_mem(0xfffc + 1) << 8;
+  this->pc_reg = this->read_mem(0xfffc) | this->read_mem(0xfffc) << 8;
+  // this->pc_reg=0xC000;
   this->sp_reg = 0xfd;
   ppu->setFirstWrite(true);
+  this->setCyclesCounter(0);
   this->foundBrk = false;
   this->remainingCycles = 0;
 }
@@ -85,12 +87,12 @@ void Cpu::runCycle() {
       if (opcode == 0x48 || opcode == 0x08 || opcode == 0x68 || opcode == 0x28) { //PHA //PHP //PLA //PLP
         address = 0x0100 + getSp_reg();
       }
+      this->setCyclesCounter(instruction->getCycles()+this->getCyclesCounter());
+      this->printOutput(instruction->getPrintMode(), opcode, instruction->getAddressingMode(), address);
       instruction->execute(this, address);
       if (opcode == 0x004c || opcode == 0x006c || opcode == 0x20) {
-        this->printOutput(instruction->getPrintMode(), address);
       } else {
         this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
-        //this->printOutput(instruction->getPrintMode(), address);
       }
 
       this->remainingCycles = instruction->getCycles();
@@ -242,35 +244,30 @@ uint16_t Cpu::get16BitsAddressInMemory(uint16_t address) {
   return hi | lo;
 }
 
-void Cpu::printOutput(uint16_t printFuncion, uint16_t address) {
-  printFuncion == PRINT ? this->print() : this->printls(address);
+void Cpu::printOutput(uint16_t printFuncion,uint8_t opcode, uint8_t addressMode, uint16_t address) {
+  this->print(opcode, addressMode, address);
 };
 
-void Cpu::print() {
+void Cpu::print(uint8_t opcode, uint8_t addressMode,  uint16_t address) {
   unsigned p = this->getP_reg();
 
-  cout << setfill('0')
-       << "| pc = 0x" << hex << setw(4) << this->getPc_reg()
-       << " | a = 0x" << hex << setw(2) << (unsigned)this->getA_reg()
-       << " | x = 0x" << hex << setw(2) << (unsigned)this->getX_reg()
-       << " | y = 0x" << hex << setw(2) << (unsigned)this->getY_reg()
-       << " | sp = 0x" << hex << setw(4) << (unsigned)(0x0100 + this->getSp_reg())
-       << " | p[NV-BDIZC] = " << bitset<8>(p) << " |" << endl;
-}
-
-void Cpu::printls(uint16_t address) {
-  uint8_t data = this->read_mem(address);
-  uint8_t p = this->getP_reg();
-
-  cout << setfill('0')
-       << "| pc = 0x" << hex << setw(4) << this->getPc_reg()
-       << " | a = 0x" << hex << setw(2) << (unsigned)this->getA_reg()
-       << " | x = 0x" << hex << setw(2) << (unsigned)this->getX_reg()
-       << " | y = 0x" << hex << setw(2) << (unsigned)this->getY_reg()
-       << " | sp = 0x" << hex << setw(4) << (unsigned)(0x0100 + this->getSp_reg())
-       << " | p[NV-BDIZC] = " << bitset<8>(p)
-       << " | MEM[0x" << hex << setw(4) << address
-       << "] = 0x" << hex << setw(2) << (unsigned)data << " |" << endl;
+  cout << setfill('0') << uppercase << hex << setw(4) << this->getPc_reg()
+  <<" "<< uppercase << hex << setw(2) << (unsigned)opcode;
+  if(address != 0){
+    cout << " "  << uppercase << hex << ((address & 0xF0) >> 4);
+    cout << uppercase << hex << ((address & 0xF) >> 0);
+    cout << " " << uppercase << hex << ((address & 0xF000) >> 12);
+    cout << uppercase << hex << ((address & 0xF00) >> 8);
+  }
+  else{
+    cout << setfill(' ') << setw(5) << " ";
+  }
+  cout << setfill('0') << " A:" << uppercase << hex << setw(2) << (unsigned)this->getA_reg()
+  << " X:" << uppercase << hex << setw(2) << (unsigned)this->getX_reg()
+  << " Y:" << uppercase << hex << setw(2) << (unsigned)this->getY_reg()
+  << " P:" << uppercase << hex << setw(2) << (unsigned)p
+  << " SP:" << uppercase << hex << setw(2) << (unsigned)(this->getSp_reg());
+  cout << " CYC:" << dec << this->getCyclesCounter() << endl;
 }
 
 //GETTERS
@@ -306,6 +303,9 @@ uint8_t Cpu::getF_overflow() {
 }
 uint8_t Cpu::getF_negative() {
   return this->f_negative;
+}
+int Cpu::getCyclesCounter(){
+  return this->cyclesCounter;
 }
 
 uint8_t Cpu::getP_reg() {
@@ -386,3 +386,7 @@ void Cpu::setFoundBrk(bool _foundBrk) {
 void Cpu::setPpu(Ppu *ppu) {
   this->ppu = ppu;
 };
+
+void Cpu::setCyclesCounter(int cyclesCounter){
+  this->cyclesCounter = cyclesCounter;
+}
