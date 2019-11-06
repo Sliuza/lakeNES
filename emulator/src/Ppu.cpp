@@ -41,13 +41,12 @@ void Ppu::reset() {
   this->ppu_address = 0;
   this->ppu_cycle = 0;
   this->scan_line = 0;
-  this->oam_address = 0;
+  this->oam_address = 0X300;
   this->fine_x_scrool = 0;
   this->base_nametable_address = 0;
   this->vram_increment = 1;
   this->pipeline_state = pre_render;
-  this->scan_lineSprites.reserve(8);
-  this->scan_lineSprites.resize(0);
+
 }
 void Ppu::control(bitset<8> ctrl) {
   if (!ctrl[0] && !ctrl[1]) {
@@ -302,130 +301,5 @@ void Ppu::writeTblPattern() {
 }
 
 void Ppu::step() {
-  switch (this->pipeline_state) {
-      case pre_render:
-        if (this->ppu_cycle == 1)
-          vblank = sprite_zero_hit = false;
-        else if (this->ppu_cycle == 256 + 2 && this->show_background && this->show_sprites) {
-          ppu_address &= ~0x41f;
-          ppu_address |= this->base_nametable_address & 0x41f;
-        } else if (this->ppu_cycle > 280 && this->ppu_cycle <= 304 && this->show_background && this->show_sprites) {
-          ppu_address &= ~0x7be0;
-          ppu_address |= this->base_nametable_address & 0x7be0;
-        }
-        if (this->ppu_cycle >= 340 - (!this->even_frame && this->show_background && this->show_sprites)) {
-          pipeline_state = render;
-          this->ppu_cycle = scan_line = 0;
-        }
-        break;
-      case render:
-        if (this->ppu_cycle > 0 && this->ppu_cycle <= 256) {
-          uint8_t bgColor = 0, sprColor = 0;
-          bool bgOpaque = false, sprOpaque = true;
-          bool spriteForeground = false;
-
-          int x = this->ppu_cycle - 1;
-          int y = scan_line;
-
-          if (this->show_background) {
-            auto x_fine = (this->fine_x_scrool + x) % 8;
-            if (!sprites_left_most || x >= 8) {
-              auto addr = 0x2000 | (ppu_address & 0x0FFF);
-              uint8_t tile = ppuRead(addr);
-
-              addr = (tile * 16) + ((ppu_address >> 12) & 0x7);
-              addr |= this->background_pattern << 12;
-              bgColor = (ppuRead(addr) >> (7 ^ x_fine)) & 1;
-              bgColor |= ((ppuRead(addr + 8) >> (7 ^ x_fine)) & 1) << 1;
-
-              bgOpaque = bgColor;
-
-              addr = 0x23C0 | (ppu_address & 0x0C00) | ((ppu_address >> 4) & 0x38) | ((ppu_address >> 2) & 0x07);
-              auto attribute = ppuRead(addr);
-              int shift = ((ppu_address >> 4) & 4) | (ppu_address & 2);
-              bgColor |= ((attribute >> shift) & 0x3) << 2;
-            }
-            if (x_fine == 7) {
-              if ((ppu_address & 0x001F) == 31) {
-                ppu_address &= ~0x001F;
-                ppu_address ^= 0x0400;
-              } else
-                ppu_address += 1;
-            }
-          }
-
-          if (this->show_sprites && (!this->sprites_left_most || x >= 8)) {
-            if (!sprite_zero_hit && this->show_background && sprOpaque && bgOpaque) {
-            sprite_zero_hit = true;
-            }
-
-            break;
-          }
-
-        } else if (this->ppu_cycle == 256 + 1 && this->show_background) {
-          if ((ppu_address & 0x7000) != 0x7000)
-            ppu_address += 0x1000;
-          else {
-            ppu_address &= ~0x7000;
-            int y = (ppu_address & 0x03E0) >> 5;
-            if (y == 29) {
-              y = 0;
-              ppu_address ^= 0x0800;
-            } else if (y == 31)
-              y = 0;
-            else
-              y += 1;
-            ppu_address = (ppu_address & ~0x03E0) | (y << 5);
-          }
-        } else if (this->ppu_cycle == 256 + 2 && this->show_background && this->show_sprites) {
-          ppu_address &= ~0x41f;
-          ppu_address |= this->base_nametable_address & 0x41f;
-        }
-
-        if (this->ppu_cycle >= 340) {
-          scan_lineSprites.resize(0);
-
-          int range = 8;
-          if (this->sprite_pattern)
-            range = 16;
-
-          ++scan_line;
-          this->ppu_cycle = 0;
-        }
-
-        if (scan_line >= 240)
-          pipeline_state = post_render;
-
-        break;
-      case post_render:
-        if (this->ppu_cycle >= 340) {
-          ++scan_line;
-          this->ppu_cycle = 0;
-          pipeline_state = vertical_blank;
-          screen.sendToDisplay(this->tblPattern, this->tblName, this->oam_table);
-        }
-        break;
-      case vertical_blank:
-        if (this->ppu_cycle == 1 && scan_line == 240 + 1) {
-          vblank = true;
-          if (this->generateInterrupt) {
-            this->cpu_nmi_interrupt();
-          }
-        }
-
-        if (this->ppu_cycle >= 340) {
-          ++scan_line;
-          this->ppu_cycle = 0;
-        }
-
-        if (scan_line >= 261) {
-          this->pipeline_state = pre_render;
-          scan_line = 0;
-          this->even_frame = !this->even_frame;
-        }
-
-        break;
-    }
-
-    ++this->ppu_cycle;
+    
 }

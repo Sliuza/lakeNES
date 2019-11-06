@@ -196,7 +196,7 @@ if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 				}
 			}
 			
-			SDL_UpdateWindowSurface(window);
+			// SDL_UpdateWindowSurface(window);
 		}
 
 		// DISPLAY OAM
@@ -235,7 +235,9 @@ if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 								color = 0xE40058;
 								break;
 						}
-
+                        if(oam_table[k][2] & 0x03 == 3){
+                            color = 0x000001;
+                        }
 						// offset para o pixel
 						// y_oam --> nos da a LINHA do TILE.   
 						// x_oam --> nos da a COLUNA do TILE.
@@ -288,9 +290,9 @@ if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 			}
 		}
 
-        SDL_Delay( 7000 );
 		SDL_BlitSurface(oamSurface, NULL, screenSurface, NULL);
 		SDL_UpdateWindowSurface(window);
+        SDL_Delay( 7000 );
 
 		
 	}
