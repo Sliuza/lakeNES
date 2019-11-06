@@ -56,7 +56,7 @@ void Cpu::reset() {
   this->f_interrupt = 1;
   this->flags = 1;
   this->f_negative = this->f_overflow = this->f_zero = this->f_carry = this->f_decimal = 0;
-  this->pc_reg = this->read_mem(0xfffc) | this->read_mem(0xfffc) << 8;
+  this->pc_reg = this->read_mem(0xfffc) | this->read_mem(0xfffc + 1) << 8;
   // this->pc_reg=0xC000;
   this->sp_reg = 0xfd;
   ppu->setFirstWrite(true);
