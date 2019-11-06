@@ -10,12 +10,13 @@ bool Ppu::startPpu() {
   // Initiate ram with 0xFF
   init_array(this->palleteRam, (uint8_t)0x0000);
   this->reset();
+  this->screen.createWindow();
   return true;
 };
 
 void Ppu::renderize() {
   // muda a cor da surface da tela
-  // s.sendToDisplay();
+   screen.sendToDisplay(this->tblPattern, this->tblName, this->oam_table);
 
   // brinca com os pixels da Screen, faz retas, pontos e retangulos
   //screen.drawPixel();

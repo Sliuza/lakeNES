@@ -19,6 +19,10 @@ using namespace std;
 class Screen
 {
 public:
+	SDL_Window* window;
+	SDL_Surface* surface;
+
+	void createWindow();
 	void startDisplay();
 	// void sendToDisplay();
 	//cabecalho da funcao do sendToDisplay com Parametros
