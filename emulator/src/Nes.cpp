@@ -15,6 +15,7 @@ void Nes::load() {
   ppu.setCpu(&cpu);
   ppu.set_nmi_callback([&](){ cpu.nmi_interruption(); });
   cpu.startCpu();
+  ppu.startPpu();
 }
 
 void Nes::run() {
@@ -22,15 +23,15 @@ void Nes::run() {
   while (!cpu.getFoundBrk()) {
     for (int i = 0; i < TOTAL_CYCLES && !cpu.getFoundBrk(); i++) {
       this->runCycle();
+      //printf("999999999999\n");
     }
+      ppu.renderize();
+      cpu.nmi_interruption();
     //TODO: Integrate with the ppu.renderize();
   };
-  ppu.renderize();
+  ppu.endPpu();
 };
 
 void Nes::runCycle() {
   cpu.runCycle();
-  ppu.step();
-  ppu.step();
-  ppu.step();
 }

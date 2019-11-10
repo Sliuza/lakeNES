@@ -23,23 +23,30 @@ Cpu::Cpu() {
 };
 
 void Cpu::nmi_interruption(){
-    this->push(this->pc_reg >> 8);
-    this->push(this->pc_reg);
-    uint8_t flags = this->getF_negative() << 7 |
-                    this->getF_overflow() << 6 |
-                    1 << 5 |
-                    0 << 4 |
-                    this->getF_decimal() << 3 |
-                    this->getF_interrupt() << 2 |
-                    this->getF_zero() << 1 |
-                    this->getF_carry();
-    
+  printf("PC START NMI: %d \n", this->pc_reg);
+  this->push(this->pc_reg >> 8);
+  this->push(this->pc_reg);
+  printf("PC LOADED NMI: %d \n", this->pc_reg);
+  uint8_t flags = this->getF_negative() << 7 |
+                  this->getF_overflow() << 6 |
+                  1 << 5 |
+                  0 << 4 |
+                  this->getF_decimal() << 3 |
+                  this->getF_interrupt() << 2 |
+                  this->getF_zero() << 1 |
+                  this->getF_carry();
+  printf("FLAGS START NMI: %d \n", this->flags);
 
-    this->push(flags);
-    uint16_t addr_abs = 0xFFFA;
+  
+  
+  uint16_t addr_abs = 0xFFFA;
 	uint16_t lo = this->read_mem(addr_abs + 0);
 	uint16_t hi = this->read_mem(addr_abs + 1);
 	this->pc_reg = (hi << 8) | lo;
+  printf("PC END NMI: %d \n", this->pc_reg);
+  this->push(flags);
+  printf("FLAGS LOADED NMI: %d   SPREG: %d\n", this->flags, this->sp_reg);
+
 }
 
 void Cpu::shutPpu() {
@@ -88,9 +95,9 @@ void Cpu::runCycle() {
         address = 0x0100 + getSp_reg();
       }
       this->setCyclesCounter(instruction->getCycles()+this->getCyclesCounter());
-      this->printOutput(instruction->getPrintMode(), opcode, instruction->getAddressingMode(), address);
+      //this->printOutput(instruction->getPrintMode(), opcode, instruction->getAddressingMode(), address);
       instruction->execute(this, address);
-      if (opcode == 0x004c || opcode == 0x006c || opcode == 0x20) {
+      if (opcode == 0x4c || opcode == 0x6c || opcode == 0x20 || opcode == 0x60 || opcode == 0x40 ) {
       } else {
         this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
       }

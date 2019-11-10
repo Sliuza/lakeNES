@@ -20,7 +20,7 @@ BIN=./emulator/bin
 LOG=./emulator/log
 EXT=./emulator/ext
 NES=./main
-OBJS=emulator/src/Sdl.cpp
+
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
@@ -36,7 +36,7 @@ CROSS_AS=${EXT}/asm6/asm6
 
 # ****************************************************
 
-all: ${BIN} ${LOG} ${NES} ${OBJS}
+all: ${BIN} ${LOG} ${NES} 
 
 ${NES}:
 	${CC} ${CCFLAGS} emulator/src/main.cpp -o ${NES}
@@ -50,8 +50,6 @@ ${BIN}/%: ${TST}/%.s
 ${LOG}:
 	@mkdir -p ${LOG}
 
-$(OBJS):
-	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
 
 test: ${BIN} ${LOG} ${NES} ${TESTS} clear
 	@{  echo "************************* Tests ******************************"; \

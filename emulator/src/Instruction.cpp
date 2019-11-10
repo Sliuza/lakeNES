@@ -283,7 +283,7 @@ void JSRInstruction::execute(Cpu *cpu, uint16_t address) {
   //PUSH PC INTO STACK, SET PC ADDRESS.
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t stack = cpu->getSp_reg();
-    uint16_t pc = cpu->getPc_reg();
+    uint16_t pc = cpu->getPc_reg() + 2;
     cpu->write_mem((pc >> 8) & 0x00FF, 0x0100 + stack);
     stack--;
     cpu->write_mem(pc & 0x00FF, 0x0100 + stack);
@@ -375,14 +375,17 @@ void RTIInstruction::execute(Cpu *cpu, uint16_t address) {
   //cout << "[RTIInstruction] -  execute()\n";
   if (address >= 0x0000 && address <= 0xFFFF) {
     uint8_t stack = cpu->getSp_reg();
+    printf("STACK: %d \n",stack);
     stack++;
     uint8_t status = cpu->read_mem(0x0100 + stack);
-
+    cpu->setP_reg(status);
+    printf("STATUS: %d \n",status);
     stack++;
     uint16_t pc = (uint16_t)cpu->read_mem(0x0100 + stack);
+    printf("PC CARREGADO: %d \n",pc);
     stack++;
     pc |= (uint16_t)cpu->read_mem(0x0100 + stack) << 8;
-
+    printf("PC ESCRITO: %d \n",pc);
     cpu->setPc_reg(pc);
     cpu->setSp_reg(stack);
   }
