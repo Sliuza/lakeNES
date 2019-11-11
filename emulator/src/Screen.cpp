@@ -14,7 +14,7 @@
 
 
 const int SCREEN_WIDTH = 256;
-const int SCREEN_HEIGHT = 256;
+const int SCREEN_HEIGHT = 224;
 
 SDL_Renderer *renderer = nullptr;
 
@@ -145,9 +145,9 @@ void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]
 	uint8_t sprite2[8];
 	int i = 0, j = 0;
 	int color = 0;
-	for(int b = 0; b < 1024; b++){
+	for(int b = 0; b < 944; b++){
 		uint8_t background = tblName[0][b];
-		printf(" BACKG: %d \n", background);
+		
 	    //sprite1  --> linha + coluna
 		
 		
@@ -182,7 +182,8 @@ void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]
 				// offset para o pixel -> i, j e b. 
 				// (b / 32) --> nos da a LINHA do TILE.   
 				// (b % 32) --> nos da a COLUNA do TILE.
-				pixels[(i*256 + j)+((b/32)*2048) + ((b%32)*8)] = color;
+				if(b > 32 && b < 960)
+					pixels[(i*256 + j)+(((b/32) - 1)*2048) + ((b%32)*8)] = color;
 				sprite1[i] >>= 1;
 				sprite2[i] >>= 1; 
 			}
@@ -195,7 +196,7 @@ void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]
 	SDL_Surface* oamSurface;
 	oamSurface = SDL_GetWindowSurface(this->window);
 	
-	int k = 0, y_oam = 0, x_oam = 0;
+	int k = 0, y_oam = 0, x_oam = 0, invert = 0;
 	for(k = 0; k < 64; k++){
 		//printf("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP %d \n ", oam_table[k][1]);
 
@@ -210,7 +211,7 @@ void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]
 			
 			for(i = 0; i < 8; i++){
 				for(j= 7; j >= 0 ; j--){
-					int invert = i;
+					invert = i;
 
 					if(oam_table[k][2] & (0x01 << 7))
 						invert = 7 - i;
@@ -240,8 +241,9 @@ void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]
 					// x_oam --> nos da a COLUNA do TILE.
 					y_oam = oam_table[k][0];
 					x_oam = oam_table[k][3];
-					pixels[(i*256 + j)+(y_oam*256 + x_oam)] = color;
-					//pixels[(i*256 + j)+((b/32)*2048) + ((b%32)*8)] = color;
+					printf(" Y_OAM: %d ------ X_OAM: %d\n", y_oam, x_oam);
+					if(x_oam < 256 && y_oam >= 8 && y_oam < 232)
+						pixels[(i*256 + j)+((y_oam - 8)*256 + x_oam)] = color;
 					sprite1[invert] >>= 1;
 					sprite2[invert] >>= 1; 
 				}
