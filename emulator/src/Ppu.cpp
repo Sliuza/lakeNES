@@ -3,7 +3,7 @@
 #include <iomanip>
 
 Ppu::Ppu() {
-//   this->startPpu();
+  //this->startPpu();
 };
 
 bool Ppu::startPpu() {
@@ -102,7 +102,7 @@ void Ppu::write_mem(uint8_t val, uint16_t addr){
             this->control(val);
             break;
         case 0x2001: // Mask
-            printf("MASK SET --------------------- %d \n", val);
+            
             this->mask(val);
             break;
         case 0x2003: // OAM Address
@@ -116,9 +116,10 @@ void Ppu::write_mem(uint8_t val, uint16_t addr){
             break;
         case 0x2006: //PPU address 
             this->setPpuAddress(val);
-            printf("PPU DATA =================== PPUADDR:  %d  \n", this->ppu_address);
+            
             break;
         case 0x2007: //PPU data
+            printf("PPU DATA: %d / %d =================== PPUADDR:  %d  \n", val, addr, this->ppu_address);
             this->setPpu_Data(val);
             break;
         case 0x4014: // OAMDMA
@@ -140,6 +141,10 @@ u_int8_t Ppu::read_mem(uint16_t addr) {
       return this->getOam_Data(addr);
     case 0x2007: //PPU data
       return this->getPpu_Data();
+    case 0x4016:
+      return 0;
+    case 0x4017:
+      return 0;
     default:
       cout << "WARNING:Trying to read not allowed PPU memory ADDR: " << addr << endl;
       break;
@@ -277,7 +282,8 @@ void Ppu::setLatch(bool state) {
 void Ppu::setOAMDMA(uint8_t value){
 
   this->setOam_Addr(value << 8);
-  printf("%d ---------- \n", value, this->oam_address);
+  
+  //this->setOam_Table(this->getRam());
 }
 
 void Ppu::setChr_Rom(vector<uint8_t> chr) {
@@ -299,8 +305,4 @@ void Ppu::writeTblPattern() {
   for (i = 0; i < 4096; i++) {
     this->tblPattern[0][i] = this->chr_Rom[i];
   }
-}
-
-void Ppu::step() {
-    
 }

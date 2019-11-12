@@ -75,7 +75,6 @@ class Ppu {
 
   public:
   Ppu();
-  void step();
   bool startPpu();
   void reset();
   void renderize();
