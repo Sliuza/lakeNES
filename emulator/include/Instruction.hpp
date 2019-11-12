@@ -16,10 +16,12 @@ class Instruction {
   virtual uint8_t getAddressingMode() = 0;
   virtual uint8_t getPrintMode() = 0;
   virtual uint8_t getCycles() = 0;
+  virtual string getDecodedInstruction() = 0;
   virtual void setInstructionSize(uint8_t instructionSize) = 0;
   virtual void setAddressingMode(uint8_t addressingMode) = 0;
   virtual void setPrintMode(uint8_t printMode) = 0;
   virtual void setCycles(uint8_t cycles) = 0;
+  virtual void setDecodedInstruction(string decodedInstruction) = 0;
 };
 
 class BaseInstruction : public Instruction {
@@ -29,6 +31,7 @@ class BaseInstruction : public Instruction {
   uint8_t _instructionSize;
   uint8_t _printMode;
   uint8_t _cycles;
+  string _decodedInstruction;
 
   public:
   BaseInstruction();
@@ -37,10 +40,12 @@ class BaseInstruction : public Instruction {
   uint8_t getAddressingMode();
   uint8_t getPrintMode();
   uint8_t getCycles();
+  string getDecodedInstruction();
   void setInstructionSize(uint8_t instructionSize);
   void setAddressingMode(uint8_t addressingMode);
   void setPrintMode(uint8_t printMode);
   void setCycles(uint8_t cycles);
+  void setDecodedInstruction(string decodedInstruction);
 };
 
 class ADCInstruction : public BaseInstruction {

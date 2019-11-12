@@ -3,7 +3,7 @@
 #include <iomanip>
 
 Ppu::Ppu() {
-  this->startPpu();
+//   this->startPpu();
 };
 
 bool Ppu::startPpu() {

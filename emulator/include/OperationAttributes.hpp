@@ -7,6 +7,7 @@ struct OperationAttributes {
   uint8_t addressingMode;
   uint8_t printMode;
   uint8_t cycles;
+  string name;
 };
 
 #endif

@@ -25,12 +25,12 @@ void Nes::run() {
     }
     //TODO: Integrate with the ppu.renderize();
   };
-  ppu.renderize();
+//   ppu.renderize();
 };
 
 void Nes::runCycle() {
   cpu.runCycle();
-  ppu.step();
-  ppu.step();
-  ppu.step();
+//   ppu.step();
+//   ppu.step();
+//   ppu.step();
 }
