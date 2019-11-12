@@ -51,7 +51,7 @@ class Cpu {
   void runCycle();
   void reset();
   uint16_t getAddressBasedOnAddressingMode(uint8_t addressingMode);
-  string getPrintBasedOnAddressingMode(uint8_t addressingMode);
+  string getPrintBasedOnAddressingMode(uint8_t addressingMode, uint8_t opcode, string decodedInstruction, uint16_t possible_pc);
   uint16_t get16BitsAddress(uint16_t address);
   uint16_t get16BitsAddressInMemory(uint16_t address);
   void printOutput(uint16_t printFuncion,uint8_t opcode, uint8_t addressMode, uint16_t address, string decodedInstruction);

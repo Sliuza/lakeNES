@@ -11,18 +11,7 @@ using namespace std;
 void print(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc, uint8_t p)
 {
 	cout << setfill('0')
-		 << "| pc = 0x" << hex << setw(4) << pc
-		 << " | a = 0x" << hex << setw(2) << (unsigned)a
-		 << " | x = 0x" << hex << setw(2) << (unsigned)x
-		 << " | y = 0x" << hex << setw(2) << (unsigned)y
-		 << " | sp = 0x" << hex << setw(4) << sp
-		 << " | p[NV-BDIZC] = " << bitset<8>(p) << " |" << endl;
-}
-
-void printls(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc, uint8_t p, uint16_t addr, uint8_t data)
-{
-	cout << setfill('0')
-		 << "| pc = 0x" << hex << setw(4) << pc
+		 << uppercase << hex << setw(4) << pc
 		 << " | a = 0x" << hex << setw(2) << (unsigned)a
 		 << " | x = 0x" << hex << setw(2) << (unsigned)x
 		 << " | y = 0x" << hex << setw(2) << (unsigned)y
@@ -30,6 +19,19 @@ void printls(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc, uint8_t 
 		 << " | p[NV-BDIZC] = " << bitset<8>(p)
 		 << " | MEM[0x" << hex << setw(4) << addr
 		 << "] = 0x" << hex << setw(2) << (unsigned)data << " |" << endl;
+}
+
+void printls(uint8_t a, uint8_t x, uint8_t y, uint16_t sp, uint16_t pc, uint8_t p, uint16_t addr, uint8_t data)
+{
+	cout << setfill('0')
+		 << uppercase << hex << setw(4) << pc
+		 << "A:" << uppercase << hex << setw(2) << (unsigned)a
+		 << " X:" << uppercase << hex << setw(2) << (unsigned)x
+		 << " Y:" << uppercase << hex << setw(2) << (unsigned)y
+		 << " P:" << uppercase << hex << setw(2) << (unsigned)p
+		 << " SP:" << uppercase << hex << setw(4) << sp
+		 << " | MEM[0x" << uppercase << hex << setw(4) << addr
+		 << "] = 0x" << uppercase<< hex << setw(2) << (unsigned)data << " |" << endl;
 }
 
 
