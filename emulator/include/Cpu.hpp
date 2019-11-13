@@ -5,6 +5,7 @@
 
 #include "Rom.hpp"
 #include "PrintFunction.hpp"
+#include "Screen.hpp"
 #include <bitset>
 #include <fstream>
 #include <iostream>
@@ -40,6 +41,7 @@ class Cpu {
   Ppu *ppu;
 
   public:
+  Screen screen;
   Cpu();
   void loadROM(string path);
   void printROM();

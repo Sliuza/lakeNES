@@ -121,6 +121,5 @@ InstructionFactory.o: emulator/src/InstructionFactory.cpp emulator/include/Instr
 
 Screen.o: emulator/src/Screen.cpp emulator/include/Screen.hpp
 	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/Screen.cpp
-
 clear: 
 	$(RM) *.o *~

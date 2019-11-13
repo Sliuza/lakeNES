@@ -18,6 +18,11 @@ using namespace std;
 
 class Screen
 {
+
+private:
+	int counter1 = 0;
+	int counter2 = 0;
+	
 public:
 	SDL_Window* window;
 	SDL_Surface* surface;
@@ -30,6 +35,8 @@ public:
 	void endDisplay();
 	void drawPixel();
 	bool openWindow();
+	uint8_t readControl1();
+	uint8_t readControl2();
 };
 
 #endif

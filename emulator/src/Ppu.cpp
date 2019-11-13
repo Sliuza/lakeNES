@@ -17,11 +17,6 @@ bool Ppu::startPpu() {
 void Ppu::renderize() {
   // muda a cor da surface da tela
    screen.sendToDisplay(this->tblPattern, this->tblName, this->oam_table);
-
-  // brinca com os pixels da Screen, faz retas, pontos e retangulos
-  //screen.drawPixel();
-
-  //chamada do sendToDispley com parametros
 }
 
 void Ppu::endPpu() {
@@ -86,13 +81,13 @@ void Ppu::setPpuAddress(uint8_t addr) {
     this->ppu_address &= ~0xff00;
     this->ppu_address |= (addr & 0x3f) << 8;
     this->first_write = false;
-    printf("000000000 =================== PPUADDR:  %d  \n", this->ppu_address);
+    // printf("000000000 =================== PPUADDR:  %d  \n", this->ppu_address);
   } else {
     this->ppu_address &= ~0xff;
     this->ppu_address |= addr;
     this->oam_address = ppu_address;
     this->first_write = true;
-    printf("1111111111 =================== PPUADDR:  %d  \n", this->ppu_address);
+    // printf("1111111111 =================== PPUADDR:  %d  \n", this->ppu_address);
   }
 }
 
@@ -119,14 +114,17 @@ void Ppu::write_mem(uint8_t val, uint16_t addr){
             
             break;
         case 0x2007: //PPU data
-            printf("PPU DATA: %d / %d =================== PPUADDR:  %d  \n", val, addr, this->ppu_address);
+            // printf("PPU DATA: %d / %d =================== PPUADDR:  %d  \n", val, addr, this->ppu_address);
             this->setPpu_Data(val);
             break;
         case 0x4014: // OAMDMA
             this->setOAMDMA(val);
             break;
+        case 0x4016:
+            printf("----------------------------------------------------------\n");
+            break;
         default:
-            cout << "WARNING: trying to write not allowed PPU memory ADDR: " << addr << " VALUE: " << val << endl;
+            // cout << "WARNING: trying to write not allowed PPU memory ADDR: " << addr << " VALUE: " << val << endl;
             break;
 
     }
