@@ -11,11 +11,16 @@
 #include <iostream>
 #include <stdint.h>
 #include <vector>
+#include <map>
 
 using namespace std;
 
 class Ppu;
 class Cpu {
+  public:
+    map<int, pair<double, int> > time_instructions;
+    double avr_time_instruction = 0;
+    int instruction_counter = 0;
   private:
   // counter registers: store a single byte
   uint16_t pc_reg = 0; // program counter, 2 byte

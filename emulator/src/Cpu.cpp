@@ -5,7 +5,7 @@
 #include "Utils.cpp"
 #include <iomanip>
 #include <sstream>
-
+#include <ctime>
 
 uint8_t make_P(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint8_t t6) {
   uint8_t b = t1 + t2 * 2 + t3 * 4 + t4 * 8 + t5 * 64 + t6 * 128;
@@ -82,8 +82,9 @@ uint8_t Cpu::pull() {
 void Cpu::runCycle() {
   Instruction *instruction;
   InstructionFactory factory;
+  std::clock_t start;
   uint16_t address = 0;
-
+  start = std::clock();
   if (!this->isStall()) {
 
     uint8_t opcode = read_mem(this->pc_reg);
@@ -96,21 +97,38 @@ void Cpu::runCycle() {
           return;
       }
       address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
-      string p = this->getPrintBasedOnAddressingMode(instruction->getAddressingMode());
+    //   string p = this->getPrintBasedOnAddressingMode(instruction->getAddressingMode());
       if (opcode == 0x48 || opcode == 0x08 || opcode == 0x68 || opcode == 0x28) { //PHA //PHP //PLA //PLP
         address = 0x0100 + getSp_reg();
       }
-      this->printOutput(instruction->getPrintMode(), opcode, instruction->getAddressingMode(), address, instruction->getDecodedInstruction() + " " + p);
+    //   this->printOutput(instruction->getPrintMode(), opcode, instruction->getAddressingMode(), address, instruction->getDecodedInstruction() + " " + p);
       this->setCyclesCounter(instruction->getCycles()+this->getCyclesCounter());
       instruction->execute(this, address);
       if (opcode == 0x4c || opcode == 0x6c || opcode == 0x20 || opcode == 0x60 || opcode == 0x40 ) {
       } else {
         this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
       }
-
+      
       this->remainingCycles = instruction->getCycles();
       //deveriamos ter uma condicao para a chamada da escrita na tela.
     }
+    double duration;
+    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    if(this->time_instructions.count(opcode) > 0){
+        double avr_ins = this->time_instructions[opcode].first * this->time_instructions[opcode].second;
+        this->time_instructions[opcode].second++;
+        avr_ins = (duration + avr_ins)/ this->time_instructions[opcode].second;
+        this->time_instructions[opcode].first = avr_ins;
+    }
+    else{
+        pair<double, int> a;
+        a.first = duration;
+        a.second = 1;
+        this->time_instructions.insert({opcode,a});
+    }
+    double aux = this->avr_time_instruction * this->instruction_counter;
+    this->instruction_counter++;
+    this->avr_time_instruction = (aux + duration)/this->instruction_counter;
   }
   this->remainingCycles--;
 }
