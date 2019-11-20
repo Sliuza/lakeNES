@@ -199,6 +199,7 @@ void Screen::endDisplay(){
 
 uint8_t Screen::readControl1(){
 	SDL_Event e;
+	counter2 = 0;
 	int pointer = counter1 % 8;
 	counter1++;
 	while(SDL_PollEvent(&e) != 0){
@@ -247,6 +248,7 @@ uint8_t Screen::readControl1(){
 
 uint8_t Screen::readControl2(){
 	SDL_Event e;
+	counter1 = 0;
 	int pointer = counter2 % 8;
 	counter2++;
 	while(SDL_PollEvent(&e) != 0){
@@ -258,11 +260,12 @@ uint8_t Screen::readControl2(){
 	const uint8_t *keys = SDL_GetKeyboardState(NULL);
 	switch(pointer){
 		case 0:
-			return keys[SDL_SCANCODE_7];
+			return keys[SDL_SCANCODE_KP_PLUS];
+			
 			break;
 
 		case 1:
-			return keys[SDL_SCANCODE_9];
+			return keys[SDL_SCANCODE_KP_MINUS];
 			break;
 
 		case 2:
