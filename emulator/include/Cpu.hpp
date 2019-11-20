@@ -7,6 +7,7 @@
 #include "InstructionFactory.hpp"
 #include "PrintFunction.hpp"
 #include "Screen.hpp"
+#include "Apu.hpp"
 #include <bitset>
 #include <fstream>
 #include <iostream>
@@ -49,6 +50,7 @@ class Cpu {
 
   public:
   Screen screen;
+  Apu apu;
   Cpu();
   void loadROM(string path);
   void printROM();
@@ -68,6 +70,7 @@ class Cpu {
   void printls(uint16_t address);
   void runPpu();
   void shutPpu();
+
 
   //GETTERS
   uint16_t getPc_reg();     // program counter, 2 byte

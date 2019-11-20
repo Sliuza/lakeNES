@@ -121,25 +121,18 @@ uint8_t Cpu::read_mem(uint16_t addr) {
 
   switch (addr) {
     case 0x0000 ... 0x1FFF:
-      res = this->ram[addr & 0x7FF];
-      break;
+      return this->ram[addr & 0x7FF];
     case 0x2000 ... 0x3FFF:
-      res = ppu->read_mem(addr & 0x2007);
-      break;
+      return ppu->read_mem(addr & 0x2007);
     case 0x4014 ... 0x4015:
-      res = ppu->read_mem(addr);
-      break;
+      return ppu->read_mem(addr);
     case 0x4016:
-      res = screen.readControl1();
-      break;
+      return screen.readControl1();
     case 0x4017:
-      res = screen.readControl2();
-      break;
+      return screen.readControl2();
     default:
-      res = this->rom.readPgr(addr);
-      break;
+      return this->rom.readPgr(addr);
   }
-  return res;
 }
 void Cpu::write_mem(uint8_t val, uint16_t addr) {
   switch (addr) {
@@ -153,6 +146,18 @@ void Cpu::write_mem(uint8_t val, uint16_t addr) {
       // printf("%d ------------------------- 0000000000000000000 \n", val);
       ppu->setOAMDMA(val);
       ppu->setOam_Table(this->ram);
+      break;
+    case 0x4000:
+      apu.pulse.characteristics(val);
+      break;
+    case 0x4001:
+      // apu.sweep();
+      break;
+    case 0x4002:
+      // apu.timer();
+      break;
+    case 0x4003:
+      // apu.lenghtCounter();
       break;
     default:
       break;
@@ -271,8 +276,6 @@ string Cpu::getPrintBasedOnAddressingMode(uint8_t addressingMode) {
       stream << uppercase << hex << ((address & 0xF00) >> 8);
       stream << uppercase << hex << ((address & 0xF0) >> 4);
       stream << uppercase << hex << ((address & 0xF) >> 0);
-      stream << " " << std::hex << this->getX_reg();
-      p = "$" + stream.str();
       break;
     }
     case INDEXED_ABSOLUTE_Y: {
@@ -283,8 +286,6 @@ string Cpu::getPrintBasedOnAddressingMode(uint8_t addressingMode) {
       stream << uppercase << hex << ((address & 0xF00) >> 8);
       stream << uppercase << hex << ((address & 0xF0) >> 4);
       stream << uppercase << hex << ((address & 0xF) >> 0);
-      stream << " " << std::hex << this->getY_reg();
-      p = "$" + stream.str();
       break;
     }
     case IMMEDIATE: {
@@ -292,7 +293,6 @@ string Cpu::getPrintBasedOnAddressingMode(uint8_t addressingMode) {
       int value = this->read_mem(address);
       std::stringstream stream;
       stream << uppercase << setfill('0') << setw(2) << value;
-      p = "$" + stream.str();
       break;
     }
     case INDIRECT: {
@@ -305,7 +305,7 @@ string Cpu::getPrintBasedOnAddressingMode(uint8_t addressingMode) {
       // cout << "addressing mode = INDIRECT_INDEXED\n";
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = (this->get16BitsAddressInMemory(baseAddress) + uint16_t(this->getY_reg()));
-      cout << "Address = " << hex << (unsigned)((this->get16BitsAddressInMemory(baseAddress) + uint16_t(1))) << endl;
+      // cout << "Address = " << hex << (unsigned)((this->get16BitsAddressInMemory(baseAddress) + uint16_t(1)))  << endl;
       break;
     }
     case INDEXED_INDIRECT: {

@@ -94,9 +94,9 @@ clean:
 
 build: main clear
 
-main: main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o Screen.o
+main: main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o Screen.o Apu.o
 
-	$(CC) main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o Screen.o $(CFLAGS) $(OTHER_FLAGS) -o main 
+	$(CC) main.o Nes.o Cpu.o Rom.o Instruction.o InstructionFactory.o Ppu.o Background.o Apu.o Screen.o $(CFLAGS) $(OTHER_FLAGS) -o main 
 
 main.o: emulator/src/main.cpp
 	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/main.cpp
@@ -120,6 +120,9 @@ Instruction.o: emulator/src/Instruction.cpp emulator/include/Instruction.hpp
 
 InstructionFactory.o: emulator/src/InstructionFactory.cpp emulator/include/InstructionFactory.hpp
 	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/InstructionFactory.cpp
+
+Apu.o: emulator/src/Apu.cpp emulator/include/Apu.hpp
+	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/Apu.cpp
 
 Screen.o: emulator/src/Screen.cpp emulator/include/Screen.hpp
 	$(CC) $(CFLAGS) $(OTHER_FLAGS)  -c emulator/src/Screen.cpp

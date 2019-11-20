@@ -261,7 +261,6 @@ uint8_t Screen::readControl2(){
 	switch(pointer){
 		case 0:
 			return keys[SDL_SCANCODE_KP_PLUS];
-			
 			break;
 
 		case 1:
