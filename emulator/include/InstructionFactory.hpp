@@ -16,7 +16,7 @@ class InstructionFactory {
   private:
   map<uint8_t, OperationAttributes> instructions;
   map<uint8_t, uint8_t> addressingModeSize;
-  map<uint8_t, Instruction *> instances;
+  array<Instruction *, 60> instances;
 
   public:
   InstructionFactory();
