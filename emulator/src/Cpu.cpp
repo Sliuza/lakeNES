@@ -21,6 +21,7 @@ Cpu::Cpu() {
   this->a_reg = 0;
   this->rom = Rom();
   this->remainingCycles = 0;
+  this->factory = InstructionFactory();
 };
 
 void Cpu::nmi_interruption() {
@@ -78,7 +79,6 @@ uint8_t Cpu::pull() {
 }
 void Cpu::runCycle() {
   Instruction *instruction;
-  InstructionFactory factory;
   std::clock_t start;
   uint16_t address = 0;
   start = std::clock();
@@ -89,7 +89,7 @@ void Cpu::runCycle() {
       this->setFoundBrk(true);
     } else {
 
-      instruction = factory.createInstruction(opcode);
+      instruction = this->factory.createInstruction(opcode);
       if (&instruction == NULL) {
         return;
       }

@@ -46,6 +46,7 @@ class Cpu {
   int remainingCycles;
   int cyclesCounter;
   Ppu *ppu;
+  InstructionFactory factory;
 
   public:
   Screen screen;
