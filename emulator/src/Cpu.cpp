@@ -81,7 +81,6 @@ void Cpu::runCycle() {
   Instruction *instruction;
   std::clock_t start;
   uint16_t address = 0;
-  start = std::clock();
   if (!this->isStall()) {
 
     uint8_t opcode = read_mem(this->pc_reg);
@@ -109,22 +108,6 @@ void Cpu::runCycle() {
       this->remainingCycles = instruction->getCycles();
       //deveriamos ter uma condicao para a chamada da escrita na tela.
     }
-    double duration;
-    duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
-    if (this->time_instructions.count(opcode) > 0) {
-      double avr_ins = this->time_instructions[opcode].first * this->time_instructions[opcode].second;
-      this->time_instructions[opcode].second++;
-      avr_ins = (duration + avr_ins) / this->time_instructions[opcode].second;
-      this->time_instructions[opcode].first = avr_ins;
-    } else {
-      pair<double, int> a;
-      a.first = duration;
-      a.second = 1;
-      this->time_instructions.insert({opcode, a});
-    }
-    double aux = this->avr_time_instruction * this->instruction_counter;
-    this->instruction_counter++;
-    this->avr_time_instruction = (aux + duration) / this->instruction_counter;
   }
   this->remainingCycles--;
 }
