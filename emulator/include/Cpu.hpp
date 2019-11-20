@@ -4,18 +4,24 @@
 #define Cpu_hpp
 
 #include "Rom.hpp"
+#include "InstructionFactory.hpp"
 #include "PrintFunction.hpp"
 #include "Screen.hpp"
 #include <bitset>
 #include <fstream>
 #include <iostream>
 #include <stdint.h>
-#include <vector>
+#include <map>
 
 using namespace std;
 
 class Ppu;
 class Cpu {
+  public:
+  map<int, pair<double, int>> time_instructions;
+  double avr_time_instruction = 0;
+  int instruction_counter = 0;
+
   private:
   // counter registers: store a single byte
   uint16_t pc_reg = 0; // program counter, 2 byte
@@ -39,6 +45,7 @@ class Cpu {
   int remainingCycles;
   int cyclesCounter;
   Ppu *ppu;
+  InstructionFactory factory;
 
   public:
   Screen screen;
@@ -56,14 +63,14 @@ class Cpu {
   string getPrintBasedOnAddressingMode(uint8_t addressingMode);
   uint16_t get16BitsAddress(uint16_t address);
   uint16_t get16BitsAddressInMemory(uint16_t address);
-  void printOutput(uint16_t printFuncion,uint8_t opcode, uint8_t addressMode, uint16_t address, string decodedInstruction);
-  void print(uint8_t opcode, uint8_t addressMode,  uint16_t address, string decodedInstruction);
+  void printOutput(uint16_t printFuncion, uint8_t opcode, uint8_t addressMode, uint16_t address, string decodedInstruction);
+  void print(uint8_t opcode, uint8_t addressMode, uint16_t address, string decodedInstruction);
   void printls(uint16_t address);
   void runPpu();
   void shutPpu();
 
   //GETTERS
-  uint16_t getPc_reg();              // program counter, 2 byte
+  uint16_t getPc_reg();     // program counter, 2 byte
   uint8_t getSp_reg();      // stack pointer
   uint8_t getX_reg();       // x register
   uint8_t getY_reg();       // y register

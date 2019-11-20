@@ -4,7 +4,9 @@
 CC=g++
 
 # SDL_LIB = -L/usr/local/lib -lSDL2 -Wl,-rpath=/usr/local/lib
-SDL_INCLUDE = -I/usr/local/include
+# SDL_INCLUDE = -I/usr/X11/lib 
+SDL_INCLUDE = -L/usr/X11/lib 
+# SDL_INCLUDE = -I/usr/local/include
 # X11_INCLUDE = -I/usr/X11R6/include -I/usr/X11/include/GL
 # # CCFLAGS=-std=gnu++11 -O3
 CFLAGS = $(SDL_INCLUDE)  -std=gnu++11

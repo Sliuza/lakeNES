@@ -2,11 +2,17 @@
 #include <fstream>
 
 Rom::Rom() {}
-
+template<typename T>
+T *alloc_array_init(size_t size, T const&val) {
+    T *const res = new (std::nothrow) T[size];
+    if (res)
+        for (size_t i = 0; i < size; ++i)
+            res[i] = val;
+    return res;
+}
 void Rom::load(string path) {
     std::ifstream romFile (path, std::ios_base::binary | std::ios_base::in);
-    std::vector<uint8_t> header;
-    header.resize(0x10);
+    uint8_t header[0x10];
     // read header
     romFile.read(reinterpret_cast<char*>(&header[0]), 0x10);
     this->num_prg_banks = header[4];
@@ -21,11 +27,13 @@ void Rom::load(string path) {
     //     cout << "ERROR: This emulator only support mapper NROM" << endl;
     // }
     // read game logic
-    this->prg_rom.resize(0x4000 * num_prg_banks);
-    romFile.read(reinterpret_cast<char*>(&this->prg_rom[0]), 0x4000 * num_prg_banks);
     // read game graphics
-    this->chr_rom.resize(0x2000 * this->num_chr_banks);
-    romFile.read(reinterpret_cast<char*>(&this->chr_rom[0]), 0x2000 * this->num_chr_banks);
+     // read game logic
+    this->prg_rom = alloc_array_init<uint8_t>(0x4000*num_prg_banks, 0xFF);
+    romFile.read(reinterpret_cast<char*>(this->prg_rom), 0x4000 * num_prg_banks);
+    // read game graphics
+    this->chr_rom = alloc_array_init<uint8_t>(0x2000*num_chr_banks, 0xFF);
+    romFile.read(reinterpret_cast<char*>(this->chr_rom), 0x2000 * this->num_chr_banks);
 }
 // By now we are only using NROM mapper
 std::uint8_t Rom::readPgr(uint16_t adress){
@@ -38,10 +46,10 @@ std::uint8_t Rom::readPgr(uint16_t adress){
 }
 
 // getter
-std::vector<uint8_t> Rom::getPgr(){
+uint8_t * Rom::getPgr(){
     return this->prg_rom;
 }
 
-std::vector<uint8_t> Rom::getChr(){
+uint8_t * Rom::getChr(){
     return this->chr_rom;
 }

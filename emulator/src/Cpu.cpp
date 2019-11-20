@@ -5,7 +5,7 @@
 #include "Utils.cpp"
 #include <iomanip>
 #include <sstream>
-
+#include <ctime>
 
 uint8_t make_P(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint8_t t6) {
   uint8_t b = t1 + t2 * 2 + t3 * 4 + t4 * 8 + t5 * 64 + t6 * 128;
@@ -21,9 +21,10 @@ Cpu::Cpu() {
   this->a_reg = 0;
   this->rom = Rom();
   this->remainingCycles = 0;
+  this->factory = InstructionFactory();
 };
 
-void Cpu::nmi_interruption(){
+void Cpu::nmi_interruption() {
   // printf("PC START NMI: %d \n", this->pc_reg);
   this->push(this->pc_reg >> 8);
   this->push(this->pc_reg);
@@ -38,16 +39,13 @@ void Cpu::nmi_interruption(){
                   this->getF_carry();
   // printf("FLAGS START NMI: %d \n", this->flags);
 
-  
-  
   uint16_t addr_abs = 0xFFFA;
-	uint16_t lo = this->read_mem(addr_abs + 0);
-	uint16_t hi = this->read_mem(addr_abs + 1);
-	this->pc_reg = (hi << 8) | lo;
+  uint16_t lo = this->read_mem(addr_abs + 0);
+  uint16_t hi = this->read_mem(addr_abs + 1);
+  this->pc_reg = (hi << 8) | lo;
   // printf("PC END NMI: %d \n", this->pc_reg);
   this->push(flags);
   // printf("FLAGS LOADED NMI: %d   SPREG: %d\n", this->flags, this->sp_reg);
-
 }
 
 void Cpu::shutPpu() {
@@ -81,29 +79,29 @@ uint8_t Cpu::pull() {
 }
 void Cpu::runCycle() {
   Instruction *instruction;
-  InstructionFactory factory;
+  std::clock_t start;
   uint16_t address = 0;
-
+  start = std::clock();
   if (!this->isStall()) {
 
     uint8_t opcode = read_mem(this->pc_reg);
     if (opcode == 0x00) {
       this->setFoundBrk(true);
     } else {
-      
-      instruction = factory.createInstruction(opcode);
-      if(&instruction == NULL){
-          return;
+
+      instruction = this->factory.createInstruction(opcode);
+      if (&instruction == NULL) {
+        return;
       }
       address = getAddressBasedOnAddressingMode(instruction->getAddressingMode());
-      string p = this->getPrintBasedOnAddressingMode(instruction->getAddressingMode());
+      //   string p = this->getPrintBasedOnAddressingMode(instruction->getAddressingMode());
       if (opcode == 0x48 || opcode == 0x08 || opcode == 0x68 || opcode == 0x28) { //PHA //PHP //PLA //PLP
         address = 0x0100 + getSp_reg();
       }
-      this->printOutput(instruction->getPrintMode(), opcode, instruction->getAddressingMode(), address, instruction->getDecodedInstruction() + " " + p);
-      this->setCyclesCounter(instruction->getCycles()+this->getCyclesCounter());
+      //   this->printOutput(instruction->getPrintMode(), opcode, instruction->getAddressingMode(), address, instruction->getDecodedInstruction() + " " + p);
+      this->setCyclesCounter(instruction->getCycles() + this->getCyclesCounter());
       instruction->execute(this, address);
-      if (opcode == 0x4c || opcode == 0x6c || opcode == 0x20 || opcode == 0x60 || opcode == 0x40 ) {
+      if (opcode == 0x4c || opcode == 0x6c || opcode == 0x20 || opcode == 0x60 || opcode == 0x40) {
       } else {
         this->setPc_reg(this->pc_reg + uint16_t(instruction->getInstructionSize()));
       }
@@ -111,6 +109,22 @@ void Cpu::runCycle() {
       this->remainingCycles = instruction->getCycles();
       //deveriamos ter uma condicao para a chamada da escrita na tela.
     }
+    double duration;
+    duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+    if (this->time_instructions.count(opcode) > 0) {
+      double avr_ins = this->time_instructions[opcode].first * this->time_instructions[opcode].second;
+      this->time_instructions[opcode].second++;
+      avr_ins = (duration + avr_ins) / this->time_instructions[opcode].second;
+      this->time_instructions[opcode].first = avr_ins;
+    } else {
+      pair<double, int> a;
+      a.first = duration;
+      a.second = 1;
+      this->time_instructions.insert({opcode, a});
+    }
+    double aux = this->avr_time_instruction * this->instruction_counter;
+    this->instruction_counter++;
+    this->avr_time_instruction = (aux + duration) / this->instruction_counter;
   }
   this->remainingCycles--;
 }
@@ -150,13 +164,13 @@ void Cpu::write_mem(uint8_t val, uint16_t addr) {
       this->ram[addr & 0x7FF] = val;
       break;
     case 0x2000 ... 0x3FFF:
-        ppu->write_mem(val, addr & 0x2007);
-        break;
+      ppu->write_mem(val, addr & 0x2007);
+      break;
     case 0x4014:
-        // printf("%d ------------------------- 0000000000000000000 \n", val);
-        ppu->setOAMDMA(val);
-        ppu->setOam_Table(this->ram);
-        break;
+      // printf("%d ------------------------- 0000000000000000000 \n", val);
+      ppu->setOAMDMA(val);
+      ppu->setOam_Table(this->ram);
+      break;
     default:
       break;
   }
@@ -262,7 +276,7 @@ string Cpu::getPrintBasedOnAddressingMode(uint8_t addressingMode) {
       stream << uppercase << hex << ((address & 0xF00) >> 8);
       stream << uppercase << hex << ((address & 0xF0) >> 4);
       stream << uppercase << hex << ((address & 0xF) >> 0);
-      p = "$"+stream.str();
+      p = "$" + stream.str();
       break;
     }
     case INDEXED_ABSOLUTE_X: {
@@ -274,8 +288,8 @@ string Cpu::getPrintBasedOnAddressingMode(uint8_t addressingMode) {
       stream << uppercase << hex << ((address & 0xF00) >> 8);
       stream << uppercase << hex << ((address & 0xF0) >> 4);
       stream << uppercase << hex << ((address & 0xF) >> 0);
-      stream << " " <<std::hex << this->getX_reg();
-      p = "$"+stream.str();
+      stream << " " << std::hex << this->getX_reg();
+      p = "$" + stream.str();
       break;
     }
     case INDEXED_ABSOLUTE_Y: {
@@ -286,8 +300,8 @@ string Cpu::getPrintBasedOnAddressingMode(uint8_t addressingMode) {
       stream << uppercase << hex << ((address & 0xF00) >> 8);
       stream << uppercase << hex << ((address & 0xF0) >> 4);
       stream << uppercase << hex << ((address & 0xF) >> 0);
-      stream << " " <<std::hex << this->getY_reg();
-      p = "$"+stream.str();
+      stream << " " << std::hex << this->getY_reg();
+      p = "$" + stream.str();
       break;
     }
     case IMMEDIATE: {
@@ -295,7 +309,7 @@ string Cpu::getPrintBasedOnAddressingMode(uint8_t addressingMode) {
       int value = this->read_mem(address);
       std::stringstream stream;
       stream << uppercase << setfill('0') << setw(2) << value;
-      p = "$"+stream.str();
+      p = "$" + stream.str();
       break;
     }
     case INDIRECT: {
@@ -308,7 +322,7 @@ string Cpu::getPrintBasedOnAddressingMode(uint8_t addressingMode) {
       // cout << "addressing mode = INDIRECT_INDEXED\n";
       uint16_t baseAddress = this->read_mem(this->getPc_reg() + uint16_t(1));
       address = (this->get16BitsAddressInMemory(baseAddress) + uint16_t(this->getY_reg()));
-      cout << "Address = " << hex << (unsigned)((this->get16BitsAddressInMemory(baseAddress) + uint16_t(1)))  << endl;
+      cout << "Address = " << hex << (unsigned)((this->get16BitsAddressInMemory(baseAddress) + uint16_t(1))) << endl;
       break;
     }
     case INDEXED_INDIRECT: {
@@ -328,21 +342,21 @@ string Cpu::getPrintBasedOnAddressingMode(uint8_t addressingMode) {
       stream << uppercase << hex << ((address & 0xF00) >> 8);
       stream << uppercase << hex << ((address & 0xF0) >> 4);
       stream << uppercase << hex << ((address & 0xF) >> 0);
-      p = "$"+stream.str(); 
-      
+      p = "$" + stream.str();
+
       break;
     }
     case ZERO_PAGE: {
-    //   cout << "addressing mode = ZERO_PAGE\n";
-    address = this->read_mem(this->getPc_reg() + uint16_t(1));
-    std::stringstream stream;
-    stream << uppercase << hex << ((address & 0xF0) >> 4);
-    stream << uppercase << hex << ((address & 0xF) >> 0);
-    stream << " = ";
-    stream << uppercase << hex << ((address & 0xF000) >> 12);
-    stream << uppercase << hex << ((address & 0xF00) >> 8);
-    p = "$"+stream.str();
-    stream << " " <<std::hex << this->getY_reg();
+      //   cout << "addressing mode = ZERO_PAGE\n";
+      address = this->read_mem(this->getPc_reg() + uint16_t(1));
+      std::stringstream stream;
+      stream << uppercase << hex << ((address & 0xF0) >> 4);
+      stream << uppercase << hex << ((address & 0xF) >> 0);
+      stream << " = ";
+      stream << uppercase << hex << ((address & 0xF000) >> 12);
+      stream << uppercase << hex << ((address & 0xF00) >> 8);
+      p = "$" + stream.str();
+      stream << " " << std::hex << this->getY_reg();
 
       break;
     }
@@ -376,32 +390,31 @@ uint16_t Cpu::get16BitsAddressInMemory(uint16_t address) {
   return hi | lo;
 }
 
-void Cpu::printOutput(uint16_t printFuncion,uint8_t opcode, uint8_t addressMode, uint16_t address, string decodedInstruction) {
+void Cpu::printOutput(uint16_t printFuncion, uint8_t opcode, uint8_t addressMode, uint16_t address, string decodedInstruction) {
   this->print(opcode, addressMode, address, decodedInstruction);
 };
 
-void Cpu::print(uint8_t opcode, uint8_t addressMode,  uint16_t address, string decodedInstruction) {
+void Cpu::print(uint8_t opcode, uint8_t addressMode, uint16_t address, string decodedInstruction) {
   unsigned p = this->getP_reg();
 
   cout << setfill('0') << uppercase << hex << setw(4) << this->getPc_reg()
-  <<" "<< uppercase << hex << setw(2) << (unsigned)opcode;
-  if(address != 0){
-    cout << " "  << uppercase << hex << ((address & 0xF0) >> 4);
+       << " " << uppercase << hex << setw(2) << (unsigned)opcode;
+  if (address != 0) {
+    cout << " " << uppercase << hex << ((address & 0xF0) >> 4);
     cout << uppercase << hex << ((address & 0xF) >> 0);
     cout << " " << uppercase << hex << ((address & 0xF000) >> 12);
     cout << uppercase << hex << ((address & 0xF00) >> 8);
-  }
-  else{
+  } else {
     cout << "      ";
   }
   cout << "  ";
   cout.width(32);
-  cout << setfill(' ')<< std::left << decodedInstruction;
+  cout << setfill(' ') << std::left << decodedInstruction;
   cout << setfill('0') << " A:" << uppercase << hex << setw(2) << (unsigned)this->getA_reg()
-  << " X:" << uppercase << hex << setw(2) << (unsigned)this->getX_reg()
-  << " Y:" << uppercase << hex << setw(2) << (unsigned)this->getY_reg()
-  << " P:" << uppercase << hex << setw(2) << (unsigned)p
-  << " SP:" << uppercase << hex << setw(2) << (unsigned)(this->getSp_reg());
+       << " X:" << uppercase << hex << setw(2) << (unsigned)this->getX_reg()
+       << " Y:" << uppercase << hex << setw(2) << (unsigned)this->getY_reg()
+       << " P:" << uppercase << hex << setw(2) << (unsigned)p
+       << " SP:" << uppercase << hex << setw(2) << (unsigned)(this->getSp_reg());
   cout << " CYC:" << dec << this->getCyclesCounter() << endl;
 }
 
@@ -439,7 +452,7 @@ uint8_t Cpu::getF_overflow() {
 uint8_t Cpu::getF_negative() {
   return this->f_negative;
 }
-int Cpu::getCyclesCounter(){
+int Cpu::getCyclesCounter() {
   return this->cyclesCounter;
 }
 
@@ -522,6 +535,6 @@ void Cpu::setPpu(Ppu *ppu) {
   this->ppu = ppu;
 };
 
-void Cpu::setCyclesCounter(int cyclesCounter){
+void Cpu::setCyclesCounter(int cyclesCounter) {
   this->cyclesCounter = cyclesCounter;
 }

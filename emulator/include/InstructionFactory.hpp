@@ -8,15 +8,14 @@
 #include <cstdio>
 #include <map>
 #include <stdio.h>
-#include <vector>
 
 using namespace std;
 
 class InstructionFactory {
   private:
-  map<uint8_t, OperationAttributes> instructions;
-  map<uint8_t, uint8_t> addressingModeSize;
-  map<uint8_t, Instruction *> instances;
+  OperationAttributes instructions[255];
+  uint8_t addressingModeSize[13];
+  Instruction *instances[60];
 
   public:
   InstructionFactory();

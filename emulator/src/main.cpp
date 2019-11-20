@@ -4,7 +4,6 @@
 #include <iostream>
 #include <iterator>
 #include <stdint.h>
-#include <vector>
 using namespace std;
 
 int main(int argc, const char *argv[]) {
