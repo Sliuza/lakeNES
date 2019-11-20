@@ -6,20 +6,19 @@
 
 InstructionFactory::InstructionFactory() {
 
-  this->addressingModeSize = {
-      {ABSOLUTE, 3},
-      {INDEXED_ABSOLUTE_X, 3},
-      {INDEXED_ABSOLUTE_Y, 3},
-      {ACCUMULATOR, 1},
-      {IMMEDIATE, 2},
-      {IMPLIED, 1},
-      {INDIRECT, 2},
-      {INDIRECT_INDEXED, 2},
-      {INDEXED_INDIRECT, 2},
-      {RELATIVE, 2},
-      {ZERO_PAGE, 2},
-      {INDEXED_ZERO_PAGE_X, 2},
-      {INDEXED_ZERO_PAGE_Y, 2}};
+  this->addressingModeSize[ABSOLUTE] = 3;
+  this->addressingModeSize[INDEXED_ABSOLUTE_X] = 3;
+  this->addressingModeSize[INDEXED_ABSOLUTE_Y] = 3;
+  this->addressingModeSize[ACCUMULATOR] = 1;
+  this->addressingModeSize[IMMEDIATE] = 2;
+  this->addressingModeSize[IMPLIED] = 1;
+  this->addressingModeSize[INDIRECT] = 2;
+  this->addressingModeSize[INDIRECT_INDEXED] = 2;
+  this->addressingModeSize[INDEXED_INDIRECT] = 2;
+  this->addressingModeSize[RELATIVE] = 2;
+  this->addressingModeSize[ZERO_PAGE] = 2;
+  this->addressingModeSize[INDEXED_ZERO_PAGE_X] = 2;
+  this->addressingModeSize[INDEXED_ZERO_PAGE_Y] = 2;
 
   this->instances[ADC] = new ADCInstruction();
   this->instances[AND] = new ANDInstruction();
@@ -345,20 +344,20 @@ uint8_t InstructionFactory::getInstructionSize(uint8_t opCode) {
     return NULL;
   }
   try {
-    return this->addressingModeSize.at(attributes.addressingMode);
-  } catch(const std::out_of_range& oor){
+    return this->addressingModeSize[attributes.addressingMode];
+  } catch (const std::out_of_range &oor) {
     //   cout << "opCode does not exists in getInstructionSize: " << (int)opCode ;
-      return NULL;
+    return NULL;
   }
 };
 
 Instruction *InstructionFactory::getInstanceById(uint8_t instructionID) {
-    try {
-        return this->instances[instructionID];
-    } catch(const std::out_of_range& oor){
-        cout << "instructionID does not exists in getInstanceById: " << (int)instructionID ;
-        return NULL;
-    }
+  try {
+    return this->instances[instructionID];
+  } catch (const std::out_of_range &oor) {
+    cout << "instructionID does not exists in getInstanceById: " << (int)instructionID;
+    return NULL;
+  }
 };
 
 Instruction *InstructionFactory::createInstruction(uint8_t opCode) {
