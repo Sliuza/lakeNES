@@ -10,7 +10,6 @@
 #include <fstream>
 #include <iostream>
 #include <stdint.h>
-#include <vector>
 #include <map>
 
 using namespace std;

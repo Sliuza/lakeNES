@@ -121,7 +121,7 @@ void Ppu::write_mem(uint8_t val, uint16_t addr){
             this->setOAMDMA(val);
             break;
         case 0x4016:
-            printf("----------------------------------------------------------\n");
+            // printf("----------------------------------------------------------\n");
             break;
         default:
             // cout << "WARNING: trying to write not allowed PPU memory ADDR: " << addr << " VALUE: " << val << endl;
@@ -284,7 +284,7 @@ void Ppu::setOAMDMA(uint8_t value){
   //this->setOam_Table(this->getRam());
 }
 
-void Ppu::setChr_Rom(vector<uint8_t> chr) {
+void Ppu::setChr_Rom(uint8_t * chr) {
   this->chr_Rom = chr;
 }
 void Ppu::set_nmi_callback(std::function<void(void)> cb){

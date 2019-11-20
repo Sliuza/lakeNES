@@ -9,7 +9,6 @@
 #include <fstream>
 #include <iostream>
 #include <stdint.h>
-#include <vector>
 #include <functional>
 
 #include <bitset>
@@ -44,7 +43,7 @@ class Ppu {
   int ppu_cycle;
   bool first_write;
 
-  std::vector<int8_t>oam_data;
+  int8_t * oam_data;
   
   Screen screen;
   //aloca memoria para a PatternTabel e NameTable
@@ -67,7 +66,7 @@ class Ppu {
 
   u_int16_t base_nametable_address;
 
-  vector<uint8_t> chr_Rom;
+  uint8_t * chr_Rom;
 
   uint8_t palleteRam[0x1F];
 
@@ -89,7 +88,7 @@ class Ppu {
   uint8_t ppuRead(uint16_t addr);
   void ppuWrite(uint8_t data, uint16_t addr);
 
-  void setChr_Rom(vector<uint8_t> chr);
+  void setChr_Rom(uint8_t * chr);
   void writeTblPattern();
 
   //Setters
