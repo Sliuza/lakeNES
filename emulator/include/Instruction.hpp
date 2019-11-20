@@ -1,10 +1,11 @@
 #ifndef Instruction_hpp
 #define Instruction_hpp
 
-#include "Cpu.hpp"
 #include <iostream>
 #include <stdio.h>
 #include <string>
+
+class Cpu;
 
 using namespace std;
 
