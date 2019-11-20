@@ -21,63 +21,62 @@ InstructionFactory::InstructionFactory() {
       {INDEXED_ZERO_PAGE_X, 2},
       {INDEXED_ZERO_PAGE_Y, 2}};
 
-  this->instances = {
-      {ADC, new ADCInstruction()},
-      {AND, new ANDInstruction()},
-      {ASL, new ASLInstruction()},
-      {BCC, new BCCInstruction()},
-      {BCS, new BCSInstruction()},
-      {BEQ, new BEQInstruction()},
-      {BIT, new BITInstruction()},
-      {BMI, new BMIInstruction()},
-      {BNE, new BNEInstruction()},
-      {BPL, new BPLInstruction()},
-      {BRK, new BRKInstruction()},
-      {BVC, new BVCInstruction()},
-      {BVS, new BVSInstruction()},
-      {CLC, new CLCInstruction()},
-      {CLD, new CLDInstruction()},
-      {CLI, new CLIInstruction()},
-      {CLV, new CLVInstruction()},
-      {CMP, new CMPInstruction()},
-      {CPX, new CPXInstruction()},
-      {CPY, new CPYInstruction()},
-      {EOR, new EORInstruction()},
-      {JMP, new JMPInstruction()},
-      {JSR, new JSRInstruction()},
-      {LDA, new LDAInstruction()},
-      {LDX, new LDXInstruction()},
-      {LDY, new LDYInstruction()},
-      {LSR, new LSRInstruction()},
-      {NOP, new NOPInstruction()},
-      {ORA, new ORAInstruction()},
-      {PHA, new PHAInstruction()},
-      {PHP, new PHPInstruction()},
-      {PLA, new PLAInstruction()},
-      {PLP, new PLPInstruction()},
-      {RTI, new RTIInstruction()},
-      {RTS, new RTSInstruction()},
-      {STA, new STAInstruction()},
-      {STX, new STXInstruction()},
-      {STY, new STYInstruction()},
-      {DEC, new DECInstruction()},
-      {DEX, new DEXInstruction()},
-      {DEY, new DEYInstruction()},
-      {INC, new INCInstruction()},
-      {INX, new INXInstruction()},
-      {INY, new INYInstruction()},
-      {SBC, new SBCInstruction()},
-      {TAX, new TAXInstruction()},
-      {TAY, new TAYInstruction()},
-      {TSX, new TSXInstruction()},
-      {TXA, new TXAInstruction()},
-      {TXS, new TXSInstruction()},
-      {TYA, new TYAInstruction()},
-      {SEC, new SECInstruction()},
-      {SEI, new SEIInstruction()},
-      {SED, new SEDInstruction()},
-      {ROL, new ROLInstruction()},
-      {ROR, new RORInstruction()}};
+  this->instances[ADC] = new ADCInstruction();
+  this->instances[AND] = new ANDInstruction();
+  this->instances[ASL] = new ASLInstruction();
+  this->instances[BCC] = new BCCInstruction();
+  this->instances[BCS] = new BCSInstruction();
+  this->instances[BEQ] = new BEQInstruction();
+  this->instances[BIT] = new BITInstruction();
+  this->instances[BMI] = new BMIInstruction();
+  this->instances[BNE] = new BNEInstruction();
+  this->instances[BPL] = new BPLInstruction();
+  this->instances[BRK] = new BRKInstruction();
+  this->instances[BVC] = new BVCInstruction();
+  this->instances[BVS] = new BVSInstruction();
+  this->instances[CLC] = new CLCInstruction();
+  this->instances[CLD] = new CLDInstruction();
+  this->instances[CLV] = new CLVInstruction();
+  this->instances[CMP] = new CMPInstruction();
+  this->instances[CPX] = new CPXInstruction();
+  this->instances[CPY] = new CPYInstruction();
+  this->instances[EOR] = new EORInstruction();
+  this->instances[JMP] = new JMPInstruction();
+  this->instances[JSR] = new JSRInstruction();
+  this->instances[LDA] = new LDAInstruction();
+  this->instances[LDX] = new LDXInstruction();
+  this->instances[LDY] = new LDYInstruction();
+  this->instances[LSR] = new LSRInstruction();
+  this->instances[NOP] = new NOPInstruction();
+  this->instances[ORA] = new ORAInstruction();
+  this->instances[PHA] = new PHAInstruction();
+  this->instances[PHP] = new PHPInstruction();
+  this->instances[PLA] = new PLAInstruction();
+  this->instances[PLP] = new PLPInstruction();
+  this->instances[RTI] = new RTIInstruction();
+  this->instances[RTS] = new RTSInstruction();
+  this->instances[STA] = new STAInstruction();
+  this->instances[STX] = new STXInstruction();
+  this->instances[STX] = new STXInstruction();
+  this->instances[STY] = new STYInstruction();
+  this->instances[DEC] = new DECInstruction();
+  this->instances[DEX] = new DEXInstruction();
+  this->instances[DEY] = new DEYInstruction();
+  this->instances[INC] = new INCInstruction();
+  this->instances[INX] = new INXInstruction();
+  this->instances[INY] = new INYInstruction();
+  this->instances[SBC] = new SBCInstruction();
+  this->instances[TAX] = new TAXInstruction();
+  this->instances[TAY] = new TAYInstruction();
+  this->instances[TSX] = new TSXInstruction();
+  this->instances[TXA] = new TXAInstruction();
+  this->instances[TXS] = new TXSInstruction();
+  this->instances[TYA] = new TYAInstruction();
+  this->instances[SEC] = new SECInstruction();
+  this->instances[SEI] = new SEIInstruction();
+  this->instances[SED] = new SEDInstruction();
+  this->instances[ROL] = new ROLInstruction();
+  this->instances[ROR] = new RORInstruction();
 
   this->instructions = {
 
@@ -337,9 +336,9 @@ InstructionFactory::~InstructionFactory() {}
 
 OperationAttributes InstructionFactory::getOperationAttributes(uint8_t opCode) {
     try {
-        return this->instructions.at(opCode);
+        return this->instructions[opCode];
     } catch(const std::out_of_range& oor){
-        cout << "opcode does not exists in getOperationAttributes: " << (int)opCode ;
+        // cout << "opcode does not exists in getOperationAttributes: " << (int)opCode ;
     }
 };
 
@@ -351,14 +350,14 @@ uint8_t InstructionFactory::getInstructionSize(uint8_t opCode) {
   try {
     return this->addressingModeSize.at(attributes.addressingMode);
   } catch(const std::out_of_range& oor){
-      cout << "opCode does not exists in getInstructionSize: " << (int)opCode ;
+    //   cout << "opCode does not exists in getInstructionSize: " << (int)opCode ;
       return NULL;
   }
 };
 
 Instruction *InstructionFactory::getInstanceById(uint8_t instructionID) {
     try {
-        return this->instances.at(instructionID);
+        return this->instances[instructionID];
     } catch(const std::out_of_range& oor){
         cout << "instructionID does not exists in getInstanceById: " << (int)instructionID ;
         return NULL;
