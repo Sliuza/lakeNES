@@ -14,7 +14,7 @@ using namespace std;
 
 class InstructionFactory {
   private:
-  map<uint8_t, OperationAttributes> instructions;
+  OperationAttributes instructions[255];
   map<uint8_t, uint8_t> addressingModeSize;
   array<Instruction *, 60> instances;
 
