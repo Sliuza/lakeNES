@@ -176,7 +176,7 @@ void Ppu::ppuWrite(uint8_t data, uint16_t addr) {
 
   if (addr >= 0x0000 && addr <= 0x1FFF) {
     this->tblPattern[(addr & 0x1000) >> 12][addr & 0x0FFF] = data;
-  } else if (addr >= 0x2000 && addr <= 0x3EFF) {
+  } else if (addr >= 0x2000 && addr < 0x23C0) {
     addr &= 0x0FFF;
 
     // Horizontal
@@ -188,6 +188,10 @@ void Ppu::ppuWrite(uint8_t data, uint16_t addr) {
       this->tblName[1][addr & 0x03FF] = data;
     if (addr >= 0x0C00 && addr <= 0x0FFF)
       this->tblName[1][addr & 0x03FF] = data;
+  } 
+  else if(addr >= 0x23C0 && addr <= 0x23FF){
+    addr -= 0x23C0;
+    this->tblAttribute[addr];
   }
   else if (addr >= 0x3F00 && addr <= 0x3F1F)
   {

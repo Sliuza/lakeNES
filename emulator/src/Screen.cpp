@@ -68,7 +68,7 @@ void Screen::createWindow(){
 
 //TODO como eu acho que deveria ser um racunho do SendDisplay
 
-void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024], uint8_t oam_table[64][4], int tblPallete[32]){
+void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024], uint8_t oam_table[64][4], uint8_t tblPallete[32]){
 
 
 	// DISPLAY BACKGROUND
@@ -168,13 +168,13 @@ void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]
      //                    color = 0x000001;
      //                }
 
-                    color = tblPallete[15 + (oam_table[k][2] & 0x3) + color];
-                    color = this->palleteToHex[color];
+                    uint8_t hexColor = tblPallete[16 + (oam_table[k][2] & 0x3)*4 + color];
+                    color = this->palleteToHex[hexColor];
 					// offset para o pixel
 					y_oam = oam_table[k][0];
 					x_oam = oam_table[k][3];
 					// printf(" Y_OAM: %d ------ X_OAM: %d\n", y_oam, x_oam);
-					if(x_oam < 256 && y_oam >= 8 && y_oam < 232)
+					if(x_oam < 256 && y_oam >= 8 && y_oam < 224)
 						pixels[(i*256 + j)+((y_oam - 8)*256 + x_oam)] = color;
 					sprite1[invert] >>= 1;
 					sprite2[invert] >>= 1; 
