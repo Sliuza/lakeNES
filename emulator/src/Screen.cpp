@@ -68,7 +68,7 @@ void Screen::createWindow(){
 
 //TODO como eu acho que deveria ser um racunho do SendDisplay
 
-void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024], uint8_t oam_table[64][4]){
+void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024], uint8_t oam_table[64][4], int tblPallete[32]){
 
 
 	// DISPLAY BACKGROUND
@@ -150,23 +150,26 @@ void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]
 					color = (int) ((sprite1[invert] & 0x01) + (sprite2[invert] & 0x01)*2);
 					
 					//nossa paleta de cores em hex
-					switch(color){
-						case 0:
-							color = 0x000001;
-							break;
-						case 1:
-							color = 0xF8F8F8;
-							break;
-						case 2:
-							color = 0xF85898;
-							break;
-						case 3:
-							color = 0xE40058;
-							break;
-					}
-                    if(oam_table[k][2] & 0x03 == 3){
-                        color = 0x000001;
-                    }
+					// switch(color){
+					// 	case 0:
+					// 		color = 0x000001;
+					// 		break;
+					// 	case 1:
+					// 		color = 0xF8F8F8;
+					// 		break;
+					// 	case 2:
+					// 		color = 0xF85898;
+					// 		break;
+					// 	case 3:
+					// 		color = 0xE40058;
+					// 		break;
+					// }
+     //                if(oam_table[k][2] & 0x3 == 3){
+     //                    color = 0x000001;
+     //                }
+
+                    color = tblPallete[15 + (oam_table[k][2] & 0x3) + color];
+                    color = this->palleteToHex[color];
 					// offset para o pixel
 					y_oam = oam_table[k][0];
 					x_oam = oam_table[k][3];

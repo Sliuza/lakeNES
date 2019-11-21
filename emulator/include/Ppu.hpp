@@ -49,6 +49,7 @@ class Ppu {
   //aloca memoria para a PatternTabel e NameTable
   uint8_t tblName[2][1024];
 	uint8_t tblPattern[2][4096];
+  int     tblPalette[32];
 
 	// OAM DATA : -cada linha representa um sprite,
 	//            -cada coluna representa um byte contendo info do sprite.

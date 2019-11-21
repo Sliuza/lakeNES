@@ -16,7 +16,7 @@ bool Ppu::startPpu() {
 
 void Ppu::renderize() {
   // muda a cor da surface da tela
-   screen.sendToDisplay(this->tblPattern, this->tblName, this->oam_table);
+   screen.sendToDisplay(this->tblPattern, this->tblName, this->oam_table, this->tblPalette);
 }
 
 void Ppu::endPpu() {
@@ -165,14 +165,7 @@ uint8_t Ppu::ppuRead(uint16_t addr) {
     if (addr >= 0x0C00 && addr <= 0x0FFF)
       data = this->tblName[1][addr & 0x03FF];
   }
-  // else if (addr >= 0x3F00 && addr <= 0x3FFF){
-  //   addr &= 0x001F;
-  //   if (addr == 0x0010) addr = 0x0000;
-  //   if (addr == 0x0014) addr = 0x0004;
-  //   if (addr == 0x0018) addr = 0x0008;
-  //   if (addr == 0x001C) addr = 0x000C;
-  //   data = tblPalette[addr] & (mask.grayscale ? 0x30 : 0x3F);
-  // }
+  
 
   return data;
 }
@@ -196,15 +189,15 @@ void Ppu::ppuWrite(uint8_t data, uint16_t addr) {
     if (addr >= 0x0C00 && addr <= 0x0FFF)
       this->tblName[1][addr & 0x03FF] = data;
   }
-  // else if (addr >= 0x3F00 && addr <= 0x3FFF)
-  // {
-  //   addr &= 0x001F;
-  //   if (addr == 0x0010) addr = 0x0000;
-  //   if (addr == 0x0014) addr = 0x0004;
-  //   if (addr == 0x0018) addr = 0x0008;
-  //   if (addr == 0x001C) addr = 0x000C;
-  //   tblPalette[addr] = data;
-  // }
+  else if (addr >= 0x3F00 && addr <= 0x3FFF)
+  {
+    addr &= 0x001F;
+    if (addr == 0x0010) addr = 0x0000;
+    if (addr == 0x0014) addr = 0x0004;
+    if (addr == 0x0018) addr = 0x0008;
+    if (addr == 0x001C) addr = 0x000C;
+    this->tblPalette[addr] = data;
+  }
 }
 
 uint8_t Ppu::getOam_Data(uint16_t addr) {
