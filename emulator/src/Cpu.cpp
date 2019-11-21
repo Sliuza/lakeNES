@@ -148,17 +148,54 @@ void Cpu::write_mem(uint8_t val, uint16_t addr) {
       ppu->setOam_Table(this->ram);
       break;
     case 0x4000:
-      apu.pulse.characteristics(val);
+      // printf("PULSE1\n");
+      apu.pulse1.characteristics(val,&apu.pulse1);
       break;
     case 0x4001:
-      // apu.sweep();
+      // printf("PULSE1\n");
+      apu.pulse1.sweep(val,&apu.pulse1);
       break;
     case 0x4002:
-      // apu.timer();
+      // printf("PULSE1\n");
+      apu.pulse1.timerLow(val,&apu.pulse1);
       break;
     case 0x4003:
-      // apu.lenghtCounter();
+      // printf("PULSE1\n");
+      apu.pulse1.lengthCounter(val,&apu.pulse1);
       break;
+    case 0x4004:
+      // printf("PULSE2\n");
+      apu.pulse2.characteristics(val,&apu.pulse2);
+      break;
+    case 0x4005:
+      // printf("PULSE2\n");
+      apu.pulse2.sweep(val,&apu.pulse2);
+      break;
+    case 0x4006:
+      // printf("PULSE2\n");
+      apu.pulse2.timerLow(val,&apu.pulse2);
+      break;
+    case 0x4007:
+      // printf("PULSE2\n");
+      apu.pulse2.lengthCounter(val,&apu.pulse2);
+      break;
+    case 0x4008:
+      // printf("TRIANGLE\n");
+      apu.triangle.characteristics(val,&apu.triangle);
+      // cout << "data = " << bitset<8>(apu.triangle.loadCounter) << endl;
+      break;
+    case 0x400a:
+      // printf("TRIANGLE\n");
+      apu.triangle.timerLow(val,&apu.triangle);
+      apu.triangle.lowTimer = val;
+      // cout << "low = " << bitset<8>(apu.triangle.lowTimer) << endl;
+      break;
+    case 0x400b:
+      // printf("TRIANGLE\n");
+      apu.triangle.lengthCounter(val,&apu.triangle);
+      // cout << "data = " << bitset<11>(apu.triangle.timer) << endl;
+      break;
+
     default:
       break;
   }
