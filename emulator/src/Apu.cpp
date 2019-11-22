@@ -1,10 +1,23 @@
 #include "../include/Apu.hpp"
 #include<bitset>
 
-void Apu::runApuCycle(){
-	cout << "apu cycle\n";
+
+void Apu::apuCycle(){
+	if(this->pulse1.timer > 8 && this->pulse1.sequencer(&this->pulse1) != 0){
+		// if(this->pulse1.lenghtCounterHalt != 0)
+		// cout << "MIXER1\n";
+		this->pulse1.mixer();
+	}
+	if(this->pulse2.timer > 8 && this->pulse2.sequencer(&this->pulse2) != 0){
+		// if(this->pulse2.lenghtCounterHalt != 0)
+		// cout << "MIXER2\n";
+		this->pulse2.mixer();
+	}
 }
 
+void Apu::Pulse::mixer(){
+	
+}
 
 void Apu::Pulse::characteristics(uint8_t val,Pulse *pulse){
 	int i;
@@ -60,10 +73,32 @@ void Apu::Pulse::lengthCounter(uint8_t val,Pulse *pulse){
 void Apu::Pulse::setTimer(Pulse *pulse){
 
 	pulse->timer = (pulse->highTimer << 8 | pulse->lowTimer);
+	pulse->currentTimer = (pulse->highTimer << 8 | pulse->lowTimer);
 
-	cout << "highTimer = " << bitset<8>(pulse->highTimer)
-	<< "\nlowTimer = " << bitset<8>(pulse->lowTimer)
-	<< "\ntimer = " << bitset<16>(pulse->timer) << endl; 
+	//cout << "highTimer = " << bitset<8>(pulse->highTimer)
+	//<< "\nlowTimer = " << bitset<8>(pulse->lowTimer)
+	//<< "\ntimer = " << bitset<16>(pulse->timer) << endl; 
+}
+
+uint8_t Apu::Pulse::sequencer(Pulse *pulse){
+	
+	if(pulse->timer != 0){
+		if(down && pulse->currentTimer != 0){
+			pulse->currentTimer--;
+			// cout << "seq = " << pulse->currentTimer << endl;
+		}
+		else if(down && pulse->currentTimer == 0){
+			down = false;
+			pulse->currentTimer++;
+		}
+		else if(!down && pulse->currentTimer != 0){
+			if(pulse->currentTimer < pulse->timer){
+				pulse->currentTimer++;
+				// cout << "seq = " << pulse->currentTimer << endl;
+			}
+		}	
+	}
+	return pulse->currentTimer;
 }
 
 
@@ -71,9 +106,9 @@ void Apu::Triangle::characteristics(uint8_t val,Triangle *triangle){
 	triangle->control = (val & 0b10000000);
 	triangle->loadCounter = (val & 0b01111111);
 
-	cout << "value = " << bitset<8>(val) 
-	<< "\ncontrol = " << bitset<1>(triangle->control)
-	<< "\nloadCounter = " << bitset<7>(triangle->loadCounter) << endl;
+	//cout << "value = " << bitset<8>(val) 
+	//<< "\ncontrol = " << bitset<1>(triangle->control)
+	//<< "\nloadCounter = " << bitset<7>(triangle->loadCounter) << endl;
 }
 
 void Apu::Triangle::timerLow(uint8_t val,Triangle *triangle){
@@ -91,7 +126,7 @@ void Apu::Triangle::lengthCounter(uint8_t val,Triangle *triangle){
 void Apu::Triangle::setTimer(Triangle *triangle){
 	// cout << "low addr = " << bitset<8>(triangle->lowTimer) << endl;
 	triangle->timer = (triangle->highTimer << 8 | triangle->lowTimer);
-	cout << "highTimer = " << bitset<8>(triangle->highTimer)
-	<< "\nlowTimer = " << bitset<8>(triangle->lowTimer)
-	<< "\ntimer = " << bitset<16>(triangle->timer) << endl; 
+//	cout << "highTimer = " << bitset<8>(triangle->highTimer)
+	//<< "\nlowTimer = " << bitset<8>(triangle->lowTimer)
+	//<< "\ntimer = " << bitset<16>(triangle->timer) << endl; 
 }

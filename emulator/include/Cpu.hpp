@@ -22,6 +22,7 @@ class Cpu {
   map<int, pair<double, int>> time_instructions;
   double avr_time_instruction = 0;
   int instruction_counter = 0;
+  bool runApu;
 
   private:
   // counter registers: store a single byte

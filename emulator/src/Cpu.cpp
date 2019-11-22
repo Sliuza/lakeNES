@@ -13,12 +13,12 @@ uint8_t make_P(uint8_t t1, uint8_t t2, uint8_t t3, uint8_t t4, uint8_t t5, uint8
 }
 
 Cpu::Cpu() {
-
   this->pc_reg = 0xfffc;
   this->sp_reg = 0xfd;
   this->x_reg = 0;
   this->y_reg = 0;
   this->a_reg = 0;
+  this->runApu = false;
   this->rom = Rom();
   this->remainingCycles = 0;
   this->factory = InstructionFactory();
@@ -69,6 +69,7 @@ void Cpu::reset() {
   this->setCyclesCounter(7);
   this->foundBrk = false;
   this->remainingCycles = 0;
+  this->runApu = false;
 }
 void Cpu::push(uint8_t val) {
   this->ram[0x100 + this->sp_reg--] = val;
@@ -110,6 +111,10 @@ void Cpu::runCycle() {
     }
   }
   this->remainingCycles--;
+  if(runApu)
+    apu.apuCycle();
+  else
+    runApu = true;
 }
 
 bool Cpu::isStall() {
