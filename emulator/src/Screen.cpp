@@ -127,7 +127,8 @@ void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]
 	SDL_Surface* oamSurface;
 	oamSurface = SDL_GetWindowSurface(this->window);
 	
-	int k = 0, y_oam = 0, x_oam = 0, invert = 0;
+	int k = 0, invert = 0;
+	uint8_t y_oam = 0, x_oam = 0;
 	for(k = 0; k < 64; k++){
 		//printf("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP %d \n ", oam_table[k][1]);
 
@@ -138,7 +139,6 @@ void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]
 		int* pixels = (int*) oamSurface->pixels;
 		
 		int color = 0;
-		//if(oam_table[k][2] & (0x01 << 7)){
 			
 			for(i = 0; i < 8; i++){
 				for(j= 7; j >= 0 ; j--){
@@ -148,25 +148,6 @@ void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]
 						invert = 7 - i;
 
 					color = (int) ((sprite1[invert] & 0x01) + (sprite2[invert] & 0x01)*2);
-					
-					//nossa paleta de cores em hex
-					// switch(color){
-					// 	case 0:
-					// 		color = 0x000001;
-					// 		break;
-					// 	case 1:
-					// 		color = 0xF8F8F8;
-					// 		break;
-					// 	case 2:
-					// 		color = 0xF85898;
-					// 		break;
-					// 	case 3:
-					// 		color = 0xE40058;
-					// 		break;
-					// }
-     //                if(oam_table[k][2] & 0x3 == 3){
-     //                    color = 0x000001;
-     //                }
 
                     uint8_t hexColor = tblPallete[16 + (oam_table[k][2] & 0x3)*4 + color];
                     color = this->palleteToHex[hexColor];
@@ -174,8 +155,12 @@ void Screen::sendToDisplay(uint8_t tblPattern[2][4096], uint8_t tblName[2][1024]
 					y_oam = oam_table[k][0];
 					x_oam = oam_table[k][3];
 					// printf(" Y_OAM: %d ------ X_OAM: %d\n", y_oam, x_oam);
-					if(x_oam < 256 && y_oam >= 8 && y_oam < 224)
+					if(x_oam < 256 && y_oam >= 8 && y_oam < 232){
+						// printf("Nave y1: %d   Nave y2 %d \n", oam_table[0][0]);
+						// printf("---- y1: %d   ---- y2 %d \n", oam_table[1][0]);
+						// printf("---- y1: %d   ---- y2 %d \n", oam_table[2][0]);
 						pixels[(i*256 + j)+((y_oam - 8)*256 + x_oam)] = color;
+					}
 					sprite1[invert] >>= 1;
 					sprite2[invert] >>= 1; 
 				}

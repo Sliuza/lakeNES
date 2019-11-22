@@ -1,5 +1,5 @@
 #include "../include/Nes.hpp"
-const int TOTAL_CYCLES = 29781;
+const int TOTAL_CYCLES = 29681;
 #include <ctime>
 #include <set>
 
